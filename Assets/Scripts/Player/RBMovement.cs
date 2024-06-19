@@ -28,6 +28,11 @@ public class RBMovement : MonoBehaviour
     float horizontalMovement;
     float verticalMovement;
 
+	[Header("Climbing")]
+	[SerializeField] private ClimbCheck climbCheck;
+	[SerializeField] private float climbSpeed = 2f;
+	private bool isClimbing = false;
+
 	[Header("Ground Detection")]
 	[SerializeField] private GroundCheck groundCheck;
 	private bool isGrounded;
@@ -60,6 +65,13 @@ public class RBMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 		//rb.freezeRotation = true;
 		groundCheck.OnGroundedChange += GroundCheck_OnGroundedChange;
+		climbCheck.OnClimbChange += ClimbCheck_OnClimbChange;
+	}
+
+	private void ClimbCheck_OnClimbChange(bool value)
+	{
+		rb.useGravity = !value;
+		isClimbing = value;
 	}
 
 	private void GroundCheck_OnGroundedChange(bool value)
@@ -86,12 +98,20 @@ public class RBMovement : MonoBehaviour
 		horizontalMovement = Input.GetAxisRaw("Horizontal");
 		verticalMovement = Input.GetAxisRaw("Vertical");
 
-		moveDirection = orientation.right * horizontalMovement + orientation.forward * verticalMovement;
+		if (isClimbing)
+		{
+			moveDirection = orientation.right * horizontalMovement + orientation.up * verticalMovement;
+		}
+		else
+		{
+			moveDirection = orientation.right * horizontalMovement + orientation.forward * verticalMovement;
+		}
+
 	}
 
 	void Jump()
 	{
-		if (isGrounded)
+		if (isGrounded && !isClimbing)
 		{
 			rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
 			rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
@@ -103,6 +123,10 @@ public class RBMovement : MonoBehaviour
 		if(Input.GetKey(KeyCode.LeftShift) && isGrounded)
 		{
 			moveSpeed = Mathf.Lerp(moveSpeed, sprintSpeed, acceleration * Time.deltaTime);
+		}
+		else if (isClimbing)
+		{
+			moveSpeed = Mathf.Lerp(moveSpeed, climbSpeed, acceleration * Time.deltaTime);
 		}
 		else
 		{

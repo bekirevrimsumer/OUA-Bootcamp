@@ -5,11 +5,14 @@ using UnityEngine;
 
 public class PlayerSetup : MonoBehaviour
 {
+    //Buna baska bir yol uygula
+
     [SerializeField] private RBMovement playerMovement;
     [SerializeField] private PlayerLook playerLook;
     [SerializeField] private MoveObjWithRay moveObjWithRay;
     [SerializeField] private GameObject cam;
     [SerializeField] private GameObject groundCheck;
+    [SerializeField] private GameObject climbCheck;
 
     public bool IsLocal { get; private set; } = false;
 
@@ -21,5 +24,6 @@ public class PlayerSetup : MonoBehaviour
         playerLook.enabled = true;
         cam.SetActive(true);
         groundCheck.SetActive(true);
+        climbCheck.SetActive(true);
 	}
 }
