@@ -1,79 +1,134 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LightReflection : MonoBehaviour
 {
-    public int MaxReflections = 5;
     private LineRenderer _lineRenderer;
-    private Vector3 _oldMirrorPosition;
-    private Quaternion _oldMirrorRotation;
     private Vector3 _initialDirection;
+    private EnvironmentChanger _environmentChanger;
+    private bool _isTargetHit = false;
+    private bool _isMirrorHit = false;
 
     void Start()
     {
-        _lineRenderer = gameObject.GetComponent<LineRenderer>();
-        _lineRenderer.positionCount = 1;
-        _lineRenderer.SetPosition(0, new Vector3(0, 0, 0));
-
-        _initialDirection = transform.forward;
-        CalculateReflection(transform.position, _initialDirection, MaxReflections);
+        InitializeComponents();
+        CalculateReflection(transform.position, _initialDirection);
     }
 
-    void Update() 
+    void Update()
+    {
+        ProcessRaycast();
+    }
+
+    private void InitializeComponents()
+    {
+        _lineRenderer = gameObject.GetComponent<LineRenderer>();
+        _lineRenderer.positionCount = 1;
+        _lineRenderer.SetPosition(0, transform.position);
+
+        _environmentChanger = GameObject.Find("EnvironmentChanger").GetComponent<EnvironmentChanger>();
+        _initialDirection = transform.forward;
+    }
+
+    private void ProcessRaycast()
     {
         Ray ray = new Ray(transform.position, transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            if (hit.collider.CompareTag("Mirror"))
-            {
-                if(_oldMirrorRotation != hit.transform.rotation || _oldMirrorPosition != hit.transform.position)
-                {
-                    _lineRenderer.positionCount = 1;
-                    _lineRenderer.SetPosition(0, new Vector3(0, 0, 0));
-                    CalculateReflection(transform.position, _initialDirection, MaxReflections);
-                }
-            }
-
-            _oldMirrorPosition = hit.transform.position;
-            _oldMirrorRotation = hit.transform.rotation;
+            HandleHit(hit);
         }
         else
         {
-            _lineRenderer.positionCount = 1;
-            _lineRenderer.SetPosition(0, new Vector3(0, 0, 0));
-            CalculateReflection(transform.position, _initialDirection, MaxReflections);
+            HandleNoHit();
         }
     }
 
-    void CalculateReflection(Vector3 startPosition, Vector3 direction, int reflectionsRemaining)
+    private void HandleHit(RaycastHit hit)
     {
-        if (reflectionsRemaining == 0) return;
-
-        Ray ray = new Ray(startPosition, direction);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (hit.collider.CompareTag("Mirror"))
         {
-            Vector3 hitPoint = hit.point;
-            Vector3 reflectDirection = Vector3.Reflect(ray.direction, hit.normal);
+            ProcessMirrorHit();
+        }
 
-            if (hit.collider.CompareTag("Target"))
+        if (hit.collider.CompareTag("Target"))
+        {
+            HandleTargetHit();
+        }
+    }
+
+    private void HandleNoHit()
+    {
+        if (_isMirrorHit)
+        {
+            ResetLineRenderer();
+            CalculateReflection(transform.position, _initialDirection);
+            _isMirrorHit = false;
+        }
+    }
+
+    private void ProcessMirrorHit()
+    {
+        ResetLineRenderer();
+        CalculateReflection(transform.position, _initialDirection);
+    }
+
+    private void ResetLineRenderer()
+    {
+        _lineRenderer.positionCount = 1;
+        _lineRenderer.SetPosition(0, transform.position);
+    }
+
+    private void CalculateReflection(Vector3 startPosition, Vector3 direction)
+    {
+        Ray ray = new Ray(startPosition, direction);
+        RaycastHit[] hits = Physics.RaycastAll(ray);
+        if (hits.Length > 0)
+        {
+            ProcessHits(hits, direction);
+        }
+        else
+        {
+            AddLineRendererPosition(startPosition + direction * 5);
+        }
+    }
+
+    private void ProcessHits(RaycastHit[] hits, Vector3 direction)
+    {
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider.CompareTag("Mirror"))
             {
+                HandleMirrorReflection(hit, direction);
                 return;
             }
-
-            if (hit.collider.CompareTag("Mirror"))
+            else if (hit.collider.CompareTag("Target"))
             {
-                var distance = Vector3.Distance(startPosition, hitPoint);
-                AddLineRendererPosition(new Vector3(hitPoint.x, hitPoint.y, distance));
-                CalculateReflection(hitPoint, reflectDirection, reflectionsRemaining - 1);
+                HandleTargetHit();
+                AddLineRendererPosition(hit.point);
             }
-        }
-        else
-        {
-            Vector3 endPosition = startPosition + direction * 5;
-            AddLineRendererPosition(endPosition);
         }
     }
 
-    void AddLineRendererPosition(Vector3 position)
+    private void HandleMirrorReflection(RaycastHit hit, Vector3 direction)
+    {
+        _isMirrorHit = true;
+        Vector3 reflectDirection = Vector3.Reflect(direction, hit.normal);
+
+        AddLineRendererPosition(hit.point);
+        CalculateReflection(hit.point, reflectDirection);
+    }
+
+    private void HandleTargetHit()
+    {
+        if(!_isTargetHit)
+        {
+            LightReflectionEvent.Trigger(LightReflectionEventType.HitTarget);
+            _environmentChanger.ChangeEnvironment();
+            _isTargetHit = true;
+        }
+    }
+
+    private void AddLineRendererPosition(Vector3 position)
     {
         _lineRenderer.positionCount++;
         _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, position);
