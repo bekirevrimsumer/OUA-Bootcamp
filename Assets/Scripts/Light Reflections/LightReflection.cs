@@ -5,7 +5,6 @@ public class LightReflection : MonoBehaviour
 {
     private LineRenderer _lineRenderer;
     private Vector3 _initialDirection;
-    private EnvironmentChanger _environmentChanger;
     private bool _isTargetHit = false;
     private bool _isMirrorHit = false;
 
@@ -26,7 +25,6 @@ public class LightReflection : MonoBehaviour
         _lineRenderer.positionCount = 1;
         _lineRenderer.SetPosition(0, transform.position);
 
-        _environmentChanger = GameObject.Find("EnvironmentChanger").GetComponent<EnvironmentChanger>();
         _initialDirection = transform.forward;
     }
 
@@ -123,7 +121,6 @@ public class LightReflection : MonoBehaviour
         if(!_isTargetHit)
         {
             LightReflectionEvent.Trigger(LightReflectionEventType.HitTarget);
-            _environmentChanger.ChangeEnvironment();
             _isTargetHit = true;
         }
     }
