@@ -37,10 +37,16 @@ public class RBMovement : MonoBehaviour
 	[SerializeField] private GroundCheck groundCheck;
 	private bool isGrounded;
 
+	[Header("Movement State Machine")]
+	private IState currentMovementState;
+
+	[Header("Animator")]
+	public Animator animator;
+
     Vector3 moveDirection;
 	Vector3 slopeMoveDirection;
 
-    Rigidbody rb;
+    public Rigidbody rb;
 
 	RaycastHit slopeHit;
 
@@ -62,6 +68,9 @@ public class RBMovement : MonoBehaviour
 
 	private void Start()
 	{
+		currentMovementState = new IdleState();
+		currentMovementState.EnterState(this);
+
         rb = GetComponent<Rigidbody>();
 		//rb.freezeRotation = true;
 		groundCheck.OnGroundedChange += GroundCheck_OnGroundedChange;
@@ -100,6 +109,7 @@ public class RBMovement : MonoBehaviour
 
 		if (isClimbing)
 		{
+			//Tirmaniyor ise hareket yonunu degistiriyor
 			moveDirection = orientation.right * horizontalMovement + orientation.up * verticalMovement;
 		}
 		else
@@ -122,14 +132,17 @@ public class RBMovement : MonoBehaviour
 	{
 		if(Input.GetKey(KeyCode.LeftShift) && isGrounded)
 		{
+			//Hızlı Kosma
 			moveSpeed = Mathf.Lerp(moveSpeed, sprintSpeed, acceleration * Time.deltaTime);
 		}
 		else if (isClimbing)
 		{
+			//Tirmanma
 			moveSpeed = Mathf.Lerp(moveSpeed, climbSpeed, acceleration * Time.deltaTime);
 		}
 		else
 		{
+			//Normal kosma
 			moveSpeed = Mathf.Lerp(moveSpeed, walkSpeed, acceleration * Time.deltaTime);
 		}
 	}
@@ -148,10 +161,18 @@ public class RBMovement : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		MovePlayer();
+		//MovePlayer();
+		currentMovementState.UpdateState(this);
 	}
 
-	void MovePlayer()
+	public void ChangeState(IState newState)
+	{
+		currentMovementState.ExitState(this);
+		currentMovementState = newState;
+		newState.EnterState(this);
+	}
+
+	public void MovePlayer()
 	{
 		if (isGrounded && !OnSlope())
 		{

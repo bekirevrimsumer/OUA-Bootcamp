@@ -5453,7 +5453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e4fd9979a4e3774b977f8cb5159f651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 8462259965973956034, guid: f5d0457e6646a4a40a0e7d02d438d364, type: 3}
+  player: {fileID: 3884151125840169956, guid: 969f8364b874d264a8b0443bb75a0062, type: 3}
   spawnPoints:
   - {fileID: 1745052145}
   - {fileID: 1252733716}

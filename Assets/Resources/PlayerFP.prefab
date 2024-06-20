@@ -1703,6 +1703,7 @@ MonoBehaviour:
   climbCheck: {fileID: 6631536917205916753}
   climbSpeed: 2
   groundCheck: {fileID: 5693087682019880527}
+  animator: {fileID: 0}
 --- !u!114 &82474482039567305
 MonoBehaviour:
   m_ObjectHideFlags: 0
