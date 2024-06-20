@@ -11,6 +11,7 @@ public class Weapon : MonoBehaviour
 	[SerializeField] private Camera cam;
     [SerializeField] private int damage = 20;
     [SerializeField] private float fireRate = 0.3f;
+	[SerializeField] private LayerMask damageableLayer;
 
 	[Header("VFX")]
 	[SerializeField] private GameObject AKHitEffect;
@@ -57,7 +58,7 @@ public class Weapon : MonoBehaviour
 		Ray ray = new Ray(cam.transform.position, cam.transform.forward);
 		RaycastHit hit;
 
-		if (Physics.Raycast(ray.origin, ray.direction, out hit, 100f))
+		if (Physics.Raycast(ray.origin, ray.direction, out hit, 100f, damageableLayer))
 		{
 			PhotonNetwork.Instantiate(AKHitEffect.name, hit.point, Quaternion.identity);
 
