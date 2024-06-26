@@ -36,9 +36,9 @@ Material:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
     - _DissolveAmount: 0.13
-    - _NoiceScale: 25
-    - _NoiseAmount: 0.06
-    - _NoisePower: -0.51
+    - _NoiceScale: 84.4
+    - _NoiseAmount: 0.02
+    - _NoisePower: -0.2
     m_Colors:
     - _Color: {r: 6.188679, g: 5.984336, b: 5.984336, a: 1}
     - _MainSpeed: {r: -0.5, g: 0, b: 0, a: 0}

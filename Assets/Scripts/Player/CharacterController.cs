@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
@@ -19,7 +20,25 @@ public class CharacterController : MonoBehaviour
 
     [Header("Movement")]
     [SerializeField] private float _speed = 5f;
-    
+
+    [Header("Interact Objects")]
+    public Transform InteractObjectTransform;
+    private bool _isCarry = false;
+    private Transform _currentMirror;
+
+    [Header("Climbing")]
+    public bool IsClimbing = false;
+    private bool _inPosition = false;
+    private float _posT;
+    private Vector3 _startPos;
+    private Vector3 _endPos;
+    private Quaternion _startRot;
+    private Quaternion _endRot;
+    private float positionOffset = 0.5f;
+    private float offsetFromWall = 0.1f;
+    private float speedMultiplier = 1.5f;
+
+
 
     [Header("References")]
     public Animator Animator;
@@ -68,6 +87,27 @@ public class CharacterController : MonoBehaviour
                 ClickToMoveController();
                 break;
         }
+
+        if (Input.GetKeyDown(KeyCode.F) && _currentMirror != null)
+        {
+            if (!_isCarry)
+            {
+                PickupMirror();
+            }
+            else
+            {
+                DropMirror();
+            }
+        }
+
+        if (IsClimbing)
+        {
+            Climb();
+        }
+        else
+        {
+            CheckForClimb();
+        }
     }
 
     private bool HasMovementRestriction()
@@ -87,7 +127,7 @@ public class CharacterController : MonoBehaviour
         Animator.SetFloat("Speed", movement.magnitude);
 
         Vector3 newPosition = transform.position + movement * Time.deltaTime * _speed;
-        newPosition.y = Terrain.activeTerrain.SampleHeight(newPosition);
+        // newPosition.y = Terrain.activeTerrain.SampleHeight(newPosition);
         transform.position = newPosition;
         Rotate(movement);
     }
@@ -139,7 +179,7 @@ public class CharacterController : MonoBehaviour
         {
             RaycastHit hit;
             var r = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if(EventSystem.current.IsPointerOverGameObject()) return;
+            if (EventSystem.current.IsPointerOverGameObject()) return;
             if (Physics.Raycast(r, out hit, 100f, GroundLayer))
             {
                 NavMeshAgent.destination = hit.point;
@@ -147,5 +187,87 @@ public class CharacterController : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region Mirror Interact
+    void PickupMirror()
+    {
+        _isCarry = true;
+        Animator.SetBool("IsCarry", true);
+
+        _currentMirror.SetParent(InteractObjectTransform);
+
+        Vector3 targetPosition = new Vector3(0.1f, -0.05f, 0.03f);
+        Vector3 targetRotation = new Vector3(-90, 0, 90);
+
+        _currentMirror.DOLocalMove(targetPosition, 0.5f).SetEase(Ease.InOutQuad);
+        _currentMirror.DOLocalRotate(targetRotation, 0.5f).SetEase(Ease.InOutQuad);
+    }
+
+    void DropMirror()
+    {
+        _isCarry = false;
+        Animator.SetBool("IsCarry", false);
+
+        Transform mirrorParentTransform = InteractObjectTransform.GetChild(0);
+        mirrorParentTransform.SetParent(null);
+        _currentMirror = null;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("InteractMirror"))
+        {
+            _currentMirror = other.transform.parent;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("InteractMirror"))
+        {
+            _currentMirror = null;
+        }
+    }
+
+    #endregion
+
+    #region Climbing
+
+    private void CheckForClimb()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 1f))
+        {
+            Debug.DrawRay(transform.position, transform.forward, Color.red);
+            Debug.Log(hit.collider.name);
+            if (hit.collider.CompareTag("Climb") && Input.GetKeyDown(KeyCode.Space))
+            {
+                _startPos = transform.position;
+                _endPos = hit.transform.position + hit.transform.forward * positionOffset;
+                _startRot = transform.rotation;
+                _endRot = hit.transform.rotation;
+                _inPosition = true;
+                IsClimbing = true;
+            }
+        }
+    }
+
+    private void Climb()
+    {
+        if (_inPosition)
+        {
+            Animator.SetTrigger("Climb");
+            _posT += Time.deltaTime * speedMultiplier;
+            transform.position = Vector3.Lerp(_startPos, _endPos, _posT);
+            transform.rotation = Quaternion.Lerp(_startRot, _endRot, _posT);
+            if (_posT >= 1)
+            {
+                _inPosition = false;
+                _posT = 0;
+            }
+        }
+    }
+
     #endregion
 }

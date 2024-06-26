@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class RoomManager : MonoBehaviourPunCallbacks
+public class RoomManager : MultiplayerGenericSingleton<RoomManager>
 {
-	public static RoomManager Instance;
-
 	[SerializeField] private GameObject player;
 	[Space]
 	[SerializeField] private Transform[] spawnPoints;
@@ -14,11 +10,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
 	[SerializeField] private GameObject roomCam;
 
 	public string roomNameToJoin = "test";
-
-	private void Awake()
-	{
-		Instance = this;
-	}
 
 	public void JoinRoomButtonPressed()
 	{
@@ -43,6 +34,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
 		GameObject _player = PhotonNetwork.Instantiate(player.name, spawnPoint.position, Quaternion.identity);
-		_player.GetComponent<PlayerSetup>().IsLocalPlayer();
+		MultiplayerEvent.Trigger(MultiplayerEventType.JoinGame, _player);
+		// _player.GetComponent<PlayerSetup>().IsLocalPlayer();
 	}
 }

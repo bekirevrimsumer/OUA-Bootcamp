@@ -5,21 +5,14 @@ using Photon.Pun;
 using Photon.Realtime;
 using System;
 
-public class RoomList : MonoBehaviourPunCallbacks
+public class RoomList : MultiplayerGenericSingleton<RoomList>
 {
-	public static RoomList Instance;
-
 	[SerializeField] private RoomManager roomManager;
 	[SerializeField] private GameObject roomManagerGO;
 
 	public event Action<List<RoomInfo>> OnRoomUpdate;
 
     private List<RoomInfo> cachedRoomList = new List<RoomInfo>();
-
-	private void Awake()
-	{
-		Instance = this;
-	}
 
 	IEnumerator Start()
 	{
