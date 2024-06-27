@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum LightReflectionEventType { HitTarget }
+public enum LightReflectionEventType { HitTarget, MirrorEnter, MirrorExit, MirrorCarry, MirrorDrop }
 
 public struct LightReflectionEvent : IEventType
 {

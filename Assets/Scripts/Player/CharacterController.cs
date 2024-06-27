@@ -77,7 +77,6 @@ public class CharacterController : MonoBehaviour
 
     private void Update()
     {
-        if (HasMovementRestriction()) return;
         switch (CurrentControllerType)
         {
             case ControllerType.TopDown:
@@ -87,6 +86,8 @@ public class CharacterController : MonoBehaviour
                 ClickToMoveController();
                 break;
         }
+
+        RotateMirror();
 
         if (Input.GetKeyDown(KeyCode.F) && _currentMirror != null)
         {
@@ -108,11 +109,6 @@ public class CharacterController : MonoBehaviour
         {
             CheckForClimb();
         }
-    }
-
-    private bool HasMovementRestriction()
-    {
-        return false;
     }
 
     #region TopDownWASDMovement
@@ -192,6 +188,7 @@ public class CharacterController : MonoBehaviour
     #region Mirror Interact
     void PickupMirror()
     {
+        LightReflectionEvent.Trigger(LightReflectionEventType.MirrorCarry);
         _isCarry = true;
         Animator.SetBool("IsCarry", true);
 
@@ -206,6 +203,7 @@ public class CharacterController : MonoBehaviour
 
     void DropMirror()
     {
+        LightReflectionEvent.Trigger(LightReflectionEventType.MirrorDrop);
         _isCarry = false;
         Animator.SetBool("IsCarry", false);
 
@@ -218,6 +216,7 @@ public class CharacterController : MonoBehaviour
     {
         if (other.CompareTag("InteractMirror"))
         {
+            LightReflectionEvent.Trigger(LightReflectionEventType.MirrorEnter);
             _currentMirror = other.transform.parent;
         }
     }
@@ -226,6 +225,7 @@ public class CharacterController : MonoBehaviour
     {
         if (other.CompareTag("InteractMirror"))
         {
+            LightReflectionEvent.Trigger(LightReflectionEventType.MirrorExit);
             _currentMirror = null;
         }
     }
@@ -265,6 +265,33 @@ public class CharacterController : MonoBehaviour
             {
                 _inPosition = false;
                 _posT = 0;
+            }
+        }
+    }
+
+    #endregion
+
+    #region Mirror Rotation
+
+    private void RotateMirror()
+    {
+        if (!_isCarry && _currentMirror != null)
+        {
+            if (Input.GetKey(KeyCode.Q))
+            {
+                _currentMirror.Rotate(Vector3.up, -90 * Time.deltaTime, Space.Self);
+            }
+            if (Input.GetKey(KeyCode.E))
+            {
+                _currentMirror.Rotate(Vector3.up, 90 * Time.deltaTime, Space.Self);
+            }   
+            if(Input.GetKey(KeyCode.X))
+            {
+                _currentMirror.Rotate(Vector3.right, -90 * Time.deltaTime, Space.Self);
+            }
+            if(Input.GetKey(KeyCode.C))
+            {
+                _currentMirror.Rotate(Vector3.right, 90 * Time.deltaTime, Space.Self);
             }
         }
     }
