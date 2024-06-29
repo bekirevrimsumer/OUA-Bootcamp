@@ -27,4 +27,18 @@ public static class GameObjectExtension
 
         return component;
     }
+
+    public static GameObject FindInChildren(this GameObject gameObject, string name)
+    {
+        Transform[] children = gameObject.GetComponentsInChildren<Transform>();
+        foreach (Transform child in children)
+        {
+            if (child.name == name)
+            {
+                return child.gameObject;
+            }
+        }
+
+        return null;
+    }
 }

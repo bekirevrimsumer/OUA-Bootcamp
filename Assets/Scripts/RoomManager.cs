@@ -35,6 +35,5 @@ public class RoomManager : MultiplayerGenericSingleton<RoomManager>
 
 		GameObject _player = PhotonNetwork.Instantiate(player.name, spawnPoint.position, Quaternion.identity);
 		MultiplayerEvent.Trigger(MultiplayerEventType.JoinGame, _player);
-		// _player.GetComponent<PlayerSetup>().IsLocalPlayer();
 	}
 }

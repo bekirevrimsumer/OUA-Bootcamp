@@ -15,7 +15,7 @@ public class CinemachineCameraController : MonoBehaviour, IEventListener<Multipl
 
     public void OnEvent(MultiplayerEvent eventType)
     {
-        switch(eventType.MultiplayerEventEventType)
+        switch(eventType.MultiplayerEventType)
         {
             case MultiplayerEventType.JoinGame:
             SetCharacter(eventType.Character);

@@ -1,15 +1,16 @@
+using Photon.Pun;
 using UnityEngine;
 
 public enum MultiplayerEventType { JoinGame }
 
 public struct MultiplayerEvent : IEventType
 {
-    public MultiplayerEventType MultiplayerEventEventType;
+    public MultiplayerEventType MultiplayerEventType;
     public GameObject Character;
 
     public MultiplayerEvent(MultiplayerEventType multiplayerEventEventType, GameObject character)
     {
-        MultiplayerEventEventType = multiplayerEventEventType;
+        MultiplayerEventType = multiplayerEventEventType;
         Character = character;
     }
 
@@ -17,7 +18,7 @@ public struct MultiplayerEvent : IEventType
 
     public static void Trigger(MultiplayerEventType multiplayerEventType, GameObject character)
     {
-        e.MultiplayerEventEventType = multiplayerEventType;
+        e.MultiplayerEventType = multiplayerEventType;
         e.Character = character;
         EventManager.TriggerEvent(e);
     }

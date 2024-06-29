@@ -1,22 +1,15 @@
-using DG.Tweening;
+using Cinemachine;
+using ExitGames.Client.Photon.StructWrapping;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Animator))]
-public class CharacterController : MonoBehaviour
+public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IEventListener<MultiplayerEvent>
 {
-    public enum ControllerType { TopDown, ClickMove }
-    [SerializeField] private ControllerType _currentControllerType;
-    public ControllerType CurrentControllerType
-    {
-        get => _currentControllerType;
-        set
-        {
-            _currentControllerType = value;
-            HandleControllerChange();
-        }
-    }
+    [Header("Camera")]
+    public CinemachineVirtualCamera Camera;
+    public Transform CameraFollowTransform;
 
     [Header("Movement")]
     [SerializeField] private float _speed = 5f;
@@ -25,6 +18,9 @@ public class CharacterController : MonoBehaviour
     public Transform InteractObjectTransform;
     private bool _isCarry = false;
     private Transform _currentMirror;
+    private int _parentId;
+    private Quaternion networkRotation;
+    private int _currentMirrorViewID;
 
     [Header("Climbing")]
     public bool IsClimbing = false;
@@ -42,7 +38,6 @@ public class CharacterController : MonoBehaviour
 
     [Header("References")]
     public Animator Animator;
-    public NavMeshAgent NavMeshAgent;
     public LayerMask GroundLayer;
     private Vector3 _lastPosition;
     private float _desiredSpeed;
@@ -56,38 +51,31 @@ public class CharacterController : MonoBehaviour
     private void Init()
     {
         Animator = GetComponent<Animator>();
-        NavMeshAgent = GetComponent<NavMeshAgent>();
-        NavMeshAgent.speed = _speed;
         _lastPosition = transform.position;
-    }
-
-    [ExecuteInEditMode]
-    private void HandleControllerChange()
-    {
-        switch (_currentControllerType)
+        if (!photonView.IsMine)
         {
-            case ControllerType.TopDown:
-                NavMeshAgent.enabled = false;
-                break;
-            case ControllerType.ClickMove:
-                NavMeshAgent.enabled = true;
-                break;
+            networkRotation = Quaternion.identity;
         }
     }
 
     private void Update()
     {
-        switch (CurrentControllerType)
+        if(photonView.IsMine)
         {
-            case ControllerType.TopDown:
-                TopDownWASDMovement();
-                break;
-            case ControllerType.ClickMove:
-                ClickToMoveController();
-                break;
+            TopDownWASDMovement();
+            RotateMirror();
         }
-
-        RotateMirror();
+        // else 
+        // {
+        //     if (_currentMirror == null && _currentMirrorViewID != 0)
+        //     {
+        //         PhotonView mirrorView = PhotonView.Find(_currentMirrorViewID);
+        //         if (mirrorView != null)
+        //         {
+        //             _currentMirror = mirrorView.transform;
+        //         }
+        //     }
+        // }
 
         if (Input.GetKeyDown(KeyCode.F) && _currentMirror != null)
         {
@@ -117,7 +105,7 @@ public class CharacterController : MonoBehaviour
         var movement = GetMovement();
         movement = Vector3.ClampMagnitude(movement, 1);
 
-        Quaternion cameraRotation = Quaternion.Euler(0, Camera.main.transform.rotation.eulerAngles.y, 0);
+        Quaternion cameraRotation = Quaternion.Euler(0, Camera.transform.rotation.eulerAngles.y, 0);
         movement = cameraRotation * movement;
 
         Animator.SetFloat("Speed", movement.magnitude);
@@ -126,6 +114,8 @@ public class CharacterController : MonoBehaviour
         // newPosition.y = Terrain.activeTerrain.SampleHeight(newPosition);
         transform.position = newPosition;
         Rotate(movement);
+
+        photonView.RPC("UpdatePositionAndRotation", RpcTarget.Others, transform.position, transform.rotation);
     }
 
     private void Rotate(Vector3 movement)
@@ -146,43 +136,7 @@ public class CharacterController : MonoBehaviour
 
         return movement;
     }
-    #endregion
 
-    #region ClickToMove
-    private void ClickToMoveController()
-    {
-        if (!NavMeshAgent.enabled) return;
-        if (NavMeshAgent.hasPath)
-        {
-            if (NavMeshAgent.path.corners.Length >= 1)
-            {
-                var intendedRot = Quaternion.LookRotation(NavMeshAgent.path.corners[1] - transform.position);
-                transform.rotation = Quaternion.Slerp(transform.rotation, intendedRot, 5 * Time.deltaTime);
-            }
-            else
-            {
-                transform.LookAt(NavMeshAgent.destination);
-            }
-        }
-        _desiredSpeed = Mathf.InverseLerp(0, 1, (_lastPosition - transform.position).magnitude / Time.deltaTime);
-        var currentSpeed = Animator.GetFloat("Speed");
-        currentSpeed = Mathf.Lerp(currentSpeed, _desiredSpeed, 500 * Time.deltaTime);
-        Animator.SetFloat("Speed", currentSpeed);
-
-        _lastPosition = transform.position;
-
-        if (Input.GetMouseButton(0))
-        {
-            RaycastHit hit;
-            var r = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (EventSystem.current.IsPointerOverGameObject()) return;
-            if (Physics.Raycast(r, out hit, 100f, GroundLayer))
-            {
-                NavMeshAgent.destination = hit.point;
-                NavMeshAgent.velocity = (NavMeshAgent.destination - transform.position).normalized * NavMeshAgent.speed;
-            }
-        }
-    }
     #endregion
 
     #region Mirror Interact
@@ -191,14 +145,8 @@ public class CharacterController : MonoBehaviour
         LightReflectionEvent.Trigger(LightReflectionEventType.MirrorCarry);
         _isCarry = true;
         Animator.SetBool("IsCarry", true);
-
-        _currentMirror.SetParent(InteractObjectTransform);
-
-        Vector3 targetPosition = new Vector3(0.1f, -0.05f, 0.03f);
-        Vector3 targetRotation = new Vector3(-90, 0, 90);
-
-        _currentMirror.DOLocalMove(targetPosition, 0.5f).SetEase(Ease.InOutQuad);
-        _currentMirror.DOLocalRotate(targetRotation, 0.5f).SetEase(Ease.InOutQuad);
+		_parentId = transform.GetComponent<PhotonView>().ViewID;
+		_currentMirror.GetComponent<PhotonView>().RPC("CarryMirrorRPC", RpcTarget.All, _parentId);
     }
 
     void DropMirror()
@@ -206,15 +154,38 @@ public class CharacterController : MonoBehaviour
         LightReflectionEvent.Trigger(LightReflectionEventType.MirrorDrop);
         _isCarry = false;
         Animator.SetBool("IsCarry", false);
-
-        Transform mirrorParentTransform = InteractObjectTransform.GetChild(0);
-        mirrorParentTransform.SetParent(null);
+		_currentMirror.GetComponent<PhotonView>().RPC("DropMirrorRPC", RpcTarget.All);
         _currentMirror = null;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(Animator.GetBool("IsCarry"));
+            stream.SendNext(Animator.GetFloat("Speed"));
+            // if (_currentMirror != null)
+            // {
+            //     // stream.SendNext(_currentMirror.GetComponent<PhotonView>().ViewID);
+            //     stream.SendNext(_currentMirror.rotation);
+            // }
+        }
+        else
+        {
+            Animator.SetBool("IsCarry", (bool)stream.ReceiveNext());
+            Animator.SetFloat("Speed", (float)stream.ReceiveNext());
+
+            // if(_currentMirror != null)
+            // {
+            //     // _currentMirrorViewID = (int)stream.ReceiveNext();
+            //     _currentMirror.rotation = (Quaternion)stream.ReceiveNext();
+            // }
+        }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("InteractMirror"))
+        if (other.CompareTag("InteractMirror") && photonView.IsMine)
         {
             LightReflectionEvent.Trigger(LightReflectionEventType.MirrorEnter);
             _currentMirror = other.transform.parent;
@@ -223,7 +194,7 @@ public class CharacterController : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("InteractMirror"))
+        if (other.CompareTag("InteractMirror") && photonView.IsMine)
         {
             LightReflectionEvent.Trigger(LightReflectionEventType.MirrorExit);
             _currentMirror = null;
@@ -240,7 +211,6 @@ public class CharacterController : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.forward, out hit, 1f))
         {
             Debug.DrawRay(transform.position, transform.forward, Color.red);
-            Debug.Log(hit.collider.name);
             if (hit.collider.CompareTag("Climb") && Input.GetKeyDown(KeyCode.Space))
             {
                 _startPos = transform.position;
@@ -294,6 +264,40 @@ public class CharacterController : MonoBehaviour
                 _currentMirror.Rotate(Vector3.right, 90 * Time.deltaTime, Space.Self);
             }
         }
+    }
+
+    #endregion
+
+    #region Multiplayer
+    public void IsLocalPlayer()
+    {
+        Camera.gameObject.SetActive(true);
+        Camera.Follow = CameraFollowTransform;
+    }
+
+    public void OnEvent(MultiplayerEvent eventType)
+    {
+        switch (eventType.MultiplayerEventType)
+        {
+            case MultiplayerEventType.JoinGame:
+                if (photonView.IsMine)
+                {
+                    IsLocalPlayer();
+                }
+                break;
+        }
+    }
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        this.StartListeningEvent<MultiplayerEvent>();
+    }
+
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        this.StopListeningEvent<MultiplayerEvent>();
     }
 
     #endregion

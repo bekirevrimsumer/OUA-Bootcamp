@@ -8,7 +8,7 @@ public class MoveableBox : MonoBehaviour
     [PunRPC]
     private void SetMoveableObj(int parentId)
 	{
-		transform.parent = PhotonView.Find(parentId).transform.Find("MoveableObjPos").transform;
+		transform.parent = PhotonView.Find(parentId).transform.Find("InteractObjectTransform").transform;
 		transform.GetComponent<Rigidbody>().isKinematic = true;
 		transform.GetComponent<Collider>().enabled = false;
 		transform.localPosition = Vector3.zero;
