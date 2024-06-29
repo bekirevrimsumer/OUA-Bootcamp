@@ -17200,6 +17200,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7125344732981695587, guid: 400fec6ecb27f6f458f5c78bcedad719, type: 3}
+      propertyPath: sceneViewId
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 8300159806427996433, guid: 400fec6ecb27f6f458f5c78bcedad719, type: 3}
       propertyPath: m_Name
       value: Mirror

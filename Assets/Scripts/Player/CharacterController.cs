@@ -164,28 +164,17 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
         {
             stream.SendNext(Animator.GetBool("IsCarry"));
             stream.SendNext(Animator.GetFloat("Speed"));
-            // if (_currentMirror != null)
-            // {
-            //     // stream.SendNext(_currentMirror.GetComponent<PhotonView>().ViewID);
-            //     stream.SendNext(_currentMirror.rotation);
-            // }
         }
         else
         {
             Animator.SetBool("IsCarry", (bool)stream.ReceiveNext());
             Animator.SetFloat("Speed", (float)stream.ReceiveNext());
-
-            // if(_currentMirror != null)
-            // {
-            //     // _currentMirrorViewID = (int)stream.ReceiveNext();
-            //     _currentMirror.rotation = (Quaternion)stream.ReceiveNext();
-            // }
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("InteractMirror") && photonView.IsMine)
+        if (other.CompareTag("InteractMirror") && photonView.IsMine && !other.transform.parent.GetComponent<Mirror>().IsCarry)
         {
             LightReflectionEvent.Trigger(LightReflectionEventType.MirrorEnter);
             _currentMirror = other.transform.parent;
@@ -194,7 +183,7 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("InteractMirror") && photonView.IsMine)
+        if (other.CompareTag("InteractMirror") && photonView.IsMine && !other.transform.parent.GetComponent<Mirror>().IsCarry)
         {
             LightReflectionEvent.Trigger(LightReflectionEventType.MirrorExit);
             _currentMirror = null;
@@ -249,19 +238,19 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
         {
             if (Input.GetKey(KeyCode.Q))
             {
-                _currentMirror.Rotate(Vector3.up, -90 * Time.deltaTime, Space.Self);
+                _currentMirror.GetComponent<PhotonView>().RPC("RotateMirrorRPC", RpcTarget.All, Vector3.up, -90 * Time.deltaTime);
             }
             if (Input.GetKey(KeyCode.E))
             {
-                _currentMirror.Rotate(Vector3.up, 90 * Time.deltaTime, Space.Self);
+                _currentMirror.GetComponent<PhotonView>().RPC("RotateMirrorRPC", RpcTarget.All, Vector3.up, 90 * Time.deltaTime);                
             }   
             if(Input.GetKey(KeyCode.X))
             {
-                _currentMirror.Rotate(Vector3.right, -90 * Time.deltaTime, Space.Self);
+                _currentMirror.GetComponent<PhotonView>().RPC("RotateMirrorRPC", RpcTarget.All, Vector3.right, -90 * Time.deltaTime);
             }
             if(Input.GetKey(KeyCode.C))
             {
-                _currentMirror.Rotate(Vector3.right, 90 * Time.deltaTime, Space.Self);
+                _currentMirror.GetComponent<PhotonView>().RPC("RotateMirrorRPC", RpcTarget.All, Vector3.right, 90 * Time.deltaTime);
             }
         }
     }
