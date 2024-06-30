@@ -19,8 +19,6 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
     private bool _isCarry = false;
     private Transform _currentMirror;
     private int _parentId;
-    private Quaternion networkRotation;
-    private int _currentMirrorViewID;
 
     [Header("Climbing")]
     public bool IsClimbing = false;
@@ -52,10 +50,6 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
     {
         Animator = GetComponent<Animator>();
         _lastPosition = transform.position;
-        if (!photonView.IsMine)
-        {
-            networkRotation = Quaternion.identity;
-        }
     }
 
     private void Update()
@@ -65,17 +59,6 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
             TopDownWASDMovement();
             RotateMirror();
         }
-        // else 
-        // {
-        //     if (_currentMirror == null && _currentMirrorViewID != 0)
-        //     {
-        //         PhotonView mirrorView = PhotonView.Find(_currentMirrorViewID);
-        //         if (mirrorView != null)
-        //         {
-        //             _currentMirror = mirrorView.transform;
-        //         }
-        //     }
-        // }
 
         if (Input.GetKeyDown(KeyCode.F) && _currentMirror != null)
         {

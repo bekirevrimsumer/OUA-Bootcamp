@@ -7,17 +7,18 @@ public class CinemachineZone : MonoBehaviour
 {
 
     [Header("Virtual Camera")]
-    public bool CameraStartsActive = true;
-    public CinemachineVirtualCamera VirtualCamera;
+    public CinemachineVirtualCamera CurrentVirtualCamera;
 
     [Header("Collider")]
     public LayerMask TriggerMask;
-
     public bool UseConfiner = false;
+    public float ConfinerSize = 1;
+    private static float _defaultSize = 13; 
 
     [Header("State")]
     public bool CurrentState = false;
     public bool StateVisited = false;
+    private Coroutine _coroutine;
 
     [Header("Activation")]
     public List<GameObject> ActivationObjects;
@@ -31,15 +32,9 @@ public class CinemachineZone : MonoBehaviour
 
     protected Collider _collider;
     protected Collider _confinerCollider;
-    protected Rigidbody _confinerRigidbody;
     protected BoxCollider _boxCollider;
     protected SphereCollider _sphereCollider;
     protected CinemachineConfiner _cinemachineConfiner;
-
-    [Header("Top Down Camera")]
-    public bool RequiresPlayerCharacter = true;
-    protected CinemachineCameraController _cinemachineCameraController;
-    protected CharacterController _character;
 
     protected virtual void Awake()
     {
@@ -49,20 +44,6 @@ public class CinemachineZone : MonoBehaviour
             return;
         }
         Initialization();
-
-        if (Application.isPlaying)
-        {
-            _cinemachineCameraController = VirtualCamera.gameObject.GetComponentInChildren<CinemachineCameraController>();
-
-            if (_cinemachineCameraController == null)
-            {
-                _cinemachineCameraController = VirtualCamera.gameObject.GetComponentInParent<CinemachineCameraController>();
-            }
-            if (_cinemachineCameraController == null)
-            {
-                _cinemachineCameraController = VirtualCamera.gameObject.AddComponent<CinemachineCameraController>();
-            }
-        }
     }
 
     protected virtual void AlwaysInitialization()
@@ -72,16 +53,6 @@ public class CinemachineZone : MonoBehaviour
 
     protected virtual void Initialization()
     {
-        if (VirtualCamera == null)
-        {
-            VirtualCamera = GetComponentInChildren<CinemachineVirtualCamera>();
-        }
-
-        if (VirtualCamera == null)
-        {
-            Debug.LogWarning("Sanal kamera childrenlarda bulunamadı: " + gameObject.name);
-        }
-
         if (UseConfiner)
         {
             SetupConfinerGameObject();
@@ -99,13 +70,6 @@ public class CinemachineZone : MonoBehaviour
         {
             return;
         }
-
-        if (UseConfiner)
-        {
-            SetupConfiner();
-        }
-
-        StartCoroutine(EnableCamera(CameraStartsActive, 1));
     }
 
     protected virtual void InitializeCollider()
@@ -116,17 +80,12 @@ public class CinemachineZone : MonoBehaviour
         _collider.isTrigger = true;
     }
 
-    protected virtual void SetupConfiner()
+    protected virtual void SetupConfiner(CinemachineVirtualCamera virtualCamera)
     {
-        _confinerRigidbody = _confinerObject.AddComponent<Rigidbody>();
-        _confinerRigidbody.useGravity = false;
-        _confinerRigidbody.gameObject.isStatic = true;
-        _confinerRigidbody.isKinematic = true;
-
         CopyCollider();
         _confinerObject.transform.localPosition = Vector3.zero;
 
-        _cinemachineConfiner = VirtualCamera.gameObject.GetComponent<CinemachineConfiner>();
+        _cinemachineConfiner = virtualCamera.gameObject.GetComponent<CinemachineConfiner>();
         _cinemachineConfiner.m_ConfineMode = CinemachineConfiner.Mode.Confine3D;
         _cinemachineConfiner.m_ConfineScreenEdges = true;
 
@@ -144,7 +103,6 @@ public class CinemachineZone : MonoBehaviour
     protected virtual void ManualSetupConfiner()
     {
         Initialization();
-        SetupConfiner();
     }
 
     protected virtual void SetupConfinerGameObject()
@@ -180,38 +138,18 @@ public class CinemachineZone : MonoBehaviour
         }
     }
 
-    protected virtual IEnumerator EnableCamera(bool state, int frames)
-    {
-        if (VirtualCamera == null)
-        {
-            yield break;
-        }
-        while (frames > 0)
-        {
-            frames--;
-            yield return null;
-        }
-
-        VirtualCamera.enabled = state;
-
-        if (state)
-        {
-            _cinemachineCameraController.FollowsAPlayer = true;
-            _cinemachineCameraController.StartFollowing();
-        }
-        else
-        {
-            _cinemachineCameraController.StopFollowing();
-            _cinemachineCameraController.FollowsAPlayer = false;
-        }
-    }
-
     protected virtual void EnterZone()
     {
+        if(_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+            _coroutine = null;
+        }
+        _coroutine = StartCoroutine(SmoothCameraDistance(ConfinerSize, false));
+        SetupConfiner(CurrentVirtualCamera);
         CurrentState = true;
         StateVisited = true;
 
-        StartCoroutine(EnableCamera(true, 0));
         foreach (GameObject go in ActivationObjects)
         {
             go.SetActive(true);
@@ -220,18 +158,46 @@ public class CinemachineZone : MonoBehaviour
 
     protected virtual void ExitZone()
     {
+        if(_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+            _coroutine = null;
+        }
+        _coroutine = StartCoroutine(SmoothCameraDistance(_defaultSize, true));
         CurrentState = false;
-        StartCoroutine(EnableCamera(false, 0));
         foreach (GameObject go in ActivationObjects)
         {
             go.SetActive(false);
         }
+
+        if (UseConfiner)
+        {
+            CurrentVirtualCamera.transform.GetComponent<CinemachineConfiner>().m_BoundingVolume = null;
+            CurrentVirtualCamera.transform.GetComponent<CinemachineConfiner>().m_Damping = 4f;
+        }
+    }
+
+    private IEnumerator SmoothCameraDistance(float targetDistance, bool isExitZone)
+    {
+        float currentDistance = CurrentVirtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance;
+        float elapsedTime = 0;
+        float duration = 1f;
+
+        while (elapsedTime < duration)
+        {
+            CurrentVirtualCamera.GetCinemachineComponent<CinemachineFramingTransposer>().m_CameraDistance = Mathf.Lerp(currentDistance, targetDistance, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        if(isExitZone)
+            CurrentVirtualCamera = null;
     }
 
     protected virtual void OnTriggerEnter(Collider collider)
     {
         if ((TriggerMask.value & (1 << collider.gameObject.layer)) > 0)
         {
+            CurrentVirtualCamera = collider.transform.parent.Find("BaseCamera").GetComponent<CinemachineVirtualCamera>();
             EnterZone();
         }
     }

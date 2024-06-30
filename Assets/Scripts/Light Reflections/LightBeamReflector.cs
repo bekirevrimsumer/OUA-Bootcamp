@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LightBeamReflector : MonoBehaviour
@@ -5,9 +6,11 @@ public class LightBeamReflector : MonoBehaviour
     public LightBeamSO LightBeamSO;
     private LineRenderer _lineRenderer;
     private Vector3 _initialDirection;
-    private bool _isTargetHit = false;
     private Target _target;
+    private bool _isTargetHit = false;
     private bool _isMirrorHit = false;
+    private bool _isPortalHit = false;
+    private GameObject _portalLightBeam;
     private const int _reflectionMultiplier = 10;
 
     void Start()
@@ -51,21 +54,33 @@ public class LightBeamReflector : MonoBehaviour
         {
             ProcessMirrorHit();
         }
-
         if (hit.collider.CompareTag("Target"))
         {
             HandleTargetHit(hit);
+        }
+        if (hit.collider.CompareTag("Portal"))
+        {
+            HandlePortalHit(hit);
         }
     }
 
     private void HandleNoHit()
     {
+        ResetLineRenderer();
+
         if (_isMirrorHit)
         {
-            ResetLineRenderer();
-            CalculateReflection(transform.position, _initialDirection);
             _isMirrorHit = false;
         }
+
+        if (_isPortalHit)
+        {
+            if (_portalLightBeam != null)
+                Destroy(_portalLightBeam);
+            _isPortalHit = false;
+        }
+
+        CalculateReflection(transform.position, _initialDirection);
     }
 
     private void ProcessMirrorHit()
@@ -111,6 +126,11 @@ public class LightBeamReflector : MonoBehaviour
             HandleTargetHit(hit);
             AddLineRendererPosition(hit.point);
         }
+        else if (hit.collider.CompareTag("Portal"))
+        {
+            HandlePortalHit(hit);
+            AddLineRendererPosition(hit.point);
+        }
         else
         {
             ResetLineRenderer();
@@ -123,22 +143,44 @@ public class LightBeamReflector : MonoBehaviour
         _isMirrorHit = true;
         Vector3 reflectDirection = Vector3.Reflect(direction, hit.normal);
 
+        if (_isPortalHit)
+        {
+            if (_portalLightBeam != null)
+                Destroy(_portalLightBeam);
+            _isPortalHit = false;
+        }
+
         AddLineRendererPosition(hit.point);
         CalculateReflection(hit.point, reflectDirection, reflectionCount);
     }
 
     private void HandleTargetHit(RaycastHit hit)
     {
-        if(!_isTargetHit)
+        if (!_isTargetHit)
         {
+            ResetLineRenderer();
+            AddLineRendererPosition(hit.point);
             _target = hit.collider.GetComponent<Target>();
 
-            if(_target.colorType == LightBeamSO.LightBeamColorType)
+            if (_target.colorType == LightBeamSO.LightBeamColorType)
             {
-                Debug.Log("Target hit");
                 LightReflectionEvent.Trigger(LightReflectionEventType.HitTarget);
                 _isTargetHit = true;
             }
+        }
+    }
+
+    private void HandlePortalHit(RaycastHit hit)
+    {
+        if (!_isPortalHit)
+        {
+            _isPortalHit = true;
+            ResetLineRenderer();
+            AddLineRendererPosition(hit.point);
+            var endPortal = hit.transform.parent.Find("PortalEnd");
+
+            if (_portalLightBeam == null)
+                _portalLightBeam = Instantiate(gameObject, endPortal.position, transform.rotation);
         }
     }
 

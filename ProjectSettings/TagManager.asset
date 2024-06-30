@@ -11,6 +11,7 @@ TagManager:
   - Target
   - Climb
   - InteractMirror
+  - Portal
   layers:
   - Default
   - TransparentFX
