@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour, IEventListener<LightReflectionEvent>
+public class UIManager : MonoBehaviour, IEventListener<LightReflectionEvent>, IEventListener<InformationEvent>
 {
     [System.Serializable]
     public class KeyValuePair
@@ -9,6 +10,8 @@ public class UIManager : MonoBehaviour, IEventListener<LightReflectionEvent>
         public string key;
         public GameObject value;
     }
+
+    private GameObject _currentWindow;
 
     public List<KeyValuePair> windowList = new List<KeyValuePair>();
 
@@ -35,7 +38,34 @@ public class UIManager : MonoBehaviour, IEventListener<LightReflectionEvent>
             window.value.SetActive(false);
         }
     }
+
+    public GameObject GetWindow(string windowKey)
+    {
+        return windowList.Find(x => x.key == windowKey).value;
+    }
     #endregion
+
+    public void UpdatePanel<T>(string key, T eventType)
+    {
+        var panel = windowList.Find(p => p.key == key).value;
+        var updater = panel.GetComponent<BasePanelUpdater<T>>();
+        updater.UpdatePanel(eventType);
+    }
+
+    public void AnimatePanel(string key, bool isShow, TweenCallback onComplete = null)
+    {
+        _currentWindow = GetWindow(key);
+        if (isShow)
+        {
+            _currentWindow.GetComponent<RectTransform>().DOScaleX(1, 0.2f).SetEase(Ease.OutBack);
+            _currentWindow.GetComponent<RectTransform>().DOScaleY(1, 0.2f).SetEase(Ease.OutBack).onComplete += onComplete;
+        }
+        else
+        {
+            _currentWindow.GetComponent<RectTransform>().DOScaleX(0, 0.2f).SetEase(Ease.OutBack);
+            _currentWindow.GetComponent<RectTransform>().DOScaleY(0, 0.2f).SetEase(Ease.OutBack).onComplete += onComplete;
+        }
+    }
 
     #region Events
 
@@ -44,18 +74,29 @@ public class UIManager : MonoBehaviour, IEventListener<LightReflectionEvent>
         switch (eventType.LightReflectionEventType)
         {
             case LightReflectionEventType.MirrorEnter:
-                OpenWindow("InteractMirrorWindow");
+                AnimatePanel("InteractMirrorWindow", true);
                 break;
             case LightReflectionEventType.MirrorExit:
-                CloseWindow("InteractMirrorWindow");
+                AnimatePanel("InteractMirrorWindow", false);
                 break;
             case LightReflectionEventType.MirrorCarry:
-                CloseWindow("InteractMirrorWindow");
-                OpenWindow("CarryMirrorWindow");
+                AnimatePanel("InteractMirrorWindow", false, () => { AnimatePanel("CarryMirrorWindow", true);});
                 break;
             case LightReflectionEventType.MirrorDrop:
-                CloseWindow("CarryMirrorWindow");
-                OpenWindow("InteractMirrorWindow");
+                AnimatePanel("CarryMirrorWindow", false, () => { AnimatePanel("InteractMirrorWindow", true);});
+                break;
+        }
+    }
+
+    public void OnEvent(InformationEvent eventType)
+    {
+        switch (eventType.InformationEventType)
+        {
+            case InformationEventType.Show:
+                AnimatePanel("InfoPanel", true);
+                break;
+            case InformationEventType.Hide:
+                AnimatePanel("InfoPanel", false);
                 break;
         }
     }
@@ -63,11 +104,13 @@ public class UIManager : MonoBehaviour, IEventListener<LightReflectionEvent>
     protected virtual void OnEnable()
     {
         this.StartListeningEvent<LightReflectionEvent>();
+        this.StartListeningEvent<InformationEvent>();
     }
 
     protected virtual void OnDisable()
     {
         this.StopListeningEvent<LightReflectionEvent>();
+        this.StopListeningEvent<InformationEvent>();
     }
 
     #endregion

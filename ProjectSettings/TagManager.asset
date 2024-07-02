@@ -12,6 +12,7 @@ TagManager:
   - Climb
   - InteractMirror
   - Portal
+  - InformationMessageArea
   layers:
   - Default
   - TransparentFX

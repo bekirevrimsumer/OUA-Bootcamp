@@ -37,8 +37,6 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
     [Header("References")]
     public Animator Animator;
     public LayerMask GroundLayer;
-    private Vector3 _lastPosition;
-    private float _desiredSpeed;
 
     private void Start()
     {
@@ -49,7 +47,6 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
     private void Init()
     {
         Animator = GetComponent<Animator>();
-        _lastPosition = transform.position;
     }
 
     private void Update()
@@ -157,19 +154,31 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("InteractMirror") && photonView.IsMine && !other.transform.parent.GetComponent<Mirror>().IsCarry)
+        if (other.CompareTag("InteractMirror") && photonView.IsMine && !other.transform.parent.GetComponent<Mirror>().IsCarry && !_isCarry)
         {
             LightReflectionEvent.Trigger(LightReflectionEventType.MirrorEnter);
             _currentMirror = other.transform.parent;
+        }
+
+        if (other.CompareTag("InformationMessageArea"))
+        {
+            var infoMessageArea = other.GetComponent<InformantionMessageArea>();
+            InformationEvent.Trigger(InformationEventType.Show, infoMessageArea.infoMessageSO);
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("InteractMirror") && photonView.IsMine && !other.transform.parent.GetComponent<Mirror>().IsCarry)
+        if (other.CompareTag("InteractMirror") && photonView.IsMine && !other.transform.parent.GetComponent<Mirror>().IsCarry && !_isCarry)
         {
             LightReflectionEvent.Trigger(LightReflectionEventType.MirrorExit);
             _currentMirror = null;
+        }
+
+        if (other.CompareTag("InformationMessageArea") && photonView.IsMine)
+        {
+            var infoMessageArea = other.GetComponent<InformantionMessageArea>();
+            InformationEvent.Trigger(InformationEventType.Hide, infoMessageArea.infoMessageSO);
         }
     }
 
@@ -240,7 +249,7 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
 
     #endregion
 
-    #region Multiplayer
+    #region Multiplayer Events
     public void IsLocalPlayer()
     {
         Camera.gameObject.SetActive(true);

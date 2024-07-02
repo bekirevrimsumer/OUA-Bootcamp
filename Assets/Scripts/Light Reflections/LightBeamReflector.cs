@@ -143,13 +143,6 @@ public class LightBeamReflector : MonoBehaviour
         _isMirrorHit = true;
         Vector3 reflectDirection = Vector3.Reflect(direction, hit.normal);
 
-        if (_isPortalHit)
-        {
-            if (_portalLightBeam != null)
-                Destroy(_portalLightBeam);
-            _isPortalHit = false;
-        }
-
         AddLineRendererPosition(hit.point);
         CalculateReflection(hit.point, reflectDirection, reflectionCount);
     }
