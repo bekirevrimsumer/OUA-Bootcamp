@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LightBeamReflector : MonoBehaviour
@@ -11,6 +11,7 @@ public class LightBeamReflector : MonoBehaviour
     private bool _isMirrorHit = false;
     private bool _isPortalHit = false;
     private GameObject _portalLightBeam;
+    private List<string> _hitObjects = new List<string>();
     private const int _reflectionMultiplier = 10;
 
     void Start()
@@ -91,6 +92,7 @@ public class LightBeamReflector : MonoBehaviour
 
     private void ResetLineRenderer()
     {
+        _hitObjects.Clear();
         _lineRenderer.positionCount = 1;
         _lineRenderer.SetPosition(0, transform.position);
     }
@@ -108,6 +110,8 @@ public class LightBeamReflector : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("LightBeam")))
         {
             ProcessHit(hit, direction, reflectionCount);
+            if(!_hitObjects.Contains(hit.collider.tag))
+                _hitObjects.Add(hit.collider.tag);
         }
         else
         {
@@ -120,6 +124,12 @@ public class LightBeamReflector : MonoBehaviour
         if (hit.collider.CompareTag("Mirror"))
         {
             HandleMirrorReflection(hit, direction, ++reflectionCount);
+            if(_portalLightBeam != null && !_hitObjects.Contains("Portal"))
+            {
+                Destroy(_portalLightBeam);
+                _portalLightBeam = null;
+                _isPortalHit = false;
+            }
         }
         else if (hit.collider.CompareTag("Target"))
         {
@@ -135,6 +145,9 @@ public class LightBeamReflector : MonoBehaviour
         {
             ResetLineRenderer();
             AddLineRendererPosition(hit.point);
+
+            if(_portalLightBeam != null)
+                Destroy(_portalLightBeam);
         }
     }
 

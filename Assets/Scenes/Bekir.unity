@@ -18007,6 +18007,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7025706350600651379, guid: 400fec6ecb27f6f458f5c78bcedad719, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7025706350600651379, guid: 400fec6ecb27f6f458f5c78bcedad719, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7025706350600651379, guid: 400fec6ecb27f6f458f5c78bcedad719, type: 3}
+      propertyPath: m_Size.z
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7025706350600651379, guid: 400fec6ecb27f6f458f5c78bcedad719, type: 3}
+      propertyPath: m_Center.z
+      value: -0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7125344732981695587, guid: 400fec6ecb27f6f458f5c78bcedad719, type: 3}
       propertyPath: sceneViewId
       value: 8
@@ -18014,6 +18030,14 @@ PrefabInstance:
     - target: {fileID: 8300159806427996433, guid: 400fec6ecb27f6f458f5c78bcedad719, type: 3}
       propertyPath: m_Name
       value: Mirror
+      objectReference: {fileID: 0}
+    - target: {fileID: 9014110220802308449, guid: 400fec6ecb27f6f458f5c78bcedad719, type: 3}
+      propertyPath: m_Size.z
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 9014110220802308449, guid: 400fec6ecb27f6f458f5c78bcedad719, type: 3}
+      propertyPath: m_Center.z
+      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

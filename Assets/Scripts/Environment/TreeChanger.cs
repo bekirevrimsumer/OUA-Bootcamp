@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
+using Photon.Pun;
 using UnityEngine;
 
-public class TreeChanger : MonoBehaviour, IEventListener<LightReflectionEvent>
+public class TreeChanger : MonoBehaviourPunCallbacks, IEventListener<LightReflectionEvent>
 {
     public GameObject DeadTree;
     public GameObject OriginalTree;
@@ -26,6 +25,7 @@ public class TreeChanger : MonoBehaviour, IEventListener<LightReflectionEvent>
         }
     }
 
+    
     private void TransitionTree()
     {
         ShakeTree(DeadTree);
@@ -42,20 +42,21 @@ public class TreeChanger : MonoBehaviour, IEventListener<LightReflectionEvent>
             });
     }
 
-        private void ShakeTree(GameObject tree)
+    private void ShakeTree(GameObject tree)
     {
-        // Apply a small shaking effect to the tree
         tree.transform.DOShakePosition(1f, new Vector3(0.1f, 0.1f, 0.1f), 10, 90, false, true);
         tree.transform.DOShakeRotation(1f, new Vector3(5f, 5f, 0), 10, 90, true);
     }
 
-    protected virtual void OnEnable()
+    public override void OnEnable()
     {
+        base.OnEnable();
         this.StartListeningEvent<LightReflectionEvent>();
     }
 
-    protected virtual void OnDisable()
+    public override void OnDisable()
     {
+        base.OnDisable();
         this.StopListeningEvent<LightReflectionEvent>();
     }
 }

@@ -160,7 +160,7 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
             _currentMirror = other.transform.parent;
         }
 
-        if (other.CompareTag("InformationMessageArea"))
+        if (other.CompareTag("InformationMessageArea") && photonView.IsMine)
         {
             var infoMessageArea = other.GetComponent<InformantionMessageArea>();
             InformationEvent.Trigger(InformationEventType.Show, infoMessageArea.infoMessageSO);
