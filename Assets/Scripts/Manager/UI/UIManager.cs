@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour, IEventListener<LightReflectionEvent>, IEventListener<InformationEvent>
+public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventListener<InformationEvent>
 {
     [System.Serializable]
     public class KeyValuePair
@@ -69,21 +69,27 @@ public class UIManager : MonoBehaviour, IEventListener<LightReflectionEvent>, IE
 
     #region Events
 
-    public void OnEvent(LightReflectionEvent eventType)
+    public void OnEvent(InteractEvent eventType)
     {
-        switch (eventType.LightReflectionEventType)
+        switch (eventType.InteractEventType)
         {
-            case LightReflectionEventType.MirrorEnter:
+            case InteractEventType.MirrorEnter:
                 AnimatePanel("InteractMirrorWindow", true);
                 break;
-            case LightReflectionEventType.MirrorExit:
+            case InteractEventType.MirrorExit:
                 AnimatePanel("InteractMirrorWindow", false);
                 break;
-            case LightReflectionEventType.MirrorCarry:
+            case InteractEventType.MirrorCarry:
                 AnimatePanel("InteractMirrorWindow", false, () => { AnimatePanel("CarryMirrorWindow", true);});
                 break;
-            case LightReflectionEventType.MirrorDrop:
+            case InteractEventType.MirrorDrop:
                 AnimatePanel("CarryMirrorWindow", false, () => { AnimatePanel("InteractMirrorWindow", true);});
+                break;
+            case InteractEventType.ClimbEnter:
+                AnimatePanel("ClimbWindow", true);
+                break;
+            case InteractEventType.ClimbExit:
+                AnimatePanel("ClimbWindow", false);
                 break;
         }
     }
@@ -103,13 +109,13 @@ public class UIManager : MonoBehaviour, IEventListener<LightReflectionEvent>, IE
 
     protected virtual void OnEnable()
     {
-        this.StartListeningEvent<LightReflectionEvent>();
+        this.StartListeningEvent<InteractEvent>();
         this.StartListeningEvent<InformationEvent>();
     }
 
     protected virtual void OnDisable()
     {
-        this.StopListeningEvent<LightReflectionEvent>();
+        this.StopListeningEvent<InteractEvent>();
         this.StopListeningEvent<InformationEvent>();
     }
 

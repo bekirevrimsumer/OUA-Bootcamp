@@ -1,3 +1,4 @@
+using System.Collections;
 using Cinemachine;
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
@@ -20,22 +21,20 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
     private Transform _currentMirror;
     private int _parentId;
 
+    [Header("Jumping")]
+    public float JumpForce = 5f;
+    public float GroundDistance = 0.1f;
+    public bool IsGrounded = false;
+
     [Header("Climbing")]
-    public bool IsClimbing = false;
-    private bool _inPosition = false;
-    private float _posT;
-    private Vector3 _startPos;
-    private Vector3 _endPos;
-    private Quaternion _startRot;
-    private Quaternion _endRot;
-    private float positionOffset = 0.5f;
-    private float offsetFromWall = 0.1f;
-    private float speedMultiplier = 1.5f;
-
-
+    public float ClimbSpeed = 2f;
+    private Transform _climbPoint;
+    private bool _canClimb = false;
+    private bool _isClimbing = false;
 
     [Header("References")]
     public Animator Animator;
+    public Rigidbody Rb;    
     public LayerMask GroundLayer;
 
     private void Start()
@@ -47,16 +46,48 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
     private void Init()
     {
         Animator = GetComponent<Animator>();
+        Rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
         if(photonView.IsMine)
         {
-            TopDownWASDMovement();
+            TopDownMovement();
             RotateMirror();
+            HandleClimbing();
+            HandleJumping();
+            HandleGroundedState();
+            HandleMirrorPickup();
         }
+    }
 
+    private void HandleClimbing()
+    {
+        if (_canClimb && Input.GetKeyDown(KeyCode.Space) && !_isClimbing)
+        {
+            _isClimbing = true;
+            StartCoroutine(Climb());
+        }
+    }
+
+    private void HandleJumping()
+    {
+        IsGrounded = Physics.Raycast(transform.position, Vector3.down, GroundDistance, GroundLayer);
+
+        if (!_canClimb && !_isCarry && IsGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            Rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+        }
+    }
+
+    private void HandleGroundedState()
+    {
+        Animator.SetBool("IsGrounded", IsGrounded);
+    }
+
+    private void HandleMirrorPickup()
+    {
         if (Input.GetKeyDown(KeyCode.F) && _currentMirror != null)
         {
             if (!_isCarry)
@@ -68,19 +99,10 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
                 DropMirror();
             }
         }
-
-        if (IsClimbing)
-        {
-            Climb();
-        }
-        else
-        {
-            CheckForClimb();
-        }
     }
 
     #region TopDownWASDMovement
-    private void TopDownWASDMovement()
+    private void TopDownMovement()
     {
         var movement = GetMovement();
         movement = Vector3.ClampMagnitude(movement, 1);
@@ -122,20 +144,24 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
     #region Mirror Interact
     void PickupMirror()
     {
-        LightReflectionEvent.Trigger(LightReflectionEventType.MirrorCarry);
+        InteractEvent.Trigger(InteractEventType.MirrorCarry);
         _isCarry = true;
         Animator.SetBool("IsCarry", true);
 		_parentId = transform.GetComponent<PhotonView>().ViewID;
 		_currentMirror.GetComponent<PhotonView>().RPC("CarryMirrorRPC", RpcTarget.All, _parentId);
+        Rb.useGravity = false;
+        Rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
     }
 
     void DropMirror()
     {
-        LightReflectionEvent.Trigger(LightReflectionEventType.MirrorDrop);
+        InteractEvent.Trigger(InteractEventType.MirrorDrop);
         _isCarry = false;
         Animator.SetBool("IsCarry", false);
 		_currentMirror.GetComponent<PhotonView>().RPC("DropMirrorRPC", RpcTarget.All);
         _currentMirror = null;
+        Rb.useGravity = true;
+        Rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -156,7 +182,7 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
     {
         if (other.CompareTag("InteractMirror") && photonView.IsMine && !other.transform.parent.GetComponent<Mirror>().IsCarry && !_isCarry)
         {
-            LightReflectionEvent.Trigger(LightReflectionEventType.MirrorEnter);
+            InteractEvent.Trigger(InteractEventType.MirrorEnter);
             _currentMirror = other.transform.parent;
         }
 
@@ -165,13 +191,20 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
             var infoMessageArea = other.GetComponent<InformantionMessageArea>();
             InformationEvent.Trigger(InformationEventType.Show, infoMessageArea.infoMessageSO);
         }
+
+        if (other.CompareTag("Climb"))
+        {
+            InteractEvent.Trigger(InteractEventType.ClimbEnter);
+            _climbPoint = other.GetComponent<ClimbBox>().climbPoint;
+            _canClimb = true;
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("InteractMirror") && photonView.IsMine && !other.transform.parent.GetComponent<Mirror>().IsCarry && !_isCarry)
         {
-            LightReflectionEvent.Trigger(LightReflectionEventType.MirrorExit);
+            InteractEvent.Trigger(InteractEventType.MirrorExit);
             _currentMirror = null;
         }
 
@@ -180,44 +213,29 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
             var infoMessageArea = other.GetComponent<InformantionMessageArea>();
             InformationEvent.Trigger(InformationEventType.Hide, infoMessageArea.infoMessageSO);
         }
+
+        if (other.CompareTag("Climb"))
+        {
+            
+            InteractEvent.Trigger(InteractEventType.ClimbExit);
+            _canClimb = false;
+        }
     }
 
     #endregion
 
     #region Climbing
 
-    private void CheckForClimb()
+    IEnumerator Climb()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, 1f))
+        Animator.SetTrigger("Climb");
+        while (Vector3.Distance(transform.position, _climbPoint.position) > 0.2f)
         {
-            Debug.DrawRay(transform.position, transform.forward, Color.red);
-            if (hit.collider.CompareTag("Climb") && Input.GetKeyDown(KeyCode.Space))
-            {
-                _startPos = transform.position;
-                _endPos = hit.transform.position + hit.transform.forward * positionOffset;
-                _startRot = transform.rotation;
-                _endRot = hit.transform.rotation;
-                _inPosition = true;
-                IsClimbing = true;
-            }
+            transform.position = Vector3.MoveTowards(transform.position, _climbPoint.position, ClimbSpeed * Time.deltaTime);
+            yield return null;
         }
-    }
 
-    private void Climb()
-    {
-        if (_inPosition)
-        {
-            Animator.SetTrigger("Climb");
-            _posT += Time.deltaTime * speedMultiplier;
-            transform.position = Vector3.Lerp(_startPos, _endPos, _posT);
-            transform.rotation = Quaternion.Lerp(_startRot, _endRot, _posT);
-            if (_posT >= 1)
-            {
-                _inPosition = false;
-                _posT = 0;
-            }
-        }
+        _isClimbing = false;
     }
 
     #endregion
