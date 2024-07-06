@@ -192,7 +192,7 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
             InformationEvent.Trigger(InformationEventType.Show, infoMessageArea.infoMessageSO);
         }
 
-        if (other.CompareTag("Climb"))
+        if (other.CompareTag("Climb") && photonView.IsMine)
         {
             InteractEvent.Trigger(InteractEventType.ClimbEnter);
             _climbPoint = other.GetComponent<ClimbBox>().climbPoint;
@@ -214,7 +214,7 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
             InformationEvent.Trigger(InformationEventType.Hide, infoMessageArea.infoMessageSO);
         }
 
-        if (other.CompareTag("Climb"))
+        if (other.CompareTag("Climb") && photonView.IsMine)
         {
             
             InteractEvent.Trigger(InteractEventType.ClimbExit);
