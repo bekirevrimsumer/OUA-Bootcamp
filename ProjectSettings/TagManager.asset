@@ -4,7 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Bullet
   - Ground
   - FxTemporaire
   - Mirror
@@ -13,6 +12,8 @@ TagManager:
   - InteractMirror
   - Portal
   - InformationMessageArea
+  - ClimbWall
+  - WallUp
   layers:
   - Default
   - TransparentFX
@@ -20,9 +21,9 @@ TagManager:
   - Ground
   - Water
   - UI
-  - Hand
-  - Moveable
-  - Damageable
+  - 
+  - 
+  - 
   - Player
   - LightBeam
   - 

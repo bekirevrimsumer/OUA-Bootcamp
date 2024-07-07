@@ -1,5 +1,6 @@
 using System.Collections;
 using Cinemachine;
+using DG.Tweening;
 using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using UnityEngine;
@@ -31,6 +32,9 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
     private Transform _climbPoint;
     private bool _canClimb = false;
     private bool _isClimbing = false;
+    private Transform _climbWall;
+    private bool _canClimbWall = false;
+    private bool _isClimbWall = false;
 
     [Header("References")]
     public Animator Animator;
@@ -59,13 +63,44 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
             HandleJumping();
             HandleGroundedState();
             HandleMirrorPickup();
+            HandleClimbWall();
+        }
+    }
+
+    private void HandleClimbWall()
+    {
+        if (_canClimbWall && Input.GetKeyDown(KeyCode.Space))
+        {
+            _isClimbWall = !_isClimbWall;
+            Animator.SetBool("IsClimbWall", _isClimbWall);
+            Rb.useGravity = !_isClimbWall;
+        }
+
+        if (_isClimbWall)
+        {
+            ClimbWall();
+        }
+    }
+
+    private void ClimbWall()
+    {
+        Animator.SetBool("IsClimbWall", true);
+        var movement = GetMovement();
+
+        Animator.SetFloat("Speed", movement.magnitude);
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            float targetY = transform.position.y + ClimbSpeed * 10 * Time.deltaTime;
+            transform.DOMoveY(targetY, 0.3f).SetEase(Ease.Linear);
         }
     }
 
     private void HandleClimbing()
     {
-        if (_canClimb && Input.GetKeyDown(KeyCode.Space) && !_isClimbing)
+        if (_canClimb && Input.GetKeyDown(KeyCode.Space) && !_isClimbing && !_isClimbWall)
         {
+            transform.LookAt(new Vector3(_climbPoint.position.x, transform.position.y, _climbPoint.position.z));
             _isClimbing = true;
             StartCoroutine(Climb());
         }
@@ -75,7 +110,7 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
     {
         IsGrounded = Physics.Raycast(transform.position, Vector3.down, GroundDistance, GroundLayer);
 
-        if (!_canClimb && !_isCarry && IsGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (!_canClimb && !_canClimbWall && !_isCarry && IsGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             Rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
         }
@@ -104,6 +139,8 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
     #region TopDownWASDMovement
     private void TopDownMovement()
     {
+        if(_isClimbWall) return;
+
         var movement = GetMovement();
         movement = Vector3.ClampMagnitude(movement, 1);
 
@@ -198,6 +235,19 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
             _climbPoint = other.GetComponent<ClimbBox>().climbPoint;
             _canClimb = true;
         }
+
+        if(other.CompareTag("ClimbWall") && photonView.IsMine)
+        {
+            _canClimbWall = true;
+            _climbWall = other.transform;
+        }
+
+        if(other.CompareTag("WallUp") && photonView.IsMine && _isClimbWall)
+        {
+            Animator.SetTrigger("WallUp");
+            transform.DOMoveY(transform.position.y + 1.6f, 0.25f).SetEase(Ease.Linear)
+            .onComplete += () => transform.DOMove(transform.position + transform.forward * 1.1f, 1.1f).SetEase(Ease.Linear);
+        }
     }
 
     void OnTriggerExit(Collider other)
@@ -219,6 +269,18 @@ public class CharacterController : MonoBehaviourPunCallbacks, IPunObservable, IE
             
             InteractEvent.Trigger(InteractEventType.ClimbExit);
             _canClimb = false;
+        }
+
+        if(other.CompareTag("ClimbWall") && photonView.IsMine)
+        {
+            _canClimbWall = false;
+        }
+
+        if(other.CompareTag("WallUp") && photonView.IsMine)
+        {
+            _isClimbWall = false;
+            Animator.SetBool("IsClimbWall", false);
+            Rb.useGravity = true;
         }
     }
 
