@@ -153,4 +153,7 @@ When estimating the time for each task, care should be taken to make these times
     <p>Basic mirror placement was implemented. The player can place the mirror in the desired position and direct the light beam.</p>
     <video controls>
         <source src="Screenshots/Sprint_1/game_video_1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</details>
 
