@@ -1,41 +1,38 @@
 
 # Team Name - Game Name
 
-Unity Group 9 - Game Name
+Unity Group 9 - Gizemli İkizler: Zindanın Yankıları
 
 [![Game Image](https://via.placeholder.com/800x400)](https://via.placeholder.com/800x400)
 
 # Team Members
 | Name | Role | Social Media |
 | --- | --- | --- |
-| Bekir Evrim Sümer | Scrum Master - Developer | [Social Media] |
-| Beyzanur Kahraman | Product Owner - 3D Artist | [Social Media] |
-| Bahadır Işık | Developer | [Social Media] |
-| Çağla Gök | Developer | [Social Media] |
-| Barış Berişbek | Developer | [Social Media] |
+| Bekir Evrim Sümer | Scrum Master - Developer | <a href="https://www.linkedin.com/in/bekirevrimsumer/"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" style="width:20px;height:20px;"></a><a href="https://github.com/bekirevrimsumer"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="LinkedIn" style="width:20px;height:20px;padding-left:10px"></a>|
+| Beyzanur Kahraman | Product Owner - Game Artist | <a href="https://www.linkedin.com/in/mentalgravity/"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" style="width:20px;height:20px;"></a> |
+| Bahadır Işık | Developer | <a href="https://www.linkedin.com/in/bahad%C4%B1r-i%C5%9Fik-b224b3254/"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" style="width:20px;height:20px;"></a><a href="https://github.com/bahadirisik"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="LinkedIn" style="width:20px;height:20px;padding-left:10px"></a> |
+| Çağla Gök | Developer | <a href="https://www.linkedin.com/in/caglagok"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" style="width:20px;height:20px;"></a><a href="https://github.com/caglagok"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="LinkedIn" style="width:20px;height:20px;padding-left:10px"></a> |
+| Barış Berişbek | Developer | <a href="https://www.linkedin.com/in/barış-berişbek-ba67b0235/"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" style="width:20px;height:20px;"></a><a href="https://github.com/barisberisbek"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="LinkedIn" style="width:20px;height:20px;padding-left:10px"></a> |
 
 # Game Description
 ### Story
-Once upon a time, there was a mystical land where light and shadow danced, and colors met each other. This land was known as the "Mirror Land". However, due to an ancient curse, the beauties of this land began to fade. Light cannot find the right paths and shadows are everywhere. Brave adventurers came together to put an end to these dark forces. 
+Once upon a time, there were twin brothers named Alex and Riley. They were well-behaved and responsible children; they did their homework and asked their mother for permission to play video games. Their favorite game was "Gizemli İkizler: Zindanın Yankıları". This game, a classic dungeon exploration game, had become their favorite.
 
-Main Story:
-The game positions players as heroes who set out to illuminate this lost land. Each of them aims to progress through this dark maze using the power of light and the magic of mirrors. Players must solve complex puzzles using various mirrors and light beams and overcome obstacles that become more difficult at each level.
+But our story doesn't start here. No, the real story starts right here! Come, come a little closer. But not too much... Because the twin brothers fell into this trap.
 
-Characters and Roles:
+One day, while playing "Gizemli İkizler: Zindanın Yankıları" again, a fight broke out between the brothers. The brothers, as the name suggests, were constantly bickering. This time the fight was quite intense and Alex, angry, threw the gamepad at Riley's head. Riley was about to go to his mother to complain when unexpected letters and symbols appeared on the TV.
 
-Lumen: Master of Light. Lumen, the main character of the game, is an expert in directing and reflecting light. With his guidance, players develop new strategies for each level.
+The twin brothers curiously entered the bottom of the television and tried to decipher the meanings of these letters and symbols. However, they got too close. SUDDENLY, TWO SATANIC ARMS PULLED THEM INTO THEIR FAVORITE GAME.
 
-Mirroria: Queen of Mirrors. Throughout the game, Mirroria teaches players how to place mirrors in the best way and supports them by using her special powers.
-
-Shadow: Master of Shadows. Shadow, the secret enemy of the game, presents new challenges at each level and tries to hinder the progress of the players.
+The twin brothers, trapped inside Dungeon, will try to complete the dungeon by supporting each other and using their intelligence. They will encounter new challenges at every step, but by working together and using their mirrors skillfully, they will be able to escape from this magical world. Good luck, twin brothers!
 
 ## Game Information
 
 - **Game Type:** Puzzle, Adventure
 - **Platform:** PC
 - **Game Engine:** Unity
-- **Game Control:** Keyboard & Mouse
 - **Art Style:** 3D
+- **Target Audience:** This game can appeal to male and female players across a wide age range (10-35 years). Combining elements of adventure, exploration, action and strategy, the game will be especially appealing to players who are interested in these types of games. 
 
 ## Game Features
 
@@ -156,5 +153,4 @@ When estimating the time for each task, care should be taken to make these times
     <p>Basic mirror placement was implemented. The player can place the mirror in the desired position and direct the light beam.</p>
     <video controls>
         <source src="Screenshots/Sprint_1/game_video_1.mp4" type="video/mp4">
-        Your browser does not support the video tag.
 
