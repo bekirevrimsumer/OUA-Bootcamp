@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class CinemachineCameraController : MonoBehaviour, IEventListener<MultiplayerEvent>
 {
-    public CharacterController Character;
+    public PlayerController Character;
     public bool FollowsAPlayer = false;
 
     protected CinemachineVirtualCamera _virtualCamera;
 
     public virtual void Awake() 
     {
-        _virtualCamera = GetComponent<CinemachineVirtualCamera>();    
+        _virtualCamera = GetComponent<CinemachineVirtualCamera>();
     }
 
     public void OnEvent(MultiplayerEvent eventType)
@@ -41,7 +41,7 @@ public class CinemachineCameraController : MonoBehaviour, IEventListener<Multipl
 
     private void SetCharacter(GameObject character)
     {
-        var characterController = character.FindChildObject("CharacterBase").GetComponent<CharacterController>();
+        var characterController = character.FindChildObject("CharacterBase").GetComponent<PlayerController>();
         Character = characterController;
     }
 

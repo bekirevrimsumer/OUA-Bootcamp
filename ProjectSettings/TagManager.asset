@@ -14,6 +14,9 @@ TagManager:
   - InformationMessageArea
   - ClimbWall
   - WallUp
+  - Switch
+  - DialogueArea
+  - Interactable
   layers:
   - Default
   - TransparentFX

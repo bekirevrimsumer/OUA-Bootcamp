@@ -4,24 +4,26 @@ using UnityEngine;
 public class LightBeamReflector : MonoBehaviour
 {
     public LightBeamSO LightBeamSO;
+    public Vector3 InitialDirection;
     private LineRenderer _lineRenderer;
-    private Vector3 _initialDirection;
-    private Target _target;
+    private LightBeamTarget _target;
     private bool _isTargetHit = false;
     private bool _isMirrorHit = false;
     private bool _isPortalHit = false;
     private GameObject _portalLightBeam;
     private List<string> _hitObjects = new List<string>();
-    private const int _reflectionMultiplier = 10;
+    private const int _reflectionMultiplier = 20;
 
     void Start()
     {
         InitializeComponents();
-        CalculateReflection(transform.position, _initialDirection);
+        CalculateReflection(transform.position, InitialDirection);
     }
 
     void Update()
     {
+        if(_isTargetHit) return;
+
         ProcessRaycast();
     }
 
@@ -32,8 +34,6 @@ public class LightBeamReflector : MonoBehaviour
         _lineRenderer.SetPosition(0, transform.position);
         _lineRenderer.startColor = LightBeamSO.LightBeamColor;
         _lineRenderer.endColor = LightBeamSO.LightBeamColor;
-
-        _initialDirection = transform.forward;
     }
 
     private void ProcessRaycast()
@@ -81,13 +81,13 @@ public class LightBeamReflector : MonoBehaviour
             _isPortalHit = false;
         }
 
-        CalculateReflection(transform.position, _initialDirection);
+        CalculateReflection(transform.position, InitialDirection);
     }
 
     private void ProcessMirrorHit()
     {
         ResetLineRenderer();
-        CalculateReflection(transform.position, _initialDirection);
+        CalculateReflection(transform.position, InitialDirection);
     }
 
     private void ResetLineRenderer()
@@ -99,17 +99,19 @@ public class LightBeamReflector : MonoBehaviour
 
     private void CalculateReflection(Vector3 startPosition, Vector3 direction, int reflectionCount = 0)
     {
-        if (reflectionCount >= LightBeamSO.ReflectionLimit)
-        {
-            AddLineRendererPosition(startPosition + direction * _reflectionMultiplier);
-            return;
-        }
-
         Ray ray = new Ray(startPosition, direction);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("LightBeam")))
         {
+            Debug.DrawLine(startPosition, hit.point, Color.red);
+            if (reflectionCount >= LightBeamSO.ReflectionLimit && hit.collider.CompareTag("Mirror"))
+            {
+                AddLineRendererPosition(startPosition + direction * _reflectionMultiplier);
+                return;
+            }
+
             ProcessHit(hit, direction, reflectionCount);
+            
             if(!_hitObjects.Contains(hit.collider.tag))
                 _hitObjects.Add(hit.collider.tag);
         }
@@ -124,6 +126,7 @@ public class LightBeamReflector : MonoBehaviour
         if (hit.collider.CompareTag("Mirror"))
         {
             HandleMirrorReflection(hit, direction, ++reflectionCount);
+
             if(_portalLightBeam != null && !_hitObjects.Contains("Portal"))
             {
                 Destroy(_portalLightBeam);
@@ -134,12 +137,10 @@ public class LightBeamReflector : MonoBehaviour
         else if (hit.collider.CompareTag("Target"))
         {
             HandleTargetHit(hit);
-            AddLineRendererPosition(hit.point);
         }
         else if (hit.collider.CompareTag("Portal"))
         {
             HandlePortalHit(hit);
-            AddLineRendererPosition(hit.point);
         }
         else
         {
@@ -164,13 +165,14 @@ public class LightBeamReflector : MonoBehaviour
     {
         if (!_isTargetHit)
         {
-            ResetLineRenderer();
+            // ResetLineRenderer();
             AddLineRendererPosition(hit.point);
-            _target = hit.collider.GetComponent<Target>();
+            _target = hit.collider.GetComponent<LightBeamTarget>();
 
-            if (_target.colorType == LightBeamSO.LightBeamColorType)
+            if (_target.ColorType == LightBeamSO.LightBeamColorType)
             {
-                LightReflectionEvent.Trigger(LightReflectionEventType.HitTarget);
+                _target.IsReached = true;
+                SectionEvent.Trigger(SectionEventType.SectionCompleted);
                 _isTargetHit = true;
             }
         }

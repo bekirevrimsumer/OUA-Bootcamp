@@ -156,8 +156,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.1, y: 1.1, z: 0}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: -0.5}
 --- !u!1 &6033388861911802302
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,8 +382,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.7, y: 0.91, z: 0}
-  m_Center: {x: 0, y: 0, z: 0.03}
+  m_Size: {x: 0.7, y: 0.91, z: 0.01}
+  m_Center: {x: 0, y: 0, z: 0.02}
 --- !u!114 &7125344732981695587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,6 +404,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 2753385917323681862}
+  - {fileID: 3717411436163125651}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -435,3 +436,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 736b78c69d3b1624d8134ea93d8b9f55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsCarry: 0

@@ -2,7 +2,7 @@ using DG.Tweening;
 using Photon.Pun;
 using UnityEngine;
 
-public class TreeChanger : MonoBehaviourPunCallbacks, IEventListener<LightReflectionEvent>
+public class TreeChanger : MonoBehaviourPunCallbacks, IEventListener<SectionEvent>
 {
     public GameObject DeadTree;
     public GameObject OriginalTree;
@@ -15,11 +15,11 @@ public class TreeChanger : MonoBehaviourPunCallbacks, IEventListener<LightReflec
         });
     }
 
-    public void OnEvent(LightReflectionEvent eventType)
+    public void OnEvent(SectionEvent eventType)
     {
-        switch(eventType.LightReflectionEventType)
+        switch(eventType.SectionEventType)
         {
-            case LightReflectionEventType.HitTarget:
+            case SectionEventType.SectionCompleted:
                 ChangeTree();
                 break;
         }
@@ -51,12 +51,12 @@ public class TreeChanger : MonoBehaviourPunCallbacks, IEventListener<LightReflec
     public override void OnEnable()
     {
         base.OnEnable();
-        this.StartListeningEvent<LightReflectionEvent>();
+        this.StartListeningEvent<SectionEvent>();
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
-        this.StopListeningEvent<LightReflectionEvent>();
+        this.StopListeningEvent<SectionEvent>();
     }
 }
