@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnvironmentChanger : MonoBehaviour, IEventListener<LightReflectionEvent>
+public class EnvironmentChanger : MonoBehaviour, IEventListener<SectionEvent>
 {
     public Material originalSkyboxMaterial;
     public Material newSkyboxMaterial;
@@ -58,11 +58,11 @@ public class EnvironmentChanger : MonoBehaviour, IEventListener<LightReflectionE
         }
     }
 
-    public void OnEvent(LightReflectionEvent eventType)
+    public void OnEvent(SectionEvent eventType)
     {
-        switch(eventType.LightReflectionEventType)
+        switch(eventType.SectionEventType)
         {
-            case LightReflectionEventType.HitTarget:
+            case SectionEventType.SectionCompleted:
                 ChangeEnvironment();
                 break;
         }
@@ -70,11 +70,11 @@ public class EnvironmentChanger : MonoBehaviour, IEventListener<LightReflectionE
 
     protected virtual void OnEnable()
     {
-        this.StartListeningEvent<LightReflectionEvent>();
+        this.StartListeningEvent<SectionEvent>();
     }
 
     protected virtual void OnDisable()
     {
-        this.StopListeningEvent<LightReflectionEvent>();
+        this.StopListeningEvent<SectionEvent>();
     }
 }

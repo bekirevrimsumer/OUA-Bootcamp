@@ -54,7 +54,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 57c73a50c947ae1459f698af83fd76c6, type: 2}
+  - {fileID: 2100000, guid: 37522c982e66d3745a31ebf3390bad14, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -157,3 +157,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c50758621a0b5634ea1233cd352f5c18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LightBeamSO: {fileID: 11400000, guid: 0cb4e78b5684a4e4b94e21787135ae2c, type: 2}

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventListener<InformationEvent>
+public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventListener<InformationEvent>, IEventListener<DialogueEvent>
 {
     [System.Serializable]
     public class KeyValuePair
@@ -87,9 +87,25 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
                 break;
             case InteractEventType.ClimbEnter:
                 AnimatePanel("ClimbWindow", true);
+                UpdatePanel("ClimbWindow", eventType);
                 break;
             case InteractEventType.ClimbExit:
                 AnimatePanel("ClimbWindow", false);
+                break;
+            case InteractEventType.DoorLockKeyShow:
+                OpenWindow("DoorLockKeyWindow");
+                AnimatePanel("BackPanel", true, () => { AnimatePanel("InteractPanel", false); });
+                UpdatePanel("DoorLockKeyWindow", eventType);
+                break;
+            case InteractEventType.DoorLockKeyHide:
+                CloseWindow("DoorLockKeyWindow");
+                AnimatePanel("BackPanel", false, () => { AnimatePanel("InteractPanel", true); });
+                break;
+            case InteractEventType.DoorLockKeyEnter:
+                AnimatePanel("InteractPanel", true);
+                break;
+            case InteractEventType.DoorLockKeyExit:
+                AnimatePanel("InteractPanel", false);
                 break;
         }
     }
@@ -107,16 +123,32 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
         }
     }
 
+    public void OnEvent(DialogueEvent eventType)
+    {
+        switch (eventType.DialogueEventType)
+        {
+            case DialogueEventType.StartDialogue:
+                AnimatePanel("DialoguePanel", true);
+                UpdatePanel("DialoguePanel", eventType);
+                break;
+            case DialogueEventType.EndDialogue:
+                AnimatePanel("DialoguePanel", false);
+                break;
+        }
+    }
+
     protected virtual void OnEnable()
     {
         this.StartListeningEvent<InteractEvent>();
         this.StartListeningEvent<InformationEvent>();
+        this.StartListeningEvent<DialogueEvent>();
     }
 
     protected virtual void OnDisable()
     {
         this.StopListeningEvent<InteractEvent>();
         this.StopListeningEvent<InformationEvent>();
+        this.StopListeningEvent<DialogueEvent>();
     }
 
     #endregion

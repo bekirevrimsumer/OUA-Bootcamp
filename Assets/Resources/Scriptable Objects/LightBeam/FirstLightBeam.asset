@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: FirstLightBeam
   m_EditorClassIdentifier: 
   LightBeamColorType: 0
-  LightBeamColor: {r: 0.8679245, g: 0.74860007, b: 0.10234957, a: 1}
+  LightBeamColor: {r: 0.36642176, g: 0.9150943, b: 0.15970986, a: 1}
   ReflectionLimit: 2
