@@ -7,18 +7,21 @@ public class DoorLockKeyPanelUpdater : BasePanelUpdater<InteractEvent>
 
     public override void UpdatePanel(InteractEvent eventType)
     {
+        if (eventType.InteractItemBaseSO == null)
+            return;
+            
         var doorLockKeySO = eventType.InteractItemBaseSO as DoorLockKeySO;
 
         switch (eventType.InteractEventType)
         {
-            case InteractEventType.DoorLockKeyShow:
+            case InteractEventType.Interact:
                 KeyText.text = "";
                 foreach (var key in doorLockKeySO.CorrectCombination)
                 {
                     KeyText.text += key.ToString() + " ";
                 }
                 break;
-            case InteractEventType.DoorLockKeyHide:
+            case InteractEventType.InteractEnd:
                 KeyText.text = "";
                 break;
         }

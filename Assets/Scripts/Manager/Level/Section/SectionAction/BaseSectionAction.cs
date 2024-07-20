@@ -3,5 +3,11 @@ using UnityEngine;
 
 public class BaseSectionAction : MonoBehaviourPunCallbacks
 {
-    public virtual void Execute() {}
+    public Section Section;
+    public bool IsCompleted;
+
+    public virtual void Execute()
+    {
+        IsCompleted = true;
+    }
 }

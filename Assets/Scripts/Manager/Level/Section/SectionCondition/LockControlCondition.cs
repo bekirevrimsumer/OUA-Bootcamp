@@ -8,7 +8,7 @@
     {
         _result = new int[]{0,0,0,0};
         _isOpened = false;
-        Rotate.Rotated += CheckResults;
+        PadlockRotate.Rotated += CheckResults;
     }
 
     private void CheckResults(string wheelName, int number)
@@ -47,6 +47,6 @@
 
     private void OnDestroy()
     {
-        Rotate.Rotated -= CheckResults;
+        PadlockRotate.Rotated -= CheckResults;
     }
 }

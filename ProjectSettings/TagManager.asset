@@ -17,6 +17,7 @@ TagManager:
   - Switch
   - DialogueArea
   - Interactable
+  - DoorButton
   layers:
   - Default
   - TransparentFX

@@ -118,9 +118,11 @@ GameObject:
   - component: {fileID: 6225445312462777977}
   - component: {fileID: 3690310933742155926}
   - component: {fileID: 262985168635428021}
-  m_Layer: 10
+  - component: {fileID: 1785571039207594960}
+  - component: {fileID: 7073696790407124337}
+  m_Layer: 0
   m_Name: Mirror 1
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -135,7 +137,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.228847, y: 1.0277, z: -1.3384676}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6364107231041672741}
@@ -163,7 +165,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.22, y: 1.89, z: 0.01}
+  m_Size: {x: 2, y: 1.89, z: 2}
   m_Center: {x: 0, y: 0.97, z: 0.02}
 --- !u!114 &6225445312462777977
 MonoBehaviour:
@@ -218,6 +220,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsCarry: 0
+  IsInteractable: 1
+--- !u!114 &1785571039207594960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487895707417892016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae43eefc4b6abaf41a131756aab02ea7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Section: {fileID: 0}
+  IsCompleted: 0
+--- !u!114 &7073696790407124337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487895707417892016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8b7df4048bbcd74e8e0a6abda11c707, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsInteracting: 0
+  CurrentPlayer: {fileID: 0}
+  Mirror: {fileID: 0}
 --- !u!1 &2304526109628432866
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,7 +261,8 @@ GameObject:
   - component: {fileID: 567526167023386088}
   - component: {fileID: 542286824081558781}
   - component: {fileID: 5635242961435629070}
-  m_Layer: 5
+  - component: {fileID: 6805038856549761792}
+  m_Layer: 10
   m_Name: Group1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,6 +334,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6805038856549761792
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2304526109628432866}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.71, y: 2.52, z: 0.01}
+  m_Center: {x: -0.00000004386534, y: 1.0953424, z: -0.07}
 --- !u!1 &3106908260172658638
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,13 +449,14 @@ GameObject:
   m_Component:
   - component: {fileID: 5075910534540779785}
   - component: {fileID: 1815940457019030078}
+  - component: {fileID: 2094474651742500592}
   m_Layer: 0
   m_Name: InteractMirror
-  m_TagString: InteractMirror
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5075910534540779785
 Transform:
   m_ObjectHideFlags: 0
@@ -438,6 +493,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2094474651742500592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3389669727558383398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8b7df4048bbcd74e8e0a6abda11c707, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsInteracting: 0
+  CurrentPlayer: {fileID: 0}
+  Mirror: {fileID: 0}
 --- !u!1 &5032633545977456412
 GameObject:
   m_ObjectHideFlags: 0

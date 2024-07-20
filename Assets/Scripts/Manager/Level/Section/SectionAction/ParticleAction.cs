@@ -13,6 +13,7 @@ public class ParticleAction : BaseSectionAction
 
     public override void Execute()
     {
+        base.Execute();
         _particle.Play();
     }
 }

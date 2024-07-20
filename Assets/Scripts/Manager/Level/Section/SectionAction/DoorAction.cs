@@ -15,6 +15,7 @@ public class DoorAction : BaseSectionAction
 
     public override void Execute()
     {
+        base.Execute();
         _door.transform.DOLocalRotate(new Vector3(0, Rotation, 0), 4f).SetEase(Ease.InOutQuad);
     }
 }

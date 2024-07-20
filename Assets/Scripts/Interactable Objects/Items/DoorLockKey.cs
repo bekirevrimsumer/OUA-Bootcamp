@@ -9,12 +9,12 @@ public class DoorLockKey : Interactable
     {
         if(!_isOpen)
         {
-            InteractEvent.Trigger(InteractEventType.DoorLockKeyShow, DoorLockKeySO);
+            InteractEvent.Trigger(InteractEventType.Interact, "DoorLockKeyWindow", DoorLockKeySO);
             _isOpen = true;
         }
         else
         {
-            InteractEvent.Trigger(InteractEventType.DoorLockKeyHide);
+            InteractEvent.Trigger(InteractEventType.InteractEnd, "DoorLockKeyWindow", DoorLockKeySO);
             _isOpen = false;
         }
     }

@@ -7,6 +7,7 @@ public class PadlockAction : BaseSectionAction
 {
     public override void Execute()
     {
+        base.Execute();
         var shackle = transform.Find("Shackle");
 
         transform.DOLocalRotate(new Vector3(0, 90, 0), 1f).SetEase(Ease.OutBounce);

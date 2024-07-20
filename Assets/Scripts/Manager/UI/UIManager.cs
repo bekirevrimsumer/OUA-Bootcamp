@@ -4,28 +4,24 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventListener<InformationEvent>, IEventListener<DialogueEvent>
 {
-    [System.Serializable]
-    public class KeyValuePair
-    {
-        public string key;
-        public GameObject value;
-    }
-
     private GameObject _currentWindow;
+    private string _currentWindowText;
 
     public List<KeyValuePair> windowList = new List<KeyValuePair>();
 
     #region Window Operation
     public void OpenWindow(string windowKey)
     {
+        _currentWindowText = windowKey;
         windowList.Find(x => x.key == windowKey).value.SetActive(true);
     }
 
     public void CloseWindow(string windowKey)
     {
+        _currentWindowText = windowKey;
         windowList.Find(x => x.key == windowKey).value.SetActive(false);
     }
-    
+
     public void ToggleWindow(string windowKey)
     {
         windowList.Find(x => x.key == windowKey).value.SetActive(!windowList.Find(x => x.key == windowKey).value.activeSelf);
@@ -52,9 +48,16 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
         updater.UpdatePanel(eventType);
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
     public void AnimatePanel(string key, bool isShow, TweenCallback onComplete = null)
     {
         _currentWindow = GetWindow(key);
+        _currentWindowText = key;
+
         if (isShow)
         {
             _currentWindow.GetComponent<RectTransform>().DOScaleX(1, 0.2f).SetEase(Ease.OutBack);
@@ -71,6 +74,31 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
 
     public void OnEvent(InteractEvent eventType)
     {
+        if(!string.IsNullOrEmpty(eventType.PanelName))
+        {
+            if(eventType.IsAnimatePanel)
+            {
+                if(_currentWindowText != null && _currentWindowText != eventType.PanelName)
+                    AnimatePanel(_currentWindowText, !eventType.IsOpen);
+                
+                AnimatePanel(eventType.PanelName, eventType.IsOpen);
+            } 
+            else 
+            {
+                if(_currentWindowText != null && _currentWindowText != eventType.PanelName)
+                    CloseWindow(_currentWindowText);
+                
+                OpenWindow(eventType.PanelName);
+            }
+
+            if(eventType.IsUpdatePanel)
+            {
+                UpdatePanel(eventType.PanelName, eventType);
+            }
+
+            return;
+        }
+
         switch (eventType.InteractEventType)
         {
             case InteractEventType.MirrorEnter:
@@ -80,10 +108,14 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
                 AnimatePanel("InteractMirrorWindow", false);
                 break;
             case InteractEventType.MirrorCarry:
-                AnimatePanel("InteractMirrorWindow", false, () => { AnimatePanel("CarryMirrorWindow", true);});
+            {
+                CloseWindow("InteractMirrorWindow");
+                OpenWindow("CarryMirrorWindow");
+            }
                 break;
             case InteractEventType.MirrorDrop:
-                AnimatePanel("CarryMirrorWindow", false, () => { AnimatePanel("InteractMirrorWindow", true);});
+                CloseWindow("CarryMirrorWindow");
+                OpenWindow("InteractMirrorWindow");
                 break;
             case InteractEventType.ClimbEnter:
                 AnimatePanel("ClimbWindow", true);
@@ -92,19 +124,18 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
             case InteractEventType.ClimbExit:
                 AnimatePanel("ClimbWindow", false);
                 break;
-            case InteractEventType.DoorLockKeyShow:
-                OpenWindow("DoorLockKeyWindow");
-                AnimatePanel("BackPanel", true, () => { AnimatePanel("InteractPanel", false); });
-                UpdatePanel("DoorLockKeyWindow", eventType);
+            case InteractEventType.Interact:
+                OpenWindow("BackPanel");
+                CloseWindow("InteractPanel");
                 break;
-            case InteractEventType.DoorLockKeyHide:
-                CloseWindow("DoorLockKeyWindow");
-                AnimatePanel("BackPanel", false, () => { AnimatePanel("InteractPanel", true); });
+            case InteractEventType.InteractEnd:
+                CloseWindow("BackPanel");
+                OpenWindow("InteractPanel");
                 break;
-            case InteractEventType.DoorLockKeyEnter:
+            case InteractEventType.InteractableObjectEnter:
                 AnimatePanel("InteractPanel", true);
                 break;
-            case InteractEventType.DoorLockKeyExit:
+            case InteractEventType.InteractableObjectExit:
                 AnimatePanel("InteractPanel", false);
                 break;
         }
@@ -152,4 +183,12 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
     }
 
     #endregion
+}
+
+
+[System.Serializable]
+public class KeyValuePair
+{
+    public string key;
+    public GameObject value;
 }

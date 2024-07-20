@@ -16,6 +16,7 @@ public class LightAction : BaseSectionAction
 
     public override void Execute()
     {
+        base.Execute();
         DOTween.To(() => _light.intensity, x => _light.intensity = x, Intensity, 4);
     }
 }

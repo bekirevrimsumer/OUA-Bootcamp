@@ -34,39 +34,34 @@ public class RoomList : MultiplayerGenericSingleton<RoomList>
 		PhotonNetwork.JoinLobby();
 	}
 
-	public override void OnRoomListUpdate(List<RoomInfo> roomList)
-	{
-		if(cachedRoomList.Count <= 0)
-		{
-			cachedRoomList = roomList;
-		}
-		else
-		{
-			foreach (var room in roomList)
-			{
-				for (int i = 0; i < cachedRoomList.Count; i++)
-				{
-					if(cachedRoomList[i].Name == room.Name)
-					{
-						List<RoomInfo> newRoomList = cachedRoomList;
+public override void OnRoomListUpdate(List<RoomInfo> roomList)
+{
+    foreach (var room in roomList)
+    {
+        int index = cachedRoomList.FindIndex(r => r.Name == room.Name);
 
-						if (room.RemovedFromList)
-						{
-							newRoomList.Remove(newRoomList[i]);
-						}
-						else
-						{
-							newRoomList[i] = room;
-						}
+        if (index != -1)
+        {
+            if (room.RemovedFromList)
+            {
+                cachedRoomList.RemoveAt(index);
+            }
+            else
+            {
+                cachedRoomList[index] = room;
+            }
+        }
+        else
+        {
+            if (!room.RemovedFromList)
+            {
+                cachedRoomList.Add(room);
+            }
+        }
+    }
 
-						cachedRoomList = newRoomList;
-					}
-				}
-			}
-		}
-
-		OnRoomUpdate?.Invoke(cachedRoomList);
-	}
+    OnRoomUpdate?.Invoke(cachedRoomList);
+}
 
 	public void JoinRoomByName(string roomName)
 	{

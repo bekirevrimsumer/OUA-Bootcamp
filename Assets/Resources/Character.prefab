@@ -2404,11 +2404,10 @@ MonoBehaviour:
   CameraFollowTransform: {fileID: 604186948366500661}
   IsCameraRotatingEnabled: 1
   _speed: 5
-  InteractObjectTransform: {fileID: 2386885220714345241}
   JumpForce: 5
   GroundDistance: 0.2
   IsGrounded: 0
-  ClimbSpeed: 2
+  ClimbSpeed: 3
   Animator: {fileID: 7775398489471692208}
   Rb: {fileID: 0}
   GroundLayer:

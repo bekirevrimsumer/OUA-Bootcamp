@@ -14,6 +14,9 @@ public class DialoguePanelUpdater : BasePanelUpdater<DialogueEvent>
 
     public override void UpdatePanel(DialogueEvent eventType)
     {
+        if(eventType.DialogueSO == null)
+            return;
+            
         switch (eventType.DialogueEventType)
         {
             case DialogueEventType.StartDialogue:

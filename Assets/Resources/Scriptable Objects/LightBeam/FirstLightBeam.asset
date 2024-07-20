@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f928f3805e51e8c458a2398181ac5989, type: 3}
   m_Name: FirstLightBeam
   m_EditorClassIdentifier: 
-  LightBeamColorType: 0
-  LightBeamColor: {r: 0.36642176, g: 0.9150943, b: 0.15970986, a: 1}
+  LightBeamColorType: 2
+  LightBeamColor: {r: 0.1514774, g: 0.82671934, b: 0.8679245, a: 1}
   ReflectionLimit: 2

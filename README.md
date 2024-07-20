@@ -51,6 +51,7 @@ The twin brothers, trapped inside Dungeon, will try to complete the dungeon by s
 ## Documentation
 
 - Task Board: [Trello Board](https://trello.com/b/bGnhI7gn/agile-board-template-trello)
+- Miro Board: [Miro Board](https://miro.com/app/board/uXjVKyj05nw=/?share_link_id=266004089956)
 
 # Sprints
 Sprints will be 2 weeks long. At the end of each sprint, a sprint review will be held to evaluate the work done during the sprint and a refirement meeting will be held for the next sprint. Task scoring in sprints will be done with Fibonacci numbers (from 1 to 8).
@@ -148,12 +149,56 @@ When estimating the time for each task, care should be taken to make these times
     <img src="Screenshots/Sprint_1/game_2.png" alt="In Game 2">
 </details>
 
-<details>
-    <summary><h4 style="display: inline; margin: 0; padding: 0;">Game Video</h4></summary>
-    <p>Basic mirror placement was implemented. The player can place the mirror in the desired position and direct the light beam.</p>
-    <video controls>
-        <source src="Screenshots/Sprint_1/game_video_1.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+## Sprint 2
+
+- **Start Date:** 08.07.2024
+- **End Date:** 21.07.2024
+- **Expected Story Points:** 67
+- **Completed Story Points:** 61
+
+### Sprint Goal
+
+- Main menu design will be made.
+- Game scene design will be made and props will be added.
+- New mechanics will be developed to diversify the game.
+- Section level system will be written.
+- UI asset will be determined for the game and panels will be designed.
+- Music and sound effects will be determined and added to the game for testing. A generic SoundManager will be written.
+- The storyboard of the game will be created and the story of the characters will be written.
+- A cinematic will be added to the beginning of the game to support the story.
+- Character mechanics will be tested in the game scene.
+- Puzzles will be designed and tested in the game scene.
+- Diyalog system will be created.
+
+### Daily Scrum Meetings
+  <p>As in the last sprint, we did the daily scrums in a written way on discord. Everyone informed the whole team about which stage they were in and whether they had a problem with the work they did. We had one-on-one meetings where necessary. We tried to have a meeting with the whole team twice a week.</p>
+  <details>
+  <summary><h4 style="display: inline; margin: 0; padding: 0;">Screenshot</h4></summary>
+  <img src="Screenshots/Sprint_2/daily_scrum.png" alt="Daily Scrum">
 </details>
 
+### Sprint Review
+  <ul>
+    <li>Worked on the main menu design. The main menu was designed and the necessary buttons were added.</li>
+    <li>Game scene design was made and props were added. The scene was designed according to the story of the game.</li>
+    <li>New mechanics were developed to diversify the game. The mechanics were tested in the game scene. However, not all mechanics planned to be added at the beginning of the sprint were completed in this sprint. It will continue in the next sprint.</li>
+    <li>Section level system was written. The system was tested in the game scene.</li>
+    <li>UI asset was determined for the game and panels were designed. The panels were added to the game scene.</li>
+    <li>Music and sound effects were determined and added to the game for testing. A generic SoundManager was written.</li>
+    <li>The storyboard of the game was created and the story of the characters was written. A cinematic was added to the beginning of the game to support the story.</li>
+    <li>Character mechanics were tested in the game scene.</li>
+    <li>Thoughts were given on the puzzles to be added. We discussed how we would create a level system and shared our ideas.</li>
+  </ul>
+
+### Sprint Retrospective
+
+#### What went well?
+
+- The team was able to complete most of the sprint tasks on time.
+- The basic structure of the game was created and the main menu and game scene were designed.
+- The team was understanding and helpful to each other.
+
+#### What didn't go well?
+
+- As in the first sprint, there were deficiencies in communication and collaboration among team members. We had difficulty in having meetings as a team and decided to increase one-on-one meetings as a solution to this situation.
+- More tasks could have been completed to achieve the sprint goals without any deficiencies.

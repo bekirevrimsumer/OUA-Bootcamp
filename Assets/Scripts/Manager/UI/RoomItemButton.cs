@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class RoomItemButton : MonoBehaviour
 {
-    public string roomName;
+    public TextMeshProUGUI roomNameText;
 
     public void OnRoomItemButtonPressed()
 	{
-		RoomList.Instance.JoinRoomByName(roomName);
+		RoomManager.Instance.OnRoomItemButtonPressed(roomNameText.text);
 	}
 }
