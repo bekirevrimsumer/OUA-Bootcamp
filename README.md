@@ -212,6 +212,17 @@ When estimating the time for each task, care should be taken to make these times
 ### Sprint Backlog
 
 <details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Burndown Chart</h4></summary>
+    <p>Burndown chart is a graphical representation of work left to do versus time. The outstanding work (or backlog) is often on the vertical axis, with time along the horizontal. That is, it is a run chart of outstanding work. It is useful for predicting when all of the work will be completed.</p>
+    <p>This burndown chart consists of 2 lines:</p>
+    <ul>
+        <li>Baseline, shows the planned amount of work at the beginning of the sprint. This line assumes that the work will be completed at an ideal speed (usually at a constant speed) and shows the completion of the planned work over time.</li>
+        <li>Remaining Effort, shows the amount of work done. This line is updated by the team every day and tracks the remaining amount of work over time. This way, it can be understood whether the project will be completed on time.</li>
+    </ul>
+    <img src="Screenshots/Sprint_2/sprint_burndown.png" alt="Burndown Chart">
+</details>
+
+<details>
     <summary><h4 style="display: inline; margin: 0; padding: 0;">Trello Board</h4></summary>
     <p>In this sprint, tasks were created and tracked on the Trello board. Art/Concept tag was added to filter the tasks opened on the design side. In addition, Sprint-1, Sprint-2, Sprint-3 tags were added to track which sprint the tasks were done in. In the first sprint, while determining the story points, everyone's points were written in the task detail. However, with the decision we took as a team, we removed this and added it as a tag.</p>
     <img src="Screenshots/Sprint_2/trello_board.png" alt="Trello Board">
