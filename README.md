@@ -3,7 +3,8 @@
 
 Unity Group 9 - Gizemli İkizler: Zindanın Yankıları
 
-[![Game Image](https://via.placeholder.com/800x400)](https://via.placeholder.com/800x400)
+<img src="Screenshots/Images/Game_Image_2.jpeg" alt="Game Image 1">
+<img src="Screenshots/Images/Game_Image_1.jpg" alt="Game Image 1">
 
 # Team Members
 | Name | Role | Social Media |
@@ -153,8 +154,8 @@ When estimating the time for each task, care should be taken to make these times
 
 - **Start Date:** 08.07.2024
 - **End Date:** 21.07.2024
-- **Expected Story Points:** 67
-- **Completed Story Points:** 61
+- **Expected Story Points:** 72
+- **Completed Story Points:** 63
 
 ### Sprint Goal
 
@@ -168,13 +169,14 @@ When estimating the time for each task, care should be taken to make these times
 - A cinematic will be added to the beginning of the game to support the story.
 - Character mechanics will be tested in the game scene.
 - Puzzles will be designed and tested in the game scene.
-- Diyalog system will be created.
+- Dialog system will be created.
 
 ### Daily Scrum Meetings
   <p>As in the last sprint, we did the daily scrums in a written way on discord. Everyone informed the whole team about which stage they were in and whether they had a problem with the work they did. We had one-on-one meetings where necessary. We tried to have a meeting with the whole team twice a week.</p>
   <details>
   <summary><h4 style="display: inline; margin: 0; padding: 0;">Screenshot</h4></summary>
   <img src="Screenshots/Sprint_2/daily_scrum.png" alt="Daily Scrum">
+  <img src="Screenshots/Sprint_2/meeting.png" alt="Meeting">
 </details>
 
 ### Sprint Review
@@ -202,3 +204,48 @@ When estimating the time for each task, care should be taken to make these times
 
 - As in the first sprint, there were deficiencies in communication and collaboration among team members. We had difficulty in having meetings as a team and decided to increase one-on-one meetings as a solution to this situation.
 - More tasks could have been completed to achieve the sprint goals without any deficiencies.
+
+#### What could be improved?
+
+- Level design and puzzle design should be completed as soon as possible and sound effects should be added.
+
+### Sprint Backlog
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Trello Board</h4></summary>
+    <p>In this sprint, tasks were created and tracked on the Trello board. Art/Concept tag was added to filter the tasks opened on the design side. In addition, Sprint-1, Sprint-2, Sprint-3 tags were added to track which sprint the tasks were done in. In the first sprint, while determining the story points, everyone's points were written in the task detail. However, with the decision we took as a team, we removed this and added it as a tag.</p>
+    <img src="Screenshots/Sprint_2/trello_board.png" alt="Trello Board">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Task Details</h4></summary>
+    <p>In the task details, in accordance with scrum, information about which user story the task belongs to, who did the task, and how many story points the task is included. We also continued to write the explanations of the tasks.</p>
+    <img src="Screenshots/Sprint_2/task_details.png" alt="Task Details">
+</details>
+
+### Game Screenshots
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Main Menu</h4></summary>
+    <p>The main menu was designed and the necessary buttons were added. The main menu was designed according to the theme of the game.</p>
+    <img src="Screenshots/Sprint_2/main_menu.png" alt="Main Menu">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Level Design</h4></summary>
+    <p>Game Level Design was made. The level design was designed according to the story of the game. Multiplayer tests were also done.</p>
+    <img src="Screenshots/Sprint_2/level_design.png" alt="Game Scene">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Game Scene</h4></summary>
+    <p>The game scene was designed and props were added.</p>
+    <img src="Screenshots/Sprint_2/game_scene_1.png" alt="Game Scene">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Character Mechanics</h4></summary>
+    <p>Character mechanics were tested in the game scene.</p>
+    <img src="Screenshots/Sprint_2/game_scene_2.png" alt="Character Mechanics">
+</details>
+
