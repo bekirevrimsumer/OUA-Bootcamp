@@ -74,31 +74,6 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
 
     public void OnEvent(InteractEvent eventType)
     {
-        if(!string.IsNullOrEmpty(eventType.PanelName))
-        {
-            if(eventType.IsAnimatePanel)
-            {
-                if(_currentWindowText != null && _currentWindowText != eventType.PanelName)
-                    AnimatePanel(_currentWindowText, !eventType.IsOpen);
-                
-                AnimatePanel(eventType.PanelName, eventType.IsOpen);
-            } 
-            else 
-            {
-                if(_currentWindowText != null && _currentWindowText != eventType.PanelName)
-                    CloseWindow(_currentWindowText);
-                
-                OpenWindow(eventType.PanelName);
-            }
-
-            if(eventType.IsUpdatePanel)
-            {
-                UpdatePanel(eventType.PanelName, eventType);
-            }
-
-            return;
-        }
-
         switch (eventType.InteractEventType)
         {
             case InteractEventType.MirrorEnter:
@@ -125,18 +100,54 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
                 AnimatePanel("ClimbWindow", false);
                 break;
             case InteractEventType.Interact:
-                OpenWindow("BackPanel");
-                CloseWindow("InteractPanel");
+                if(eventType.IsOpenDefaultPanel)
+                {
+                    CloseWindow("InteractPanel");
+                    OpenWindow("BackPanel");
+                }
+
+                if(!string.IsNullOrEmpty(eventType.PanelName))
+                {
+                    if(eventType.IsAnimatePanel)
+                        AnimatePanel(eventType.PanelName, true);
+                    else
+                        OpenWindow(eventType.PanelName);
+                }
                 break;
             case InteractEventType.InteractEnd:
-                CloseWindow("BackPanel");
-                OpenWindow("InteractPanel");
+                if(eventType.IsOpenDefaultPanel)
+                {
+                    CloseWindow("BackPanel");
+                    OpenWindow("InteractPanel");
+                }
+
+                if(!string.IsNullOrEmpty(eventType.PanelName))
+                {
+                    if(eventType.IsAnimatePanel)
+                        AnimatePanel(eventType.PanelName, false);
+                    else
+                        CloseWindow(eventType.PanelName);
+                }
                 break;
             case InteractEventType.InteractableObjectEnter:
-                AnimatePanel("InteractPanel", true);
+                if(string.IsNullOrEmpty(eventType.PanelName))
+                {
+                    AnimatePanel("InteractPanel", true);
+                }
+                else
+                {
+                    AnimatePanel(eventType.PanelName, true);
+                }
                 break;
             case InteractEventType.InteractableObjectExit:
-                AnimatePanel("InteractPanel", false);
+                if(string.IsNullOrEmpty(eventType.PanelName))
+                {
+                    AnimatePanel("InteractPanel", false);
+                }
+                else
+                {
+                    AnimatePanel(eventType.PanelName, false);
+                }
                 break;
         }
     }

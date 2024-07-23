@@ -9,30 +9,30 @@ public struct InteractEvent : IEventType
     public InteractEventType InteractEventType;
     public string PanelName;
     public bool IsAnimatePanel;
-    public bool IsOpen;
     public bool IsUpdatePanel;
+    public bool IsOpenDefaultPanel;
     public InteractItemBaseSO InteractItemBaseSO;
 
-    public InteractEvent(InteractEventType interactEventType, string panelName, bool isAnimatePanel, bool isOpen, bool isUpdatePanel, InteractItemBaseSO interactItemBaseSO)
+    public InteractEvent(InteractEventType interactEventType, string panelName, bool isAnimatePanel, bool isUpdatePanel, bool isOpenDefaultPanel, InteractItemBaseSO interactItemBaseSO)
     {
         InteractEventType = interactEventType;
         PanelName = panelName;
         IsAnimatePanel = isAnimatePanel;
-        IsOpen = isOpen;
         IsUpdatePanel = isUpdatePanel;
+        IsOpenDefaultPanel = isOpenDefaultPanel;
         InteractItemBaseSO = interactItemBaseSO;
     }
 
     static InteractEvent e;
 
-    public static void Trigger(InteractEventType interactEventType, string panelName = null, bool isAnimatePanel = false, bool isOpen = true, bool isUpdatePanel = false, InteractItemBaseSO interactItemBaseSO = null)
+    public static void Trigger(InteractEventType interactEventType, string panelName = null, bool isAnimatePanel = false, bool isUpdatePanel = false, bool IsOpenDefaultPanel = true, InteractItemBaseSO interactItemBaseSO = null)
     {
         e.InteractEventType = interactEventType;
         e.PanelName = panelName;
         e.IsAnimatePanel = isAnimatePanel;
-        e.IsOpen = isOpen;
         e.IsUpdatePanel = isUpdatePanel;
         e.InteractItemBaseSO = interactItemBaseSO;
+        e.IsOpenDefaultPanel = IsOpenDefaultPanel;
         EventManager.TriggerEvent(e);
     }
 }

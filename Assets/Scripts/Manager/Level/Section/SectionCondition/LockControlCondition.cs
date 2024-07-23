@@ -1,6 +1,6 @@
 ﻿public class LockControlCondition : BaseCondition
 {
-    public DoorLockKeySO DoorLockKeySO;
+    public PaperSO PaperSO;
     private int[] _result;
     private bool _isOpened;
 
@@ -32,8 +32,8 @@
                 break;
         }
 
-        if (_result[0] == DoorLockKeySO.CorrectCombination[0] && _result[1] == DoorLockKeySO.CorrectCombination[1]
-            && _result[2] == DoorLockKeySO.CorrectCombination[2] && _result[3] == DoorLockKeySO.CorrectCombination[3] && !_isOpened)
+        if (_result[0] == PaperSO.CorrectCombination[0] && _result[1] == PaperSO.CorrectCombination[1]
+            && _result[2] == PaperSO.CorrectCombination[2] && _result[3] == PaperSO.CorrectCombination[3] && !_isOpened)
         {
             _isOpened = true;
             SectionEvent.Trigger(SectionEventType.SectionCompleted);

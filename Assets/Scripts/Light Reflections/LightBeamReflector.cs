@@ -74,12 +74,16 @@ public class LightBeamReflector : MonoBehaviour
             _isMirrorHit = false;
         }
 
-        if (_isPortalHit)
-        {
-            if (_portalLightBeam != null)
-                Destroy(_portalLightBeam);
-            _isPortalHit = false;
-        }
+        // if (_isPortalHit)
+        // {
+        //     if (_portalLightBeam != null)
+        //     {
+        //         Debug.Log("Portal Light Beam Destroyed 3");
+        //         Destroy(_portalLightBeam);
+        //     }
+
+        //     _isPortalHit = false;
+        // }
 
         CalculateReflection(transform.position, InitialDirection);
     }
@@ -103,7 +107,6 @@ public class LightBeamReflector : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("LightBeam")))
         {
-            Debug.DrawLine(startPosition, hit.point, Color.red);
             if (reflectionCount >= LightBeamSO.ReflectionLimit && hit.collider.CompareTag("Mirror"))
             {
                 AddLineRendererPosition(startPosition + direction * ReflectionMultiplier);
@@ -148,7 +151,9 @@ public class LightBeamReflector : MonoBehaviour
             AddLineRendererPosition(hit.point);
 
             if(_portalLightBeam != null)
+            {
                 Destroy(_portalLightBeam);
+            }
         }
     }
 
@@ -181,11 +186,12 @@ public class LightBeamReflector : MonoBehaviour
 
     private void HandlePortalHit(RaycastHit hit)
     {
+        AddLineRendererPosition(hit.point);
+        
         if (!_isPortalHit)
         {
             _isPortalHit = true;
-            ResetLineRenderer();
-            AddLineRendererPosition(hit.point);
+            // ResetLineRenderer();
             var endPortal = hit.transform.parent.Find("PortalEnd");
 
             if (_portalLightBeam == null)

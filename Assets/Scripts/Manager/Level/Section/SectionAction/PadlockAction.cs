@@ -12,5 +12,7 @@ public class PadlockAction : BaseSectionAction
 
         transform.DOLocalRotate(new Vector3(0, 90, 0), 1f).SetEase(Ease.OutBounce);
         shackle.DOLocalMoveY(0.5f, 1f).SetEase(Ease.OutBounce);
+        transform.tag = "Untagged";
+        InteractEvent.Trigger(InteractEventType.InteractEnd, "InteractPanel", true, false, false, null);
     }
 }

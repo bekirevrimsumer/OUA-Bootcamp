@@ -131,11 +131,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
             _currentInteractable.Interact();
         }
         
-        if(_currentInteractable != null && _currentInteractable is MirrorItem mirrorItem)
+        if(_currentInteractable != null && _currentInteractable is MirrorInteractable mirrorInteractable)
         {
             if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.C))
             {
-                mirrorItem.Interact();
+                mirrorInteractable.Interact();
             }
         }
     }
@@ -295,14 +295,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         {
             _canClimb = true;
             _climbPoint = climbBox.climbPoint;
-            InteractEvent.Trigger(InteractEventType.ClimbEnter, null, true, true, false);
+            InteractEvent.Trigger(InteractEventType.ClimbEnter, null, false, false, false);
         }
     }
 
     void HandleClimbExit(Collider other)
     {
         _canClimb = false;
-        InteractEvent.Trigger(InteractEventType.ClimbExit, null, true, false, false);
+        InteractEvent.Trigger(InteractEventType.ClimbExit, null, false, false, false);
     }
 
     void HandleClimbWallEnter(Collider other)
@@ -352,11 +352,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
         if(interactable == null) return;
 
-        if(interactable is MirrorItem mirrorItem)
+        if(interactable is MirrorInteractable mirrorInteractable)
         {
-            if(!mirrorItem.Mirror.IsCarry && mirrorItem.Mirror.IsInteractable)
+            if(!mirrorInteractable.Mirror.IsCarry && mirrorInteractable.Mirror.IsInteractable)
             {
-                InteractEvent.Trigger(InteractEventType.InteractableObjectEnter, "InteractMirrorWindow", true, true, false); 
+                InteractEvent.Trigger(InteractEventType.MirrorEnter); 
             }
 
            return;
@@ -373,11 +373,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
         if(interactable == null) return;
 
-        if(interactable is MirrorItem mirrorItem)
+        if(interactable is MirrorInteractable mirrorInteractable)
         {
-            if(mirrorItem.Mirror != null && !mirrorItem.Mirror.IsCarry)
+            if(mirrorInteractable.Mirror != null && !mirrorInteractable.Mirror.IsCarry)
             {
-                InteractEvent.Trigger(InteractEventType.InteractableObjectExit, "InteractMirrorWindow", true, false, false); 
+                InteractEvent.Trigger(InteractEventType.MirrorExit); 
             }
 
            return;

@@ -1,4 +1,0 @@
-repository "OUA-Bootcamp@barisberisbek@cloud"
-  path "/"
-    br "/main"
-    co "/main"

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ButtonCondition : BaseCondition
 {
-    private DoorButton Button;
+    private HiddenButtonInteractable Button;
 
     private void Start()
     {
-        Button = GetComponent<DoorButton>();
+        Button = GetComponent<HiddenButtonInteractable>();
     }
 
     public override bool IsCompleted()

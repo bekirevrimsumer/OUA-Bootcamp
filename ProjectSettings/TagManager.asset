@@ -18,6 +18,8 @@ TagManager:
   - DialogueArea
   - Interactable
   - DoorButton
+  - BookSlot
+  - Shelf
   layers:
   - Default
   - TransparentFX

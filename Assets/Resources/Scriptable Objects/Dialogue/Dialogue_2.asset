@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb3424bc65543ef46a9ffef5fdd53ba0, type: 3}
+  m_Name: Dialogue_2
+  m_EditorClassIdentifier: 
+  Dialogues:
+  - Name: Riley
+    Sentences:
+    - "(Nefes nefese) Alex, ba\u015Fard\u0131k! \u0130lk g\xF6revi tamamlad\u0131k!"
+  - Name: Alex
+    Sentences:
+    - "(G\xFCl\xFCmseyerek) Evet, Riley! Harika bir i\u015F \xE7\u0131kard\u0131k.
+      Ama bu sadece ba\u015Flang\u0131\xE7. Zindan daha bir\xE7ok g\xF6rev ve tuzakla
+      dolu olacak."
+  - Name: Riley
+    Sentences:
+    - "Biliyorum, ama bunu yapabilece\u011Fimizi g\xF6sterdik. Birlikte daha g\xFC\xE7l\xFC
+      oldu\u011Fumuzu unutmamal\u0131y\u0131z."
+  - Name: Alex
+    Sentences:
+    - "Kesinlikle. Ayr\u0131ca, buradaki her \u015Fey bize oyundaki kadar tan\u0131d\u0131k
+      gelmeyebilir. Her an tetikte olmal\u0131y\u0131z."
+  - Name: Riley
+    Sentences:
+    - "Aynen \xF6yle. Birlikte \xE7al\u0131\u015Fmaya devam edersek, bu zindan\u0131
+      kesinlikle tamamlar\u0131z. Hadi, karde\u015Fim, yeni bir macera bizi bekliyor!"
+  DialogueSpeed: 0.05

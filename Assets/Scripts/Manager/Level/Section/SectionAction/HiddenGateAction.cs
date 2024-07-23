@@ -10,6 +10,6 @@ public class HiddenGateAction : BaseSectionAction
     public override void Execute()
     {
         base.Execute();
-        transform.DOLocalMove(GatePosition, 1f).SetEase(Ease.InOutQuad);
+        transform.DOLocalMove(GatePosition, 4f).SetEase(Ease.InOutQuad);
     }
 }
