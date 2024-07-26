@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb3424bc65543ef46a9ffef5fdd53ba0, type: 3}
+  m_Name: Dialogue_Section_2.3
+  m_EditorClassIdentifier: 
+  Dialogues:
+  - Name: Riley
+    Sentences:
+    - Alex, o sesler de neydi?
+  - Name: Alex
+    Sentences:
+    - "San\u0131r\u0131m gizli bir ge\xE7it bulduk! Baksana duvarlar hareket etti
+      ve bir ge\xE7it a\xE7\u0131ld\u0131."
+  - Name: Riley
+    Sentences:
+    - "Hadi gidip inceleyelim. Yaln\u0131z \xE7ok dikkatli olmal\u0131y\u0131z. Oyunda
+      b\xF6yle bir gizli oda oldu\u011Funu hat\u0131rlam\u0131yorum."
+  DialogueSpeed: 0.05

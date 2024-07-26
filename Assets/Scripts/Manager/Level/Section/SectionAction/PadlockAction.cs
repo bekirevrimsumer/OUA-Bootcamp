@@ -14,5 +14,7 @@ public class PadlockAction : BaseSectionAction
         shackle.DOLocalMoveY(0.5f, 1f).SetEase(Ease.OutBounce);
         transform.tag = "Untagged";
         InteractEvent.Trigger(InteractEventType.InteractEnd, "InteractPanel", true, false, false, null);
+        SoundEvent.Trigger(SoundType.SFX, "Lock", 0.5f, 0, false);
+        SoundEvent.Trigger(SoundType.SFX, "DoorOpen", 0.5f, 0f, false);
     }
 }

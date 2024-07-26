@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     public CinemachineVirtualCamera Camera;
     public Transform CameraFollowTransform;
     public bool IsCameraRotatingEnabled = true;
+    public Camera MainCamera;
     private CinemachineFramingTransposer _framingTransposer;
 
     [Header("Movement")]
@@ -37,11 +38,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     [Header("Interactable")]
     private Interactable _currentInteractable;
     private bool _canInteract = false;
+    private Book _book;
 
     [Header("References")]
     public Animator Animator;
     public Rigidbody Rb;    
     public LayerMask GroundLayer;
+    private SoundManager _soundManager;
 
     private void Start()
     {
@@ -54,6 +57,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         Animator = GetComponent<Animator>();
         Rb = GetComponent<Rigidbody>();
         _framingTransposer = Camera.GetCinemachineComponent<CinemachineFramingTransposer>();
+        _soundManager = FindObjectOfType<SoundManager>();
+        _soundManager.footstepSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -67,6 +72,28 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
             HandleClimbWall();
             HandleInteract();
             CameraRotation();
+
+        if(_book != null && _book.isPickedUp && _book.ShelfInteractable.IsInteracting)
+        {
+            PlaceBook();
+        }
+        else if(Input.GetMouseButtonDown(0))
+        {
+            PickBook();
+        }
+
+        if(_book != null && _book.isPickedUp && !_book.ShelfInteractable.IsInteracting)
+        {
+            _book.isPickedUp = false;
+            _book.outline.enabled = false;
+            DOTween.To(() => transform.position, x => transform.position = x, _book.FirstTransform.position, 0.2f);
+        }
+
+        if(_book != null &&     _book.isPickedUp && Input.GetMouseButtonDown(1))
+        {
+            _book.isPickedUp = false;
+            _book.outline.enabled = false;
+        }
         }
     }
 
@@ -343,6 +370,40 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         }
     }
 
+    private void PickBook()
+    {
+        RaycastHit hit;
+        
+        Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Interactable")))
+        {
+            _book = hit.transform.GetComponent<Book>();
+            _book.outline.enabled = true;
+            _book.isPickedUp = true;
+        }
+    }
+
+    private void PlaceBook()
+    {
+        RaycastHit hit;
+        Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("BookSlot")))
+        {
+            var bookSlot = hit.transform.GetComponent<BoxCollider>();
+            DOTween.To(() => _book.FirstTransform.position, x => _book.FirstTransform.position = x, bookSlot.center, 0.2f);
+
+            if(Input.GetMouseButtonDown(1))
+            {
+                _book.isPickedUp = false;
+                _book.outline.enabled = false;
+            }
+        }
+        else
+        {
+            DOTween.To(() => _book.FirstTransform.position, x => _book.FirstTransform.position = x, _book.FirstTransform.position, 0.2f);
+        }
+    }
+
     void HandleInteractableEnter(Collider other)
     {
         var interactable = other.GetComponent<Interactable>();
@@ -436,6 +497,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     {
         base.OnDisable();
         this.StopListeningEvent<MultiplayerEvent>();
+    }
+
+    #endregion
+
+    #region Animation Sounds
+
+    public void Footstep()
+    {
+        SoundEvent.Trigger(SoundType.Footstep, "FootStep", 0.15f, 0, false);
     }
 
     #endregion

@@ -35,6 +35,11 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
         }
     }
 
+    public void ClickEvent()
+    {
+        SoundEvent.Trigger(SoundType.SFX, "UI_Click", 1, 0);
+    }
+
     public GameObject GetWindow(string windowKey)
     {
         return windowList.Find(x => x.key == windowKey).value;

@@ -2,6 +2,7 @@ public enum SoundType
 {
     Background,
     SFX,
+    Footstep
 }
 
 public struct SoundEvent : IEventType

@@ -103,7 +103,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Size: {x: 1.39, y: 1.33, z: 0.2}
   m_Center: {x: 0, y: 0, z: -0.5}
 --- !u!1 &1487895707417892016
 GameObject:
@@ -233,7 +233,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae43eefc4b6abaf41a131756aab02ea7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Section: {fileID: 0}
   IsCompleted: 0
 --- !u!114 &7073696790407124337
 MonoBehaviour:

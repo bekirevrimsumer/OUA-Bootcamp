@@ -1,44 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class Book : MonoBehaviour
 {
-public string Symbol;
+    public string Symbol;
     public int Code;
+    public ShelfInteractable ShelfInteractable;
+    public bool isPickedUp = false;
+    public Transform FirstTransform;
 
-    private bool isPickedUp = false;
+    public QuickOutline outline;
 
-    private void OnMouseDown()
+
+    private void Start()
     {
-        if (!isPickedUp)
-        {
-            isPickedUp = true;
-            PickBook();
-        }
-        else
-        {
-            isPickedUp = false;
-            PlaceBook();
-        }
+        outline = GetComponent<QuickOutline>();
+        outline.enabled = false;
+        FirstTransform = transform;
     }
 
-    private void PickBook()
-    {
-        RaycastHit hit;
-        var mousePosition = Input.mousePosition;
-
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(mousePosition), out hit))
-        {
-            transform.position = hit.point;
-        }
-    }
-
-    private void PlaceBook()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit))
-        {
-        }
-    }
+    
 }
