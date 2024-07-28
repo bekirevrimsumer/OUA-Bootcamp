@@ -600,7 +600,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Option A
+  m_text: "D\xFC\u015F\xFCk"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 88a18c3fb2ee34a4fb05128bc1cf4262, type: 2}
   m_sharedMaterial: {fileID: 6990096292066398198, guid: 88a18c3fb2ee34a4fb05128bc1cf4262, type: 2}
@@ -9142,6 +9142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bgMusicSource: {fileID: 788357482}
   sfxSource: {fileID: 2069533809}
+  footstepSource: {fileID: 0}
 --- !u!82 &2069533809
 AudioSource:
   m_ObjectHideFlags: 0

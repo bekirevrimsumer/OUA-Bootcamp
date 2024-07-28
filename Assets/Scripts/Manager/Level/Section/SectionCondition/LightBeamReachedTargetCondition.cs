@@ -4,6 +4,7 @@ public class LightBeamReachedTargetCondition : BaseCondition
 
     public override bool IsCompleted()
     {
+        base.IsCompleted();
         return target.IsReached;
     }
 }

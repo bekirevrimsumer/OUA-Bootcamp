@@ -42,6 +42,7 @@
 
     public override bool IsCompleted()
     {
+        base.IsCompleted();
         return _isOpened;
     }
 

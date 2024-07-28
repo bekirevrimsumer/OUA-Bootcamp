@@ -175,7 +175,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     #region TopDownWASDMovement
     private void TopDownMovement()
     {
-        if(_isClimbWall || (_currentInteractable != null && _currentInteractable.IsInteracting)) return;
+        if(_isClimbWall) return;
+
+        if(!_currentInteractable is MirrorInteractable && _currentInteractable != null && _currentInteractable.IsInteracting) return;
 
         var movement = GetMovement();
         movement = Vector3.ClampMagnitude(movement, 1);

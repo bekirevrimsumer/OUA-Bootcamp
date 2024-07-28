@@ -36,6 +36,7 @@ public class BookCondition : BaseCondition
 
     public override bool IsCompleted()
     {
+        base.IsCompleted();
         return _isCompleted;
     }
 }

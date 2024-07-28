@@ -13,6 +13,7 @@ public class ButtonCondition : BaseCondition
 
     public override bool IsCompleted()
     {
+        base.IsCompleted();
         return Button.IsPressed;
     }
 }
