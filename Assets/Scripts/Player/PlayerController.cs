@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Cinemachine;
 using Cinemachine.PostFX;
 using DG.Tweening;
@@ -39,12 +42,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     private Interactable _currentInteractable;
     private bool _canInteract = false;
     private Book _book;
+    private List<LineRenderer> _bookSlots = new List<LineRenderer>();
 
     [Header("References")]
     public Animator Animator;
     public Rigidbody Rb;    
     public LayerMask GroundLayer;
     private SoundManager _soundManager;
+    public static event Action BookChanged = delegate { };
 
     private void Start()
     {
@@ -170,7 +175,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     #region TopDownWASDMovement
     private void TopDownMovement()
     {
-        if(_isClimbWall) return;
+        if(_isClimbWall || (_currentInteractable != null && _currentInteractable.IsInteracting)) return;
 
         var movement = GetMovement();
         movement = Vector3.ClampMagnitude(movement, 1);
@@ -377,6 +382,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Interactable")))
         {
+            _bookSlots = hit.transform.parent.GetComponentsInChildren<LineRenderer>().ToList();
+
+            if (_bookSlots.Count != 0)
+            {
+                foreach (var bookSlot in _bookSlots)
+                {
+                    bookSlot.enabled = true;
+                }
+            }
+
             _book = hit.transform.GetComponent<Book>();
             _book.outline.enabled = true;
             _book.isPickedUp = true;
@@ -389,18 +404,27 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("BookSlot")))
         {
-            var bookSlot = hit.transform.GetComponent<BoxCollider>();
-            DOTween.To(() => _book.FirstTransform.position, x => _book.FirstTransform.position = x, bookSlot.center, 0.2f);
+            var transformPoint = hit.transform.GetChild(0);
+            DOTween.To(() => _book.FirstTransform.position, x => _book.FirstTransform.position = x, transformPoint.position, 0.2f);
+            _book.transform.DOLocalRotate(new Vector3(0, 90, 0), 0.2f);
 
-            if(Input.GetMouseButtonDown(1))
+            if(Input.GetMouseButtonDown(0))
             {
+                
+                _book.BookSlot = hit.transform.GetComponent<BookSlot>();
                 _book.isPickedUp = false;
                 _book.outline.enabled = false;
+
+                BookChanged?.Invoke();
+                
+                if(_bookSlots.Count != 0)
+                {
+                    foreach (var bookSlot in _bookSlots)
+                    {
+                        bookSlot.enabled = false;
+                    }
+                }
             }
-        }
-        else
-        {
-            DOTween.To(() => _book.FirstTransform.position, x => _book.FirstTransform.position = x, _book.FirstTransform.position, 0.2f);
         }
     }
 

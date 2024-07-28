@@ -19,7 +19,7 @@ public override void Interact()
 
             IsInteracting = true;
             CurrentPlayer.Camera.Follow = transform;
-            CurrentPlayer.Camera.transform.DORotate(new Vector3(20, 90, 0), 1f);
+            CurrentPlayer.Camera.transform.DORotate(new Vector3(20, -90, 0), 1f);
             CurrentPlayer.IsCameraRotatingEnabled = false;
             
             DOTween.To(() => framingTransposer.m_CameraDistance, x => framingTransposer.m_CameraDistance = x, 3f, 1f);

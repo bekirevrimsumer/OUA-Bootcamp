@@ -8,6 +8,7 @@ public class DrawCollider : MonoBehaviour
 {
     private LineRenderer lineRenderer;
     private BoxCollider boxCollider;
+    private Vector3[] corners;
 
     void Start()
     {
@@ -20,31 +21,36 @@ public class DrawCollider : MonoBehaviour
         UpdateColliderBounds();
     }
 
-    void Update()
-    {
-        UpdateColliderBounds();
-    }
-
     private void UpdateColliderBounds()
     {
         Vector3 center = boxCollider.center;
-        Vector3 size = boxCollider.size;
+        Vector3 size = boxCollider.size / 2;
 
-        Vector3[] corners = new Vector3[8];
-        corners[0] = transform.TransformPoint(center + new Vector3(size.x, size.y, size.z));
-        corners[1] = transform.TransformPoint(center + new Vector3(size.x, size.y, -size.z));
-        corners[2] = transform.TransformPoint(center + new Vector3(size.x, -size.y, -size.z));
-        corners[3] = transform.TransformPoint(center + new Vector3(size.x, -size.y, size.z));
-        corners[4] = transform.TransformPoint(center + new Vector3(-size.x, size.y, size.z));
-        corners[5] = transform.TransformPoint(center + new Vector3(-size.x, size.y, -size.z));
-        corners[6] = transform.TransformPoint(center + new Vector3(-size.x, -size.y, -size.z));
-        corners[7] = transform.TransformPoint(center + new Vector3(-size.x, -size.y, size.z));
+        corners = new Vector3[8];
+        corners[0] = center + new Vector3(size.x, size.y, size.z);
+        corners[1] = center + new Vector3(size.x, size.y, -size.z);
+        corners[2] = center + new Vector3(size.x, -size.y, -size.z);
+        corners[3] = center + new Vector3(size.x, -size.y, size.z);
+        corners[4] = center + new Vector3(-size.x, size.y, size.z);
+        corners[5] = center + new Vector3(-size.x, size.y, -size.z);
+        corners[6] = center + new Vector3(-size.x, -size.y, -size.z);
+        corners[7] = center + new Vector3(-size.x, -size.y, size.z);
 
+        lineRenderer.positionCount = 16;
         lineRenderer.SetPositions(new Vector3[] {
-            corners[0], corners[1], corners[2], corners[3],
-            corners[0], corners[4], corners[5], corners[1],
-            corners[5], corners[6], corners[7], corners[4],
-            corners[7], corners[6], corners[2], corners[3]
+            transform.TransformPoint(corners[0]), transform.TransformPoint(corners[1]),
+            transform.TransformPoint(corners[1]), transform.TransformPoint(corners[2]),
+            transform.TransformPoint(corners[2]), transform.TransformPoint(corners[3]),
+            transform.TransformPoint(corners[3]), transform.TransformPoint(corners[0]),
+            transform.TransformPoint(corners[4]), transform.TransformPoint(corners[5]),
+            transform.TransformPoint(corners[5]), transform.TransformPoint(corners[6]),
+            transform.TransformPoint(corners[6]), transform.TransformPoint(corners[7]),
+            transform.TransformPoint(corners[7]), transform.TransformPoint(corners[4]),
+            transform.TransformPoint(corners[0]), transform.TransformPoint(corners[4]),
+            transform.TransformPoint(corners[1]), transform.TransformPoint(corners[5]),
+            transform.TransformPoint(corners[2]), transform.TransformPoint(corners[6]),
+            transform.TransformPoint(corners[3]), transform.TransformPoint(corners[7]),
+            
         });
     }
 }

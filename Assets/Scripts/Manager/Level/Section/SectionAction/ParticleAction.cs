@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-[Serializable]
 public class ParticleAction : BaseSectionAction
 {
     private ParticleSystem _particle;
