@@ -27,9 +27,7 @@ public class RoomListUI : MonoBehaviour
 			GameObject roomItemGO = Instantiate(roomListItemPrefab, roomListParent);
 
 			roomItemGO.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = room.Name;
-			roomItemGO.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount + "/16";
-
-			roomItemGO.GetComponent<RoomItemButton>().roomName = room.Name;
+			roomItemGO.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = room.PlayerCount + "/" +  room.MaxPlayers;
 		}
 	}
 }

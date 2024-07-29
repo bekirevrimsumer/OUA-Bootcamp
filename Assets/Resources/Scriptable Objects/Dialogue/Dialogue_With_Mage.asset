@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb3424bc65543ef46a9ffef5fdd53ba0, type: 3}
+  m_Name: Dialogue_With_Mage
+  m_EditorClassIdentifier: 
+  Dialogues:
+  - Name: "Zindan B\xFCy\xFCc\xFCs\xFC"
+    Sentences:
+    - "Sana bir hikaye anlatmam\u0131 ister misin?"
+    - "Bir zamanlar, uzak bir diyarda be\u015F renkli krall\u0131k varm\u0131\u015F:
+      Ye\u015Fil Krall\u0131k, Mavi Krall\u0131k, Mor Krall\u0131k, Sar\u0131 Krall\u0131k
+      ve Siyah Krall\u0131k."
+    - "Bu krall\u0131klar aras\u0131ndaki uyumu sa\u011Flamak i\xE7in renklerin belli
+      bir s\u0131rayla dizilmesi gerekirmi\u015F. Bilge bir adam, krall\u0131klar\u0131n
+      uyumunu sa\u011Flamak i\xE7in gizemli ipu\xE7lar\u0131 b\u0131rakm\u0131\u015F."
+    - "Bilge adam, bilgeli\u011Fini do\u011Fadan al\u0131r ve ye\u015Fil olan her
+      \u015Feyi sever. Ye\u015Fil Krall\u0131k'\u0131n hikayesi, her zaman bilgelik
+      dolu ba\u015Flang\u0131\xE7lar\u0131n simgesidir."
+    - "G\xF6ky\xFCz\xFC, do\u011Fan\u0131n \xFCst\xFCndedir ve mavinin huzurunu ta\u015F\u0131r.
+      Ye\u015Fil Krall\u0131k'tan sonra gelen huzur dolu g\xF6ky\xFCz\xFC, hikayelerde
+      ikinci s\u0131radad\u0131r."
+    - "Kraliyet hikayeleri, her zaman bir umut \u0131\u015F\u0131\u011F\u0131n\u0131n
+      ard\u0131ndan gelir. Mor Krall\u0131k, kraliyet hikayelerini anlat\u0131r,
+      fakat her zaman bir \u0131\u015F\u0131\u011F\u0131n ard\u0131ndan gelmelidir."
+    - "Sar\u0131 Krall\u0131k, karanl\u0131k zamanlardan sonra gelen umudu ve \u0131\u015F\u0131\u011F\u0131
+      temsil eder. Ancak, umut ve \u0131\u015F\u0131k her zaman geceyle sonu\xE7lan\u0131r."
+    - Gece ise her hikayenin sonudur.
+  DialogueSpeed: 0.05

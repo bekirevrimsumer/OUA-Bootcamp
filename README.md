@@ -3,7 +3,8 @@
 
 Unity Group 9 - Gizemli İkizler: Zindanın Yankıları
 
-[![Game Image](https://via.placeholder.com/800x400)](https://via.placeholder.com/800x400)
+<img src="Screenshots/Images/Game_Image_2.jpeg" alt="Game Image 1">
+<img src="Screenshots/Images/Game_Image_1.jpg" alt="Game Image 1">
 
 # Team Members
 | Name | Role | Social Media |
@@ -51,6 +52,7 @@ The twin brothers, trapped inside Dungeon, will try to complete the dungeon by s
 ## Documentation
 
 - Task Board: [Trello Board](https://trello.com/b/bGnhI7gn/agile-board-template-trello)
+- Miro Board: [Miro Board](https://miro.com/app/board/uXjVKyj05nw=/?share_link_id=266004089956)
 
 # Sprints
 Sprints will be 2 weeks long. At the end of each sprint, a sprint review will be held to evaluate the work done during the sprint and a refirement meeting will be held for the next sprint. Task scoring in sprints will be done with Fibonacci numbers (from 1 to 8).
@@ -148,12 +150,113 @@ When estimating the time for each task, care should be taken to make these times
     <img src="Screenshots/Sprint_1/game_2.png" alt="In Game 2">
 </details>
 
+## Sprint 2
+
+- **Start Date:** 08.07.2024
+- **End Date:** 21.07.2024
+- **Expected Story Points:** 72
+- **Completed Story Points:** 63
+
+### Sprint Goal
+
+- Main menu design will be made.
+- Game scene design will be made and props will be added.
+- New mechanics will be developed to diversify the game.
+- Section level system will be written.
+- UI asset will be determined for the game and panels will be designed.
+- Music and sound effects will be determined and added to the game for testing. A generic SoundManager will be written.
+- The storyboard of the game will be created and the story of the characters will be written.
+- A cinematic will be added to the beginning of the game to support the story.
+- Character mechanics will be tested in the game scene.
+- Puzzles will be designed and tested in the game scene.
+- Dialog system will be created.
+
+### Daily Scrum Meetings
+  <p>As in the last sprint, we did the daily scrums in a written way on discord. Everyone informed the whole team about which stage they were in and whether they had a problem with the work they did. We had one-on-one meetings where necessary. We tried to have a meeting with the whole team twice a week.</p>
+  <details>
+  <summary><h4 style="display: inline; margin: 0; padding: 0;">Screenshot</h4></summary>
+  <img src="Screenshots/Sprint_2/daily_scrum.png" alt="Daily Scrum">
+  <img src="Screenshots/Sprint_2/meeting.png" alt="Meeting">
+</details>
+
+### Sprint Review
+  <ul>
+    <li>Worked on the main menu design. The main menu was designed and the necessary buttons were added.</li>
+    <li>Game scene design was made and props were added. The scene was designed according to the story of the game.</li>
+    <li>New mechanics were developed to diversify the game. The mechanics were tested in the game scene. However, not all mechanics planned to be added at the beginning of the sprint were completed in this sprint. It will continue in the next sprint.</li>
+    <li>Section level system was written. The system was tested in the game scene.</li>
+    <li>UI asset was determined for the game and panels were designed. The panels were added to the game scene.</li>
+    <li>Music and sound effects were determined and added to the game for testing. A generic SoundManager was written.</li>
+    <li>The storyboard of the game was created and the story of the characters was written. A cinematic was added to the beginning of the game to support the story.</li>
+    <li>Character mechanics were tested in the game scene.</li>
+    <li>Thoughts were given on the puzzles to be added. We discussed how we would create a level system and shared our ideas.</li>
+  </ul>
+
+### Sprint Retrospective
+
+#### What went well?
+
+- The team was able to complete most of the sprint tasks on time.
+- The basic structure of the game was created and the main menu and game scene were designed.
+- The team was understanding and helpful to each other.
+
+#### What didn't go well?
+
+- As in the first sprint, there were deficiencies in communication and collaboration among team members. We had difficulty in having meetings as a team and decided to increase one-on-one meetings as a solution to this situation.
+- More tasks could have been completed to achieve the sprint goals without any deficiencies.
+
+#### What could be improved?
+
+- Level design and puzzle design should be completed as soon as possible and sound effects should be added.
+
+### Sprint Backlog
+
 <details>
-    <summary><h4 style="display: inline; margin: 0; padding: 0;">Game Video</h4></summary>
-    <p>Basic mirror placement was implemented. The player can place the mirror in the desired position and direct the light beam.</p>
-    <video controls>
-        <source src="Screenshots/Sprint_1/game_video_1.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Burndown Chart</h4></summary>
+    <p>Burndown chart is a graphical representation of work left to do versus time. The outstanding work (or backlog) is often on the vertical axis, with time along the horizontal. That is, it is a run chart of outstanding work. It is useful for predicting when all of the work will be completed.</p>
+    <p>This burndown chart consists of 2 lines:</p>
+    <ul>
+        <li>Baseline, shows the planned amount of work at the beginning of the sprint. This line assumes that the work will be completed at an ideal speed (usually at a constant speed) and shows the completion of the planned work over time.</li>
+        <li>Remaining Effort, shows the amount of work done. This line is updated by the team every day and tracks the remaining amount of work over time. This way, it can be understood whether the project will be completed on time.</li>
+    </ul>
+    <img src="Screenshots/Sprint_2/sprint_burndown.png" alt="Burndown Chart">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Trello Board</h4></summary>
+    <p>In this sprint, tasks were created and tracked on the Trello board. Art/Concept tag was added to filter the tasks opened on the design side. In addition, Sprint-1, Sprint-2, Sprint-3 tags were added to track which sprint the tasks were done in. In the first sprint, while determining the story points, everyone's points were written in the task detail. However, with the decision we took as a team, we removed this and added it as a tag.</p>
+    <img src="Screenshots/Sprint_2/trello_board.png" alt="Trello Board">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Task Details</h4></summary>
+    <p>In the task details, in accordance with scrum, information about which user story the task belongs to, who did the task, and how many story points the task is included. We also continued to write the explanations of the tasks.</p>
+    <img src="Screenshots/Sprint_2/task_details.png" alt="Task Details">
+</details>
+
+### Game Screenshots
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Main Menu</h4></summary>
+    <p>The main menu was designed and the necessary buttons were added. The main menu was designed according to the theme of the game.</p>
+    <img src="Screenshots/Sprint_2/main_menu.png" alt="Main Menu">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Level Design</h4></summary>
+    <p>Game Level Design was made. The level design was designed according to the story of the game. Multiplayer tests were also done.</p>
+    <img src="Screenshots/Sprint_2/level_design.png" alt="Game Scene">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Game Scene</h4></summary>
+    <p>The game scene was designed and props were added.</p>
+    <img src="Screenshots/Sprint_2/game_scene_1.png" alt="Game Scene">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Character Mechanics</h4></summary>
+    <p>Character mechanics were tested in the game scene.</p>
+    <img src="Screenshots/Sprint_2/game_scene_2.png" alt="Character Mechanics">
 </details>
 

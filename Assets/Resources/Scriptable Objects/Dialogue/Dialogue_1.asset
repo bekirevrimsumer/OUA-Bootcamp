@@ -15,11 +15,10 @@ MonoBehaviour:
   Dialogues:
   - Name: Alex
     Sentences:
-    - Hello I'm Alex.
-    - "Bu bir test deneme yaz\u0131s\u0131d\u0131r."
+    - "Bak burada oyundaki \u0131\u015F\u0131n demetlerinden var."
+    - "Bu \u0131\u015F\u0131n demetini aynayla hedefe yans\u0131tarak bu b\xF6l\xFCm\xFC
+      tamamlamal\u0131y\u0131z."
   - Name: Riley
     Sentences:
-    - Hello I'm Alex.
-    - "Bu bir test deneme yaz\u0131s\u0131d\u0131r."
-    - Bu da deneme v2.
+    - "Evet, hadi sen aynay\u0131 ta\u015F\u0131. Ben de seni y\xF6nlendireyim."
   DialogueSpeed: 0.05

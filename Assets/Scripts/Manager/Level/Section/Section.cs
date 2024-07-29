@@ -9,6 +9,7 @@ public class Section : BaseSectionAction, IEventListener<SectionEvent>
 {
     public List<BaseSectionAction> Actions = new List<BaseSectionAction>();
     public List<BaseCondition> Conditions = new List<BaseCondition>();
+    public DialogueSO DialogueSO;
     private bool _isCompleted;
 
     public override void Execute()
@@ -26,7 +27,11 @@ public class Section : BaseSectionAction, IEventListener<SectionEvent>
         {
             action.Execute();
         }
-
+        SoundEvent.Trigger(SoundType.SFX, "Target", 0.5f, 0, false);
+        
+        if(DialogueSO != null)
+            DialogueEvent.Trigger(DialogueEventType.StartDialogue, DialogueSO);
+        
         _isCompleted = true;
     }
 

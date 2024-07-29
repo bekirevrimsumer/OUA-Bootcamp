@@ -7,11 +7,14 @@ using UnityEngine;
 public class Mirror : MonoBehaviourPun, IPunObservable
 {
 	public bool IsCarry = false;
+    public bool IsInteractable = true;
 	private Quaternion _networkRotation;
 
 	[PunRPC]
 	private void CarryMirrorRPC(int parentId)
 	{
+        if(!IsInteractable) return;
+
 		IsCarry = true;
 		transform.parent = PhotonView.Find(parentId).gameObject.FindInChildren("InteractObjectTransform").transform;
 
@@ -25,6 +28,8 @@ public class Mirror : MonoBehaviourPun, IPunObservable
 	[PunRPC]
 	private void DropMirrorRPC()
 	{
+        if(!IsInteractable) return;
+
 		IsCarry = false;
 		transform.parent = null;
 	}
@@ -33,10 +38,12 @@ public class Mirror : MonoBehaviourPun, IPunObservable
     private void RotateMirrorRPC(Vector3 axis, float angle)
     {
         transform.Rotate(axis, angle, Space.Self);
-    }
+    }   
 
     public void RotateMirror(Vector3 axis, float angle)
     {
+        if(!IsInteractable) return;
+        
         if (photonView.IsMine)
         {
             photonView.RPC("RotateMirrorRPC", RpcTarget.All, axis, angle);

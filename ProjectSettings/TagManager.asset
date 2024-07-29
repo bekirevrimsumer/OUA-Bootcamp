@@ -17,6 +17,10 @@ TagManager:
   - Switch
   - DialogueArea
   - Interactable
+  - DoorButton
+  - BookSlot
+  - Shelf
+  - Book
   layers:
   - Default
   - TransparentFX
@@ -24,8 +28,8 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
-  - 
+  - Interactable
+  - BookSlot
   - 
   - Player
   - LightBeam

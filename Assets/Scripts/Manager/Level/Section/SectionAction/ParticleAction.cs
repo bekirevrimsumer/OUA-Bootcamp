@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-[Serializable]
 public class ParticleAction : BaseSectionAction
 {
     private ParticleSystem _particle;
@@ -13,6 +12,7 @@ public class ParticleAction : BaseSectionAction
 
     public override void Execute()
     {
+        base.Execute();
         _particle.Play();
     }
 }

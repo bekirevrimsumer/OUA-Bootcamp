@@ -3,5 +3,10 @@ using UnityEngine;
 
 public class BaseSectionAction : MonoBehaviourPunCallbacks
 {
-    public virtual void Execute() {}
+    public bool IsCompleted;
+
+    public virtual void Execute()
+    {
+        IsCompleted = true;
+    }
 }

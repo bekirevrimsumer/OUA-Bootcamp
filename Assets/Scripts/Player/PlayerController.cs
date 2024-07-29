@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Cinemachine;
 using Cinemachine.PostFX;
 using DG.Tweening;
@@ -13,17 +16,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     public CinemachineVirtualCamera Camera;
     public Transform CameraFollowTransform;
     public bool IsCameraRotatingEnabled = true;
+    public Camera MainCamera;
     private CinemachineFramingTransposer _framingTransposer;
-    private CinemachineVolumeSettings _volumeSettings;
 
     [Header("Movement")]
     [SerializeField] private float _speed = 5f;
 
-    [Header("Interact Objects")]
-    public Transform InteractObjectTransform;
-    private bool _isCarry = false;
-    private Transform _currentMirror;
-    private int _parentId;
 
     [Header("Jumping")]
     public float JumpForce = 5f;
@@ -39,18 +37,19 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     private bool _canClimbWall = false;
     private bool _isClimbWall = false;
 
-    [Header("Padlock")]
-    private GameObject _currentPadlock;
-    private bool _canFocusPadlock = false;
-    private bool _isPadlockFocused = false;
 
     [Header("Interactable")]
-    private IInteractable _currentInteractable;
+    private Interactable _currentInteractable;
+    private bool _canInteract = false;
+    private Book _book;
+    private List<LineRenderer> _bookSlots = new List<LineRenderer>();
 
     [Header("References")]
     public Animator Animator;
     public Rigidbody Rb;    
     public LayerMask GroundLayer;
+    private SoundManager _soundManager;
+    public static event Action BookChanged = delegate { };
 
     private void Start()
     {
@@ -63,7 +62,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         Animator = GetComponent<Animator>();
         Rb = GetComponent<Rigidbody>();
         _framingTransposer = Camera.GetCinemachineComponent<CinemachineFramingTransposer>();
-        _volumeSettings = Camera.GetComponent<CinemachineVolumeSettings>();
+        _soundManager = FindObjectOfType<SoundManager>();
+        _soundManager.footstepSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -71,15 +71,34 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         if(photonView.IsMine)
         {
             TopDownMovement();
-            RotateMirror();
             HandleClimbing();
             HandleJumping();
             HandleGroundedState();
-            HandleMirrorPickup();
             HandleClimbWall();
-            HandleLockFocus();
             HandleInteract();
             CameraRotation();
+
+        if(_book != null && _book.isPickedUp && _book.ShelfInteractable.IsInteracting)
+        {
+            PlaceBook();
+        }
+        else if(Input.GetMouseButtonDown(0))
+        {
+            PickBook();
+        }
+
+        if(_book != null && _book.isPickedUp && !_book.ShelfInteractable.IsInteracting)
+        {
+            _book.isPickedUp = false;
+            _book.outline.enabled = false;
+            DOTween.To(() => transform.position, x => transform.position = x, _book.FirstTransform.position, 0.2f);
+        }
+
+        if(_book != null &&     _book.isPickedUp && Input.GetMouseButtonDown(1))
+        {
+            _book.isPickedUp = false;
+            _book.outline.enabled = false;
+        }
         }
     }
 
@@ -107,7 +126,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
         if (Input.GetKey(KeyCode.W))
         {
-            float targetY = transform.position.y + ClimbSpeed * 10 * Time.deltaTime;
+            float targetY = transform.position.y + ClimbSpeed * 5 * Time.deltaTime;
             transform.DOMoveY(targetY, 0.3f).SetEase(Ease.Linear);
         }
     }
@@ -126,7 +145,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     {
         IsGrounded = Physics.Raycast(transform.position, Vector3.down, GroundDistance, GroundLayer);
 
-        if (!_canClimb && !_canClimbWall && !_isCarry && IsGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (!_canClimb && !_canClimbWall && IsGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             Rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
         }
@@ -137,63 +156,28 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         Animator.SetBool("IsGrounded", IsGrounded);
     }
 
-    private void HandleMirrorPickup()
-    {
-        if (Input.GetKeyDown(KeyCode.F) && _currentMirror != null)
-        {
-            if (!_isCarry)
-            {
-                PickupMirror();
-            }
-            else
-            {
-                DropMirror();
-            }
-        }
-    }
-
-    private void HandleLockFocus()
-    {
-        if (Input.GetKeyDown(KeyCode.F) && _canFocusPadlock && !_isPadlockFocused)
-        {
-            _isPadlockFocused = true;
-            Camera.Follow = _currentPadlock.transform;
-            Camera.transform.DORotate(new Vector3(45, 110, 0), 1f);
-            IsCameraRotatingEnabled = false;
-            
-            DOTween.To(() => _framingTransposer.m_CameraDistance, x => _framingTransposer.m_CameraDistance = x, 1f, 1f);
-            DOTween.To(() => _framingTransposer.m_TrackedObjectOffset.y, y => _framingTransposer.m_TrackedObjectOffset.y = y, 0f, 1f);
-
-            _volumeSettings.m_Profile.TryGet<DepthOfField>(out var depthOfField);
-            depthOfField.active = false;
-        }
-        else if (Input.GetKeyDown(KeyCode.F) && _isPadlockFocused)
-        {
-            _isPadlockFocused = false;
-            Camera.Follow = CameraFollowTransform;
-            IsCameraRotatingEnabled = true;
-            Camera.transform.DORotate(new Vector3(50, 0, 0), 1f);
-            
-            DOTween.To(() => _framingTransposer.m_CameraDistance, x => _framingTransposer.m_CameraDistance = x, 13f, 1f);
-            DOTween.To(() => _framingTransposer.m_TrackedObjectOffset.y, y => _framingTransposer.m_TrackedObjectOffset.y = y, 1.2f, 1f);
-
-            _volumeSettings.m_Profile.TryGet<DepthOfField>(out var depthOfField);
-            depthOfField.active = true;
-        }
-    }
-
     private void HandleInteract()
     {
-        if (Input.GetKeyDown(KeyCode.F) && _currentInteractable != null)
+        if (Input.GetKeyDown(KeyCode.F) && _currentInteractable != null && _canInteract)
         {
             _currentInteractable.Interact();
+        }
+        
+        if(_currentInteractable != null && _currentInteractable is MirrorInteractable mirrorInteractable)
+        {
+            if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.C))
+            {
+                mirrorInteractable.Interact();
+            }
         }
     }
 
     #region TopDownWASDMovement
     private void TopDownMovement()
     {
-        if(_isClimbWall || _isPadlockFocused) return;
+        if(_isClimbWall) return;
+
+        if(!_currentInteractable is MirrorInteractable && _currentInteractable != null && _currentInteractable.IsInteracting) return;
 
         var movement = GetMovement();
         movement = Vector3.ClampMagnitude(movement, 1);
@@ -250,27 +234,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     #endregion
 
     #region Mirror Interact
-    void PickupMirror()
-    {
-        InteractEvent.Trigger(InteractEventType.MirrorCarry);
-        _isCarry = true;
-        Animator.SetBool("IsCarry", true);
-		_parentId = transform.GetComponent<PhotonView>().ViewID;
-		_currentMirror.GetComponent<PhotonView>().RPC("CarryMirrorRPC", RpcTarget.All, _parentId);
-        Rb.useGravity = false;
-        Rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
-    }
-
-    void DropMirror()
-    {
-        InteractEvent.Trigger(InteractEventType.MirrorDrop);
-        _isCarry = false;
-        Animator.SetBool("IsCarry", false);
-		_currentMirror.GetComponent<PhotonView>().RPC("DropMirrorRPC", RpcTarget.All);
-        _currentMirror = null;
-        Rb.useGravity = true;
-        Rb.constraints = RigidbodyConstraints.FreezeRotation;
-    }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -288,33 +251,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
     #endregion
 
-    #region Mirror Rotation
-
-    private void RotateMirror()
-    {
-        if (!_isCarry && _currentMirror != null)
-        {
-            if (Input.GetKey(KeyCode.Q))
-            {
-                _currentMirror.GetComponent<PhotonView>().RPC("RotateMirrorRPC", RpcTarget.All, Vector3.up, -45 * Time.deltaTime);
-            }
-            if (Input.GetKey(KeyCode.E))
-            {
-                _currentMirror.GetComponent<PhotonView>().RPC("RotateMirrorRPC", RpcTarget.All, Vector3.up, 45 * Time.deltaTime);                
-            }   
-            if(Input.GetKey(KeyCode.X))
-            {
-                _currentMirror.GetComponent<PhotonView>().RPC("RotateMirrorRPC", RpcTarget.All, Vector3.right, -45 * Time.deltaTime);
-            }
-            if(Input.GetKey(KeyCode.C))
-            {
-                _currentMirror.GetComponent<PhotonView>().RPC("RotateMirrorRPC", RpcTarget.All, Vector3.right, 45 * Time.deltaTime);
-            }
-        }
-    }
-
-    #endregion
-
     #region Collision
 
     void OnTriggerEnter(Collider other)
@@ -323,9 +259,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
         switch (other.tag)
         {
-            case "InteractMirror":
-                HandleInteractMirrorEnter(other);
-                break;
             case "InformationMessageArea":
                 HandleInformationMessageAreaEnter(other);
                 break;
@@ -337,9 +270,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
                 break;
             case "WallUp":
                 HandleWallUpEnter();
-                break;
-            case "Switch":
-                HandleSwitchEnter(other);
                 break;
             case "DialogueArea":
                 HandleDialogueAreaEnter(other);
@@ -356,9 +286,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
         switch (other.tag)
         {
-            case "InteractMirror":
-                HandleInteractMirrorExit(other);
-                break;
             case "InformationMessageArea":
                 HandleInformationMessageAreaExit(other);
                 break;
@@ -371,32 +298,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
             case "WallUp":
                 HandleWallUpExit();
                 break;
-            case "Switch":
-                HandleSwitchExit();
-                break;
             case "Interactable":
                 HandleInteractableExit(other);
                 break;
-        }
-    }
-
-    void HandleInteractMirrorEnter(Collider other)
-    {
-        var mirror = other.transform.parent.GetComponent<Mirror>();
-        if (mirror != null && !mirror.IsCarry && !_isCarry)
-        {
-            InteractEvent.Trigger(InteractEventType.MirrorEnter);
-            _currentMirror = other.transform.parent;
-        }
-    }
-
-    void HandleInteractMirrorExit(Collider other)
-    {
-        var mirror = other.transform.parent.GetComponent<Mirror>();
-        if (mirror != null && !mirror.IsCarry && !_isCarry)
-        {
-            InteractEvent.Trigger(InteractEventType.MirrorExit);
-            _currentMirror = null;
         }
     }
 
@@ -423,16 +327,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         var climbBox = other.GetComponent<ClimbBox>();
         if (climbBox != null)
         {
-            InteractEvent.Trigger(InteractEventType.ClimbEnter);
-            _climbPoint = climbBox.climbPoint;
             _canClimb = true;
+            _climbPoint = climbBox.climbPoint;
+            InteractEvent.Trigger(InteractEventType.ClimbEnter, null, false, false, false);
         }
     }
 
     void HandleClimbExit(Collider other)
     {
-        InteractEvent.Trigger(InteractEventType.ClimbExit);
         _canClimb = false;
+        InteractEvent.Trigger(InteractEventType.ClimbExit, null, false, false, false);
     }
 
     void HandleClimbWallEnter(Collider other)
@@ -463,17 +367,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         Rb.useGravity = true;
     }
 
-    void HandleSwitchEnter(Collider other)
-    {
-        _canFocusPadlock = true;
-        _currentPadlock = other.gameObject.FindChildObject("padlock");
-    }
-
-    void HandleSwitchExit()
-    {
-        _canFocusPadlock = false;
-    }
-
     void HandleDialogueAreaEnter(Collider other)
     {
         var dialogueArea = other.GetComponent<DialogueArea>();
@@ -484,17 +377,100 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         }
     }
 
+    private void PickBook()
+    {
+        RaycastHit hit;
+        
+        Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Interactable")))
+        {
+            _bookSlots = hit.transform.parent.GetComponentsInChildren<LineRenderer>().ToList();
+
+            if (_bookSlots.Count != 0)
+            {
+                foreach (var bookSlot in _bookSlots)
+                {
+                    bookSlot.enabled = true;
+                }
+            }
+
+            _book = hit.transform.GetComponent<Book>();
+            _book.outline.enabled = true;
+            _book.isPickedUp = true;
+        }
+    }
+
+    private void PlaceBook()
+    {
+        RaycastHit hit;
+        Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("BookSlot")))
+        {
+            var transformPoint = hit.transform.GetChild(0);
+            DOTween.To(() => _book.FirstTransform.position, x => _book.FirstTransform.position = x, transformPoint.position, 0.2f);
+            _book.transform.DOLocalRotate(new Vector3(0, 90, 0), 0.2f);
+
+            if(Input.GetMouseButtonDown(0))
+            {
+                
+                _book.BookSlot = hit.transform.GetComponent<BookSlot>();
+                _book.isPickedUp = false;
+                _book.outline.enabled = false;
+
+                BookChanged?.Invoke();
+                
+                if(_bookSlots.Count != 0)
+                {
+                    foreach (var bookSlot in _bookSlots)
+                    {
+                        bookSlot.enabled = false;
+                    }
+                }
+            }
+        }
+    }
+
     void HandleInteractableEnter(Collider other)
     {
-        var interactable = other.GetComponent<IInteractable>();
+        var interactable = other.GetComponent<Interactable>();
         _currentInteractable = interactable;
-        InteractEvent.Trigger(InteractEventType.DoorLockKeyEnter);
+        _currentInteractable.CurrentPlayer = this;
+        _canInteract = true;
+
+        if(interactable == null) return;
+
+        if(interactable is MirrorInteractable mirrorInteractable)
+        {
+            if(!mirrorInteractable.Mirror.IsCarry && mirrorInteractable.Mirror.IsInteractable)
+            {
+                InteractEvent.Trigger(InteractEventType.MirrorEnter); 
+            }
+
+           return;
+        }
+
+        InteractEvent.Trigger(InteractEventType.InteractableObjectEnter);
     }
 
     void HandleInteractableExit(Collider other)
     {
+        var interactable = other.GetComponent<Interactable>();
         _currentInteractable = null;
-        InteractEvent.Trigger(InteractEventType.DoorLockKeyExit);
+        _canInteract = false;
+
+        if(interactable == null) return;
+
+        if(interactable is MirrorInteractable mirrorInteractable)
+        {
+            if(mirrorInteractable.Mirror != null && !mirrorInteractable.Mirror.IsCarry)
+            {
+                InteractEvent.Trigger(InteractEventType.MirrorExit); 
+            }
+
+           return;
+        }
+
+        InteractEvent.Trigger(InteractEventType.InteractableObjectExit);
     }
 
     #endregion
@@ -547,6 +523,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     {
         base.OnDisable();
         this.StopListeningEvent<MultiplayerEvent>();
+    }
+
+    #endregion
+
+    #region Animation Sounds
+
+    public void Footstep()
+    {
+        SoundEvent.Trigger(SoundType.Footstep, "FootStep", 0.15f, 0, false);
     }
 
     #endregion
