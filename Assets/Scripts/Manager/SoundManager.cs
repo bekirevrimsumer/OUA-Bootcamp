@@ -22,15 +22,8 @@ public class SoundManager : MonoBehaviour, IEventListener<SoundEvent>
     {
         if (!bgMusicSource.isPlaying)
         {
-            if (SceneManager.GetActiveScene().name == "MainMenu")
-            {
-                PlaySound("MainMenu", 0.5f, 0, true);
-            }
-            else
-            {
-                int random = Random.Range(0, backgroundMusics.Count);
-                PlaySound(backgroundMusics.Keys.ToArray()[random], 0.5f, 0, true);
-            }
+            int random = Random.Range(0, backgroundMusics.Count);
+            PlaySound(backgroundMusics.Keys.ToArray()[random], 0.5f, 0, true);
         }
     }
 

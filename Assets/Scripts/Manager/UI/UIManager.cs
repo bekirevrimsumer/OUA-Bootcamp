@@ -99,7 +99,6 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
                 break;
             case InteractEventType.ClimbEnter:
                 AnimatePanel("ClimbWindow", true);
-                UpdatePanel("ClimbWindow", eventType);
                 break;
             case InteractEventType.ClimbExit:
                 AnimatePanel("ClimbWindow", false);
@@ -113,6 +112,8 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
 
                 if(!string.IsNullOrEmpty(eventType.PanelName))
                 {
+                    if(eventType.IsUpdatePanel)
+                        UpdatePanel(eventType.PanelName, eventType);
                     if(eventType.IsAnimatePanel)
                         AnimatePanel(eventType.PanelName, true);
                     else

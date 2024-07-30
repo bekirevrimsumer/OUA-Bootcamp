@@ -379,6 +379,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
     private void PickBook()
     {
+        if(_currentInteractable == null) return;
+        if(_currentInteractable != null && _currentInteractable is ShelfInteractable shelfInteractable && !shelfInteractable.IsInteracting) return;
+
         RaycastHit hit;
         
         Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);

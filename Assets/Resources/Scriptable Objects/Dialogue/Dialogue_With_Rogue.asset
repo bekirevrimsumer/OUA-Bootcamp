@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb3424bc65543ef46a9ffef5fdd53ba0, type: 3}
+  m_Name: Dialogue_With_Rogue
+  m_EditorClassIdentifier: 
+  Dialogues:
+  - Name: "Zindan A\u015F\xE7\u0131s\u0131"
+    Sentences:
+    - "(Ka\u015Flar\u0131n\u0131 kald\u0131rarak) Ah, kimler gelmi\u015F bak\u0131n
+      hele! Kay\u0131p \xE7ocuklar zindan\u0131n a\u015F\xE7\u0131s\u0131n\u0131n
+      mutfa\u011F\u0131na d\xFC\u015Fm\xFC\u015F. Ne b\xFCy\xFCk \u015Fans!"
+  - Name: Alex
+    Sentences:
+    - "(\u015Ea\u015Fk\u0131n) Sen kimsin?"
+  - Name: "Zindan A\u015F\xE7\u0131s\u0131"
+    Sentences:
+    - "(G\xFCl\xFCmseyerek) Ben bu lanetli zindan\u0131n ba\u015F a\u015F\xE7\u0131s\u0131y\u0131m.
+      \u0130smim \xF6nemli de\u011Fil. Ama sizin buradan \xE7\u0131kman\u0131z i\xE7in
+      \xF6nemli olan bir \u015Fey var."
+  - Name: Riley
+    Sentences:
+    - "(Merakla) Neymi\u015F o?"
+  - Name: "Zindan A\u015F\xE7\u0131s\u0131"
+    Sentences:
+    - "(Alayc\u0131 bir sesle) Ah, tabii ki \xF6zel tarifim. Efsanevi Ayd\u0131nlatma
+      \u0130ksiri. Tabii, bunu yapabilecek yetene\u011Finiz varsa."
+  - Name: Alex
+    Sentences:
+    - "(Kararl\u0131l\u0131kla) Tarifini ver, yapar\u0131z."
+  - Name: "Zindan B\xFCy\xFCc\xFCs\xFC"
+    Sentences:
+    - "\xD6ncelikle k\xF6\u015Fedeki hedefe \u0131\u015F\u0131n demetini y\xF6nlendirmeniz
+      gerekiyor. Bu size malzemelerin bulundu\u011Fu odan\u0131n kaps\u0131n\u0131
+      a\xE7acakt\u0131r."
+    - "Sonras\u0131nda ise o odaya giderek \u015Fu malzemeleri bulman\u0131z gerekir:"
+    - "G\xF6lge K\xF6k\xFC, L\xFCminesans S\u0131v\u0131s\u0131, Havu\xE7, \xD6zel
+      bir kab\u0131n i\xE7erisinde saklanan Zeravent K\xF6k\xFC ve tabiki bu iksiri
+      saklayabilece\u011Fim bir adet iksir kab\u0131."
+    - "T\xFCm bu malzemeleri toplad\u0131ktan sonra buradaki oca\u011Fa gelip kar\u0131\u015F\u0131m\u0131
+      tamamlaman\u0131z gerekiyor."
+  - Name: Riley
+    Sentences:
+    - "(Karde\u015Fine d\xF6nerek) Alex, bu g\xF6revler zorlu olacak ama birlikte
+      ba\u015Farabiliriz."
+  - Name: Alex
+    Sentences:
+    - "(Kararl\u0131l\u0131kla) Evet, Riley. Bu zindan\u0131n s\u0131rlar\u0131n\u0131
+      \xE7\xF6zmek i\xE7in her \u015Feyi yapaca\u011F\u0131z."
+  DialogueSpeed: 0.05
