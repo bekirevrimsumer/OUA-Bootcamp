@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
     [Header("References")]
     public Animator Animator;
-    public Rigidbody Rb;    
+    public Rigidbody Rb;
     public LayerMask GroundLayer;
     private SoundManager _soundManager;
     public static event Action BookChanged = delegate { };
@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
     private void Update()
     {
-        if(photonView.IsMine)
+        if (photonView.IsMine)
         {
             TopDownMovement();
             HandleClimbing();
@@ -76,23 +76,23 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
             CameraRotation();
             Respawn();
 
-            if(_book != null && _book.isPickedUp && _book.ShelfInteractable.IsInteracting)
+            if (_book != null && _book.isPickedUp && _book.ShelfInteractable.IsInteracting)
             {
                 PlaceBook();
             }
-            else if(Input.GetMouseButtonDown(0))
+            else if (Input.GetMouseButtonDown(0))
             {
                 PickBook();
             }
 
-            if(_book != null && _book.isPickedUp && !_book.ShelfInteractable.IsInteracting)
+            if (_book != null && _book.isPickedUp && !_book.ShelfInteractable.IsInteracting)
             {
                 _book.isPickedUp = false;
                 _book.outline.enabled = false;
                 DOTween.To(() => transform.position, x => transform.position = x, _book.FirstTransform.position, 0.2f);
             }
 
-            if(_book != null && _book.isPickedUp && Input.GetMouseButtonDown(1))
+            if (_book != null && _book.isPickedUp && Input.GetMouseButtonDown(1))
             {
                 _book.isPickedUp = false;
                 _book.outline.enabled = false;
@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
     public void Respawn()
     {
-        if(CurrentRespawnPoint != null && Input.GetKeyDown(KeyCode.F12))
+        if (CurrentRespawnPoint != null && Input.GetKeyDown(KeyCode.F12))
         {
             transform.position = CurrentRespawnPoint.position;
         }
@@ -168,10 +168,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         {
             _currentInteractable.Interact();
         }
-        
-        if(_currentInteractable != null && _currentInteractable is MirrorInteractable mirrorInteractable)
+
+        if (_currentInteractable != null && _currentInteractable is MirrorInteractable mirrorInteractable)
         {
-            if(Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.C))
+            if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.C))
             {
                 mirrorInteractable.Interact();
             }
@@ -181,9 +181,17 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     #region TopDownWASDMovement
     private void TopDownMovement()
     {
-        if(_isClimbWall) return;
-
-        if(!_currentInteractable is MirrorInteractable && _currentInteractable != null && _currentInteractable.IsInteracting) return;
+        if (_isClimbWall) return;
+        
+        if(_currentInteractable != null)
+        {
+            var currentInteractable = _currentInteractable.GetType();
+            if (currentInteractable != typeof(MirrorInteractable))
+            {
+                if (_currentInteractable.IsInteracting) return;
+            }
+        }
+        
 
         var movement = GetMovement();
         movement = Vector3.ClampMagnitude(movement, 1);
@@ -394,11 +402,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
     private void PickBook()
     {
-        if(_currentInteractable == null) return;
-        if(_currentInteractable != null && _currentInteractable is ShelfInteractable shelfInteractable && !shelfInteractable.IsInteracting) return;
+        if (_currentInteractable == null) return;
+        if (_currentInteractable != null && _currentInteractable is ShelfInteractable shelfInteractable && !shelfInteractable.IsInteracting) return;
 
         RaycastHit hit;
-        
+
         Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Interactable")))
         {
@@ -427,16 +435,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
             var child = hit.transform.GetChild(0);
             _book.photonView.RPC("PlaceBook", RpcTarget.All, child.transform.position.x, child.transform.position.y, child.transform.position.z);
 
-            if(Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
             {
-                
+
                 _book.BookSlot = hit.transform.GetComponent<BookSlot>();
                 _book.isPickedUp = false;
                 _book.outline.enabled = false;
 
                 BookChanged?.Invoke();
-                
-                if(_bookSlots.Count != 0)
+
+                if (_bookSlots.Count != 0)
                 {
                     foreach (var bookSlot in _bookSlots)
                     {
@@ -449,45 +457,56 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
     void HandleInteractableEnter(Collider other)
     {
-        if(_currentInteractable != null) return;
+        if (_currentInteractable != null) return;
 
         var interactable = other.GetComponent<Interactable>();
+
+        if (interactable == null) return;
+
+        if (interactable is MirrorInteractable mirrorInteractable)
+        {
+
+            if (!mirrorInteractable.Mirror.IsCarry && mirrorInteractable.Mirror.IsInteractable)
+            {
+                _currentInteractable = interactable;
+                _currentInteractable.CurrentPlayer = this;
+                _canInteract = true;
+                InteractEvent.Trigger(InteractEventType.MirrorEnter);
+            }
+
+            return;
+        }
+
         _currentInteractable = interactable;
         _currentInteractable.CurrentPlayer = this;
         _canInteract = true;
 
-        if(interactable == null) return;
-
-        if(interactable is MirrorInteractable mirrorInteractable)
-        {
-            if(!mirrorInteractable.Mirror.IsCarry && mirrorInteractable.Mirror.IsInteractable)
-            {
-                InteractEvent.Trigger(InteractEventType.MirrorEnter); 
-            }
-
-           return;
-        }
 
         InteractEvent.Trigger(InteractEventType.InteractableObjectEnter);
     }
 
     void HandleInteractableExit(Collider other)
     {
+        if (_currentInteractable == null) return;
+
         var interactable = other.GetComponent<Interactable>();
-        _currentInteractable = null;
-        _canInteract = false;
 
-        if(interactable == null) return;
+        if (interactable == null) return;
 
-        if(interactable is MirrorInteractable mirrorInteractable)
+        if (interactable is MirrorInteractable mirrorInteractable)
         {
-            if(mirrorInteractable.Mirror != null && !mirrorInteractable.Mirror.IsCarry)
+            if (!mirrorInteractable.Mirror.IsCarry && mirrorInteractable.Mirror.IsInteractable)
             {
-                InteractEvent.Trigger(InteractEventType.MirrorExit); 
+                _currentInteractable = null;
+                _canInteract = false;
+                InteractEvent.Trigger(InteractEventType.MirrorExit);
             }
 
-           return;
+            return;
         }
+
+        _currentInteractable = null;
+        _canInteract = false;
 
         InteractEvent.Trigger(InteractEventType.InteractableObjectExit);
     }

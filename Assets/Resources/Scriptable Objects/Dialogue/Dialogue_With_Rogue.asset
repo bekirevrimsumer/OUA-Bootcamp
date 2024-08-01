@@ -55,4 +55,4 @@ MonoBehaviour:
     Sentences:
     - "(Kararl\u0131l\u0131kla) Evet, Riley. Bu zindan\u0131n s\u0131rlar\u0131n\u0131
       \xE7\xF6zmek i\xE7in her \u015Feyi yapaca\u011F\u0131z."
-  DialogueSpeed: 0.05
+  DialogueSpeed: 0.03

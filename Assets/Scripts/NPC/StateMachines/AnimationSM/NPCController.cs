@@ -4,7 +4,7 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NPCController : MonoBehaviourPunCallbacks
+public class NPCController : MonoBehaviour
 {
     public Animator Animator;
     public NavMeshAgent Agent;
@@ -30,7 +30,6 @@ public class NPCController : MonoBehaviourPunCallbacks
             _currentState.UpdateState(this);
     }
 
-    [PunRPC]
     public void ChangeState(IState newState)
     {
         _currentState.ExitState(this);
@@ -38,7 +37,6 @@ public class NPCController : MonoBehaviourPunCallbacks
         _currentState.EnterState(this);
     }
 
-    [PunRPC]
     public void MovePlayer()
     {
         if (Waypoints.Count > 0)

@@ -22,6 +22,7 @@ TagManager:
   - Shelf
   - Book
   - RespawnPoint
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -31,7 +32,7 @@ TagManager:
   - UI
   - Interactable
   - BookSlot
-  - 
+  - Wall
   - Player
   - LightBeam
   - 

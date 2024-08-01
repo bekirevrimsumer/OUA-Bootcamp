@@ -20,9 +20,10 @@ public class DialoguePanelUpdater : BasePanelUpdater<DialogueEvent>
         switch (eventType.DialogueEventType)
         {
             case DialogueEventType.StartDialogue:
-                if(!_isCompleted && _nextDialogue.DialogueSO != null && _nextDialogue.DialogueSO.name != eventType.DialogueSO.name)
+                if(!_isCompleted && _isTyping && _nextDialogue.DialogueSO != null && _nextDialogue.DialogueSO.name != eventType.DialogueSO.name)
                     _nextDialogue = eventType;
                 else
+                    StopAllCoroutines();
                     StartCoroutine(StartDialogue(eventType));
                 break;
             case DialogueEventType.EndDialogue:
