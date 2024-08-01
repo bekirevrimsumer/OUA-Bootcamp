@@ -170,7 +170,6 @@ public class LightBeamReflector : MonoBehaviour
     {
         if (!_isTargetHit)
         {
-            // ResetLineRenderer();
             AddLineRendererPosition(hit.point);
             _target = hit.collider.GetComponent<LightBeamTarget>();
 
@@ -191,7 +190,6 @@ public class LightBeamReflector : MonoBehaviour
         if (!_isPortalHit)
         {
             _isPortalHit = true;
-            // ResetLineRenderer();
             var endPortal = hit.transform.parent.Find("PortalEnd");
 
             if (_portalLightBeam == null)

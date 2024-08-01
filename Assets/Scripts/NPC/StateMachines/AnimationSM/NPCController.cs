@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NPCController : MonoBehaviour
+public class NPCController : MonoBehaviourPunCallbacks
 {
     public Animator Animator;
     public NavMeshAgent Agent;
@@ -29,6 +30,7 @@ public class NPCController : MonoBehaviour
             _currentState.UpdateState(this);
     }
 
+    [PunRPC]
     public void ChangeState(IState newState)
     {
         _currentState.ExitState(this);
@@ -36,18 +38,17 @@ public class NPCController : MonoBehaviour
         _currentState.EnterState(this);
     }
 
+    [PunRPC]
     public void MovePlayer()
     {
         if (Waypoints.Count > 0)
         {
-            var waypointIndex = Random.Range(0, Waypoints.Count);
-            if (waypointIndex == _currentWaypointIndex)
-            {
-                waypointIndex = (waypointIndex + 1) % Waypoints.Count;
-            }
-            _currentWaypointIndex = waypointIndex;
-
             Agent.SetDestination(Waypoints[_currentWaypointIndex]);
+            _currentWaypointIndex += 1;
+            if (_currentWaypointIndex >= Waypoints.Count)
+            {
+                _currentWaypointIndex = 0;
+            }
         }
     }
 }

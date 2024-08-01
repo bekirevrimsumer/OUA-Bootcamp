@@ -21,6 +21,7 @@ TagManager:
   - BookSlot
   - Shelf
   - Book
+  - RespawnPoint
   layers:
   - Default
   - TransparentFX
