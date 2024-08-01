@@ -14,6 +14,6 @@ public class ChestAction : BaseSectionAction
         
         ObjectInChest.SetActive(true);
         transform.DOLocalRotate(new Vector3(Rotation, 0, 0), 1f).SetEase(Ease.InOutQuad);
-        SoundEvent.Trigger(SoundType.SFX, "OpenChest", 0.5f, 0, false);
+        SoundEvent.Trigger(SoundType.SFX, "OpenChest", 0, false);
     }
 }

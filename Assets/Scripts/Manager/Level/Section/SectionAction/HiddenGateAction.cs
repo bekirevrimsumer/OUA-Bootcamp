@@ -11,6 +11,6 @@ public class HiddenGateAction : BaseSectionAction
     {
         base.Execute();
         transform.DOLocalMove(GatePosition, 4f).SetEase(Ease.InOutQuad);
-        SoundEvent.Trigger(SoundType.SFX, "HiddenGate", 1f, 0.5f, false);
+        SoundEvent.Trigger(SoundType.SFX, "HiddenGate", 1f, false);
     }
 }

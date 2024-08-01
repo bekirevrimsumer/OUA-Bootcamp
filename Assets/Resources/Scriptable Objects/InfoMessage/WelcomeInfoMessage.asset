@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc1d0ec05144294cb85697ac2b5541f, type: 3}
   m_Name: WelcomeInfoMessage
   m_EditorClassIdentifier: 
-  Title: Welcome
-  Message: Welcome adventurer. in this area you will learn about the game.
+  Title: Portal
+  Message: "I\u015F\u0131n demetlerini portallara y\xF6nlendirerek belki de ihtiyac\u0131n
+    olan bir odada \u0131\u015F\u0131n demeti olu\u015Fturabilirsin. Bir dene bence!"

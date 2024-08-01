@@ -3,11 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Cinemachine;
-using Cinemachine.PostFX;
 using DG.Tweening;
 using Photon.Pun;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 [RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEventListener<MultiplayerEvent>
@@ -33,7 +31,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     private Transform _climbPoint;
     private bool _canClimb = false;
     private bool _isClimbing = false;
-    private Transform _climbWall;
     private bool _canClimbWall = false;
     private bool _isClimbWall = false;
 
@@ -54,7 +51,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     private void Start()
     {
         Init();
-        Application.targetFrameRate = 120;
     }
 
     private void Init()
@@ -342,7 +338,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     void HandleClimbWallEnter(Collider other)
     {
         _canClimbWall = true;
-        _climbWall = other.transform;
     }
 
     void HandleClimbWallExit(Collider other)
@@ -534,7 +529,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
     public void Footstep()
     {
-        SoundEvent.Trigger(SoundType.Footstep, "FootStep", 0.15f, 0, false);
+        SoundEvent.Trigger(SoundType.Footstep, "FootStep", 0, false);
     }
 
     #endregion

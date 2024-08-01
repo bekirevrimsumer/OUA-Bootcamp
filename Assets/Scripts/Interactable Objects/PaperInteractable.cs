@@ -7,13 +7,13 @@ public class PaperInteractable : Interactable
         if(!IsInteracting)
         {
             InteractEvent.Trigger(InteractEventType.Interact, "DoorLockKeyWindow", false, true, true, PaperSO);
-            SoundEvent.Trigger(SoundType.SFX, "PaperOpen", 0.5f, 0, false);
+            SoundEvent.Trigger(SoundType.SFX, "PaperOpen", 0, false);
             IsInteracting = true;
         }
         else
         {
             InteractEvent.Trigger(InteractEventType.InteractEnd, "DoorLockKeyWindow", false, false, true, PaperSO);
-            SoundEvent.Trigger(SoundType.SFX, "PaperClose", 0.5f, 0, false);
+            SoundEvent.Trigger(SoundType.SFX, "PaperClose", 0, false);
             IsInteracting = false;
         }
     }

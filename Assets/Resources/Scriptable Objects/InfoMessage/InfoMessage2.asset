@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc1d0ec05144294cb85697ac2b5541f, type: 3}
   m_Name: InfoMessage2
   m_EditorClassIdentifier: 
-  Title: Test Info Message
-  Message: Test Info Message Test Info Message Test Info Message
+  Title: Aynalara Dikkat!
+  Message: "Aynalar bu zindandan seni kurtaracak en \xF6nemli nesne! I\u015F\u0131n
+    demetlerini aynalar\u0131 kullanarak hedefe ula\u015Ft\u0131rmal\u0131s\u0131n
+    ki zindanda ilerleyebilesin."

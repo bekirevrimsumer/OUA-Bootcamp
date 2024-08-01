@@ -27,7 +27,7 @@ public class Section : BaseSectionAction, IEventListener<SectionEvent>
         {
             action.Execute();
         }
-        SoundEvent.Trigger(SoundType.SFX, "Target", 0.5f, 0, false);
+        SoundEvent.Trigger(SoundType.SFX, "Target", 0, false);
         
         if(DialogueSO != null)
             DialogueEvent.Trigger(DialogueEventType.StartDialogue, DialogueSO);

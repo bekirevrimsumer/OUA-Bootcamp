@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour, IEventListener<SoundEvent>
 {
@@ -9,13 +9,41 @@ public class SoundManager : MonoBehaviour, IEventListener<SoundEvent>
     public AudioSource sfxSource;
     public AudioSource footstepSource;
 
+    public Slider bgMusicSlider;
+    public Slider sfxSlider;
+
     private Dictionary<string, AudioClip> backgroundMusics = new Dictionary<string, AudioClip>();
     private Dictionary<string, AudioClip> sfxs = new Dictionary<string, AudioClip>();
     private Dictionary<string, AudioClip> footstepSounds = new Dictionary<string, AudioClip>();
+    private float _currentBgMusicVolume;
+    private float _currentSFXVolume;
 
     private void Awake()
     {
         LoadSounds();
+    }
+
+    private void Start() 
+    {
+        if (PlayerPrefs.HasKey("BgMusicVolume"))
+        {
+            bgMusicSlider.value = PlayerPrefs.GetFloat("BgMusicVolume");
+            bgMusicSource.volume = bgMusicSlider.value;
+            _currentBgMusicVolume = bgMusicSlider.value;
+        }
+
+        if (PlayerPrefs.HasKey("SFXVolume"))
+        {
+            sfxSlider.value = PlayerPrefs.GetFloat("SFXVolume");
+            sfxSource.volume = sfxSlider.value;
+            if(footstepSource != null)
+                footstepSource.volume = sfxSlider.value;
+
+            _currentSFXVolume = sfxSlider.value;
+        }
+
+        bgMusicSlider.onValueChanged.AddListener(delegate { OnBgMusicVolumeChange(); });
+        sfxSlider.onValueChanged.AddListener(delegate { OnSFXVolumeChange(); });
     }
 
     private void Update()
@@ -23,7 +51,7 @@ public class SoundManager : MonoBehaviour, IEventListener<SoundEvent>
         if (!bgMusicSource.isPlaying)
         {
             int random = Random.Range(0, backgroundMusics.Count);
-            PlaySound(backgroundMusics.Keys.ToArray()[random], 0.5f, 0, true);
+            PlaySound(backgroundMusics.Keys.ToArray()[random], 0, true);
         }
     }
 
@@ -48,12 +76,12 @@ public class SoundManager : MonoBehaviour, IEventListener<SoundEvent>
         }
     }
 
-    public void PlaySound(string name, float volume, float delay, bool loop)
+    public void PlaySound(string name, float delay, bool loop)
     {
         if (backgroundMusics.ContainsKey(name))
         {
             bgMusicSource.clip = backgroundMusics[name];
-            bgMusicSource.volume = volume;
+            bgMusicSource.volume = _currentBgMusicVolume;
             bgMusicSource.loop = loop;
             bgMusicSource.PlayDelayed(delay);
         }
@@ -63,12 +91,12 @@ public class SoundManager : MonoBehaviour, IEventListener<SoundEvent>
         }
     }
 
-    public void PlaySFX(string name, float volume, float delay)
+    public void PlaySFX(string name, float delay)
     {
         if (sfxs.ContainsKey(name))
         {
             sfxSource.clip = sfxs[name];
-            sfxSource.volume = volume;
+            sfxSource.volume = _currentSFXVolume;
             sfxSource.PlayDelayed(delay);
         }
         else
@@ -77,12 +105,26 @@ public class SoundManager : MonoBehaviour, IEventListener<SoundEvent>
         }
     }
 
-    public void PlayFootstep(float volume, float delay)
+    public void PlayFootstep(float delay)
     {
         var random = Random.Range(0, footstepSounds.Count);
         footstepSource.clip = footstepSounds.Values.ToArray()[random];
-        footstepSource.volume = volume;
+        footstepSource.volume = _currentSFXVolume / 2;
         footstepSource.PlayDelayed(delay);
+    }
+
+    public void OnBgMusicVolumeChange()
+    {
+        bgMusicSource.volume = bgMusicSlider.value;
+        PlayerPrefs.SetFloat("BgMusicVolume", bgMusicSlider.value);
+        _currentBgMusicVolume = bgMusicSlider.value;
+    }
+
+    public void OnSFXVolumeChange()
+    {
+        sfxSource.volume = sfxSlider.value;
+        PlayerPrefs.SetFloat("SFXVolume", sfxSlider.value);
+        _currentSFXVolume = sfxSlider.value;
     }
 
     public void OnEvent(SoundEvent eventType)
@@ -90,13 +132,13 @@ public class SoundManager : MonoBehaviour, IEventListener<SoundEvent>
         switch (eventType.Type)
         {
             case SoundType.Background:
-                PlaySound(eventType.Name, eventType.Volume, eventType.Delay, eventType.Loop);
+                PlaySound(eventType.Name, eventType.Delay, eventType.Loop);
                 break;
             case SoundType.SFX:
-                PlaySFX(eventType.Name, eventType.Volume, eventType.Delay);
+                PlaySFX(eventType.Name, eventType.Delay);
                 break;
             case SoundType.Footstep:
-                PlayFootstep(eventType.Volume, eventType.Delay);
+                PlayFootstep(eventType.Delay);
                 break;
         }
     }

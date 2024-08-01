@@ -14,16 +14,19 @@ public class NPCController : MonoBehaviour
     public IdleState _idleState = new IdleState();
     [HideInInspector]
     public WalkState _walkState = new WalkState();
+    private NPCEnemyAction _npcEnemyAction;
 
     void Start()
     {
         _currentState = _idleState;
         _currentState.EnterState(this);
+        _npcEnemyAction = GetComponent<NPCEnemyAction>();
     }
 
     void Update()
     {
-        _currentState.UpdateState(this);
+        if(!_npcEnemyAction.IsCompleted)
+            _currentState.UpdateState(this);
     }
 
     public void ChangeState(IState newState)
@@ -43,8 +46,6 @@ public class NPCController : MonoBehaviour
                 waypointIndex = (waypointIndex + 1) % Waypoints.Count;
             }
             _currentWaypointIndex = waypointIndex;
-
-            Debug.Log("Moving to waypoint: " + _currentWaypointIndex);
 
             Agent.SetDestination(Waypoints[_currentWaypointIndex]);
         }

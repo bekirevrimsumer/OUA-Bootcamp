@@ -1,24 +1,31 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventListener<InformationEvent>, IEventListener<DialogueEvent>
 {
     private GameObject _currentWindow;
-    private string _currentWindowText;
 
     public List<KeyValuePair> windowList = new List<KeyValuePair>();
+
+    private void Update() 
+    {
+        if (SceneManager.GetActiveScene().name == "Game" && Input.GetKeyDown(KeyCode.Escape))
+        {
+            CloseWindow("SettingsPanel");
+            ToggleWindow("PausePanel");
+        }    
+    }
 
     #region Window Operation
     public void OpenWindow(string windowKey)
     {
-        _currentWindowText = windowKey;
         windowList.Find(x => x.key == windowKey).value.SetActive(true);
     }
 
     public void CloseWindow(string windowKey)
     {
-        _currentWindowText = windowKey;
         windowList.Find(x => x.key == windowKey).value.SetActive(false);
     }
 
@@ -37,7 +44,7 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
 
     public void ClickEvent()
     {
-        SoundEvent.Trigger(SoundType.SFX, "UI_Click", 1, 0);
+        SoundEvent.Trigger(SoundType.SFX, "UI_Click", 0);
     }
 
     public GameObject GetWindow(string windowKey)
@@ -61,7 +68,6 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
     public void AnimatePanel(string key, bool isShow, TweenCallback onComplete = null)
     {
         _currentWindow = GetWindow(key);
-        _currentWindowText = key;
 
         if (isShow)
         {
@@ -164,6 +170,7 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
         {
             case InformationEventType.Show:
                 AnimatePanel("InfoPanel", true);
+                UpdatePanel("InfoPanel", eventType);
                 break;
             case InformationEventType.Hide:
                 AnimatePanel("InfoPanel", false);

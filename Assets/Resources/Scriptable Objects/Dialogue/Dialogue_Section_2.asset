@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb3424bc65543ef46a9ffef5fdd53ba0, type: 3}
+  m_Name: Dialogue_Section_2
+  m_EditorClassIdentifier: 
+  Dialogues:
+  - Name: Riley
+    Sentences:
+    - "(Derin bir nefes alarak) Alex, bu salon ger\xE7ekten \xE7ok etkileyiciydi.
+      Ama g\xF6revleri tamamlad\u0131k!"
+  - Name: Alex
+    Sentences:
+    - "(G\xFCl\xFCmseyerek) Evet, Riley. Bu zindan\u0131n en b\xFCy\xFCk salonlar\u0131ndan
+      biriydi ve ba\u015Fard\u0131k. Birlikte \xE7al\u0131\u015Farak her engeli a\u015Fabilece\u011Fimizi
+      g\xF6sterdik."
+  - Name: Riley
+    Sentences:
+    - "(\xC7evresine bakarak) Burada her \u015Fey \xE7ok ger\xE7ek\xE7i. Bu d\xFCnya...
+      Oyundan \xE7ok daha fazlas\u0131 gibi hissediliyor."
+  - Name: Alex
+    Sentences:
+    - "(Ba\u015F\u0131n\u0131 sallayarak) Kesinlikle. Bu d\xFCnya sadece bir oyun
+      de\u011Fil, burada ger\xE7ekten s\u0131k\u0131\u015F\u0131p kalm\u0131\u015F
+      gibiyiz. Ama korkma, birlikte buradan \xE7\u0131kaca\u011F\u0131z."
+  - Name: Riley
+    Sentences:
+    - "(Kararl\u0131l\u0131kla) Evet, do\u011Fru. Birlikte her \u015Feyin \xFCstesinden
+      gelebiliriz."
+  DialogueSpeed: 0.05
