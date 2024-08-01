@@ -15,6 +15,7 @@ public class NPCEnemyAction : BaseSectionAction
     {
         base.Execute();
         _NPCController.Animator.SetBool("IsDead", true);
+        _NPCController.GetComponent<BoxCollider>().enabled = false;
 
     }
 }

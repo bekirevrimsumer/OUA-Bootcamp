@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
         if (SceneManager.GetActiveScene().name == "Game" && Input.GetKeyDown(KeyCode.Escape))
         {
             CloseWindow("SettingsPanel");
+            CloseWindow("GameplayPanel");
             ToggleWindow("PausePanel");
         }    
     }

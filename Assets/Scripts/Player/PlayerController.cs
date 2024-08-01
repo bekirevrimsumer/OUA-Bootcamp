@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     public LayerMask GroundLayer;
     private SoundManager _soundManager;
     public static event Action BookChanged = delegate { };
+    public Transform CurrentRespawnPoint;
 
     private void Start()
     {
@@ -73,28 +74,37 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
             HandleClimbWall();
             HandleInteract();
             CameraRotation();
+            Respawn();
 
-        if(_book != null && _book.isPickedUp && _book.ShelfInteractable.IsInteracting)
-        {
-            PlaceBook();
-        }
-        else if(Input.GetMouseButtonDown(0))
-        {
-            PickBook();
-        }
+            if(_book != null && _book.isPickedUp && _book.ShelfInteractable.IsInteracting)
+            {
+                PlaceBook();
+            }
+            else if(Input.GetMouseButtonDown(0))
+            {
+                PickBook();
+            }
 
-        if(_book != null && _book.isPickedUp && !_book.ShelfInteractable.IsInteracting)
-        {
-            _book.isPickedUp = false;
-            _book.outline.enabled = false;
-            DOTween.To(() => transform.position, x => transform.position = x, _book.FirstTransform.position, 0.2f);
-        }
+            if(_book != null && _book.isPickedUp && !_book.ShelfInteractable.IsInteracting)
+            {
+                _book.isPickedUp = false;
+                _book.outline.enabled = false;
+                DOTween.To(() => transform.position, x => transform.position = x, _book.FirstTransform.position, 0.2f);
+            }
 
-        if(_book != null &&     _book.isPickedUp && Input.GetMouseButtonDown(1))
-        {
-            _book.isPickedUp = false;
-            _book.outline.enabled = false;
+            if(_book != null && _book.isPickedUp && Input.GetMouseButtonDown(1))
+            {
+                _book.isPickedUp = false;
+                _book.outline.enabled = false;
+            }
         }
+    }
+
+    public void Respawn()
+    {
+        if(CurrentRespawnPoint != null && Input.GetKeyDown(KeyCode.F12))
+        {
+            transform.position = CurrentRespawnPoint.position;
         }
     }
 
@@ -273,6 +283,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
             case "Interactable":
                 HandleInteractableEnter(other);
                 break;
+            case "RespawnPoint":
+                HandleRespawnPointEnter(other);
+                break;
         }
     }
 
@@ -298,6 +311,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
                 HandleInteractableExit(other);
                 break;
         }
+    }
+
+    public void HandleRespawnPointEnter(Collider other)
+    {
+        CurrentRespawnPoint = other.transform;
     }
 
     void HandleInformationMessageAreaEnter(Collider other)
@@ -338,11 +356,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     void HandleClimbWallEnter(Collider other)
     {
         _canClimbWall = true;
+        InteractEvent.Trigger(InteractEventType.ClimbEnter, null, false, false, false);
     }
 
     void HandleClimbWallExit(Collider other)
     {
         _canClimbWall = false;
+        InteractEvent.Trigger(InteractEventType.ClimbExit, null, false, false, false);
     }
 
     void HandleWallUpEnter()
@@ -404,9 +424,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         Ray ray = MainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("BookSlot")))
         {
-            var transformPoint = hit.transform.GetChild(0);
-            DOTween.To(() => _book.FirstTransform.position, x => _book.FirstTransform.position = x, transformPoint.position, 0.2f);
-            _book.transform.DOLocalRotate(new Vector3(0, 90, 0), 0.2f);
+            var child = hit.transform.GetChild(0);
+            _book.photonView.RPC("PlaceBook", RpcTarget.All, child.transform.position.x, child.transform.position.y, child.transform.position.z);
 
             if(Input.GetMouseButtonDown(0))
             {
@@ -430,6 +449,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
     void HandleInteractableEnter(Collider other)
     {
+        if(_currentInteractable != null) return;
+
         var interactable = other.GetComponent<Interactable>();
         _currentInteractable = interactable;
         _currentInteractable.CurrentPlayer = this;

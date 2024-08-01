@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b07f0608b58b68e4a82e86f236445461, type: 3}
   m_Name: Paper02
   m_EditorClassIdentifier: 
-  CorrectCombination: 01000000010000000100000001000000
+  CorrectCombination: 09000000050000000600000003000000
