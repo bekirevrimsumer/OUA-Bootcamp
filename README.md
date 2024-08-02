@@ -392,6 +392,14 @@ When estimating the time for each task, care should be taken to make these times
 ### Game Screenshots
 
 <details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Unity Analytics</h4></summary>
+    <p>Unity Analytics integration was done to track which section the players followed and how long they followed it.</p>
+    <img src="Screenshots/Sprint_3/analytics_1.png" alt="Analytics 1">
+    <img src="Screenshots/Sprint_3/analytics_2.png" alt="Analytics 2">
+    <img src="Screenshots/Sprint_3/analytics_3.png" alt="Analytics 3">
+</details>
+
+<details>
     <summary><h4 style="display: inline; margin: 0; padding: 0;">Puzzle Design</h4></summary>
     <p>Puzzle design was completed and in-game tests were completed. The puzzles were designed according to the story of the game.</p>
     <img src="Screenshots/Sprint_3/game_4.png" alt="Puzzle Design">
