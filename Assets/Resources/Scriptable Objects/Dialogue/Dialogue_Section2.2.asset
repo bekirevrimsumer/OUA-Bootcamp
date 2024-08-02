@@ -19,4 +19,4 @@ MonoBehaviour:
   - Name: Riley
     Sentences:
     - "Evet Alex g\xF6rd\xFCm. Arkas\u0131nda bir buton mu var sanki?"
-  DialogueSpeed: 0.05
+  DialogueSpeed: 0.03

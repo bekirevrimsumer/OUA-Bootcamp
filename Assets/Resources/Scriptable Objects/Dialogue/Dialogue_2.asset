@@ -33,4 +33,4 @@ MonoBehaviour:
     Sentences:
     - "Aynen \xF6yle. Birlikte \xE7al\u0131\u015Fmaya devam edersek, bu zindan\u0131
       kesinlikle tamamlar\u0131z. Hadi, karde\u015Fim, yeni bir macera bizi bekliyor!"
-  DialogueSpeed: 0.05
+  DialogueSpeed: 0.02

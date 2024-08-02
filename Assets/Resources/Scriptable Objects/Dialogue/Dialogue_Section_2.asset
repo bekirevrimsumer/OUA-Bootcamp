@@ -35,4 +35,4 @@ MonoBehaviour:
     Sentences:
     - "(Kararl\u0131l\u0131kla) Evet, do\u011Fru. Birlikte her \u015Feyin \xFCstesinden
       gelebiliriz."
-  DialogueSpeed: 0.05
+  DialogueSpeed: 0.02
