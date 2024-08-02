@@ -66,6 +66,57 @@ Story Points:
 
 When estimating the time for each task, care should be taken to make these times realistic. Tasks are determined before the sprint starts and worked on these tasks during the sprint. New tasks created while the sprint is in progress should be opened in the backlog. If the developers finish their tasks, new task assignments are made from the backlog.
 
+## Summary
+
+<details>
+<summary>Sprint 1</summary>
+
+- Theme and story were determined.
+- Software and hardware tools to be used were decided.
+- User Stories were determined, and a backlog was created.
+- Generic classes and functions for development were created.
+- Basic character movements were implemented.
+- Light Beam and Mirror Placement features were implemented.
+- Multiplayer feature was implemented.
+- Cinemachine and Cinemachine Zones were integrated.
+
+</details>
+
+<details>
+<summary>Sprint 2</summary>
+
+- Main menu design was completed.
+- Game scene design was completed, and props were added.
+- New mechanics to diversify the game were developed.
+- Section level system was written.
+- UI assets were determined, and panels were designed.
+- Music and sound effects were determined and added for testing.
+- The storyboard of the game was created, and the story of the characters was written.
+- A cinematic was added to the beginning of the game to support the story.
+- Character mechanics were tested in the game scene.
+- Puzzles were designed and tested in the game scene.
+- Dialog system was created.
+
+</details>
+
+<details>
+<summary>Sprint 3</summary>
+
+- Puzzle design was completed, and in-game tests were conducted.
+- UI was developed.
+- Settings panel and in-game menu were designed.
+- In-game sound effects and music were completed.
+- New mechanics to diversify gameplay were added.
+- A cinematic video telling the story of the game was created.
+- Artificial intelligence was used for cinematic images.
+- Unity Analytics integration was done to track player progression and duration.
+- NPC dialog system was created.
+- NPC walking animations and dialogues were implemented.
+- NavMesh was used for NPC walking.
+- The game was tested, and bugs were fixed.
+
+</details>
+
 ## Sprint 1
 - **Start Date:** 24.06.2024
 - **End Date:** 07.07.2024
@@ -260,3 +311,102 @@ When estimating the time for each task, care should be taken to make these times
     <img src="Screenshots/Sprint_2/game_scene_2.png" alt="Character Mechanics">
 </details>
 
+## Sprint 3
+
+- **Start Date:** 22.07.2024
+- **End Date:** 02.08.2024
+- **Expected Story Points:** 68
+- **Completed Story Points:** 68
+
+### Sprint Goal
+
+- Puzzle design will be completed and in-game tests will be completed.
+- UI will be developed. Settings panel and in-game menu will be designed.
+- In-game sound effects and music will be completed.
+- New mechanics that will diversify the gameplay will be added.
+- A cinematic video that tells the story of the game will be created. Artificial intelligence will be used for cinematic images.
+- Unity Analytics integration will be done to track which section the players followed and how long they followed it.
+- NPC dialog system will be created. NPCs' walking animations and dialogues will be made. NavMesh will be used for walking.
+- The game will be tested and bugs will be fixed.
+
+### Daily Scrum Meetings
+  <p>As in other sprints, we did daily scrums in writing via discord in this sprint. We reviewed the work done together with short meetings when necessary and helped each other. We tried to communicate and collaborate more in this sprint.</p>
+  <details>
+  <summary><h4 style="display: inline; margin: 0; padding: 0;">Screenshot</h4></summary>
+  <img src="Screenshots/Sprint_3/daily_scrum.png" alt="Daily Scrum">
+</details>
+
+### Sprint Review
+  <ul>
+    <li>Puzzle design was completed and in-game tests were completed. The puzzles were designed according to the story of the game.</li>
+    <li>UI design in the main menu has been improved. Menu design was also made in the game. A menu where the player can learn key combinations has been added.</li>
+    <li>In-game sound effects and music were completed. The sound effects and music were added to the game for testing.</li>
+    <li>New mechanics that will diversify the gameplay were added. The mechanics were tested in the game scene.</li>
+    <li>A cinematic video that tells the story of the game was created. Artificial intelligence was used for cinematic images.</li>
+    <li>Unity Analytics integration was done to track which section the players followed and how long they followed it.</li>
+    <li>NPC dialog system was created. NPCs' walking animations and dialogues were made. NavMesh was used for walking.</li>
+    <li>We used Cinemachine collider to overcome obstacles between the character and the camera.</li>
+    <li>Errors in the dialog system and mirror placement were fixed.</li>
+    <li>Dialogs were developed to help the player. Information message areas were added for players.</li>
+    <li>The game was tested and bugs were fixed.</li>
+  </ul>
+
+### Sprint Retrospective
+
+#### What went well?
+
+- All tasks planned for this week were completed without any deficiencies.
+- The team was able to complete the sprint tasks on time.
+- The game was tested in detail. Existing and potential errors were fixed.
+
+#### What didn't go well?
+
+- Some tasks were difficult to complete. Extra time was spent to complete these tasks.
+
+#### What could be improved?
+
+- A decision was made that the team should work much more focused and take ownership of the work. The whole team should contribute one hundred percent and take ownership.
+
+### Sprint Backlog
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Burndown Chart</h4></summary>
+    <p>We reached our sprint goals by working more in the last days of the sprint by looking at the burndown chart in this sprint. All the work planned at the beginning of the sprint was completed.</p>
+    <img src="Screenshots/Sprint_3/burdown_chart.png" alt="Burndown Chart">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Trello Board</h4></summary>
+    <p>All tasks waiting in the backlog were assigned and moved to the sprint tab. Extra information was added to the tasks to be detailed and explanatory.</p>
+    <img src="Screenshots/Sprint_3/trello_board.png" alt="Trello Board">
+    <p>Creating user stories in Trello and matching them with tasks allowed us to see how many tasks we need to open for each user story in all sprints, how many story points of work we did.</p>
+    <img src="Screenshots/Sprint_3/user_story.png">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Task Details</h4></summary>
+    <p>In this sprint, at the request of the team members, we proceeded with shorter task explanations. It was observed that there were more bug tasks than other sprints.</p> 
+    <img src="Screenshots/Sprint_3/task_details.png" alt="Task Details">
+</details>
+
+### Game Screenshots
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">Puzzle Design</h4></summary>
+    <p>Puzzle design was completed and in-game tests were completed. The puzzles were designed according to the story of the game.</p>
+    <img src="Screenshots/Sprint_3/game_4.png" alt="Puzzle Design">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">UI Design</h4></summary>
+    <p>UI design in the main menu has been improved. Menu design was also made in the game. A menu where the player can learn key combinations has been added.</p>
+    <img src="Screenshots/Sprint_3/main_menu.png" alt="UI Design">
+</details>
+
+<details>
+    <summary><h4 style="display: inline; margin: 0; padding: 0;">In Game</h4></summary>
+    <p>Errors in the dialog system and mirror placement were fixed. Dialogs were developed to help the player. Information message areas were added for players.</p>
+    <img src="Screenshots/Sprint_3/game_1.png" alt="In Game 1">
+    <img src="Screenshots/Sprint_3/game_2.png" alt="In Game 2">
+    <img src="Screenshots/Sprint_3/game_3.png" alt="In Game 3">
+</details>
