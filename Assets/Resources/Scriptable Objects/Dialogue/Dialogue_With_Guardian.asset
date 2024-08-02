@@ -17,4 +17,4 @@ MonoBehaviour:
     Sentences:
     - "Buradan ge\xE7meye \xE7al\u0131\u015F\u0131rsan\u0131z bu zindan son nefesinizi
       verdi\u011Finiz yer olacak!"
-  DialogueSpeed: 0.05
+  DialogueSpeed: 0.02

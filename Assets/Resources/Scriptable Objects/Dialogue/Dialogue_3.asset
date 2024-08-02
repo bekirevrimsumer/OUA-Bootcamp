@@ -20,4 +20,4 @@ MonoBehaviour:
     Sentences:
     - "Ye\u015Fil \u0131\u015F\u0131n demetini bu portala y\xF6nlendirerek \u0131\u015F\u0131n\u0131
       farkl\u0131 bir yere iletebiliriz."
-  DialogueSpeed: 0.05
+  DialogueSpeed: 0.03

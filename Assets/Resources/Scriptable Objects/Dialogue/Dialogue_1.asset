@@ -21,4 +21,4 @@ MonoBehaviour:
   - Name: Riley
     Sentences:
     - "Evet, hadi sen aynay\u0131 ta\u015F\u0131. Ben de seni y\xF6nlendireyim."
-  DialogueSpeed: 0.05
+  DialogueSpeed: 0.02

@@ -24,4 +24,4 @@ MonoBehaviour:
     Sentences:
     - "Hadi gidip inceleyelim. Yaln\u0131z \xE7ok dikkatli olmal\u0131y\u0131z. Oyunda
       b\xF6yle bir gizli oda oldu\u011Funu hat\u0131rlam\u0131yorum."
-  DialogueSpeed: 0.05
+  DialogueSpeed: 0.02

@@ -34,4 +34,4 @@ MonoBehaviour:
     - "Sar\u0131 Krall\u0131k, karanl\u0131k zamanlardan sonra gelen umudu ve \u0131\u015F\u0131\u011F\u0131
       temsil eder. Ancak, umut ve \u0131\u015F\u0131k her zaman geceyle sonu\xE7lan\u0131r."
     - Gece ise her hikayenin sonudur.
-  DialogueSpeed: 0.05
+  DialogueSpeed: 0.03

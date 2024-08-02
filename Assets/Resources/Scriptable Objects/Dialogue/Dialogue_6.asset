@@ -18,4 +18,4 @@ MonoBehaviour:
     - "Bak sen \u015Fu ikizlere! Bu iksiri \xFCretmeyi ba\u015Fard\u0131\u011F\u0131n\u0131za
       g\xF6re art\u0131k zindan kilitli kap\u0131lar\u0131 sizin i\xE7in a\xE7\u0131lacakt\u0131r."
     - "Dikkatli olun \xE7ocuklar. Bu zindan hala tehlikelerle dolu."
-  DialogueSpeed: 0.05
+  DialogueSpeed: 0.03

@@ -43,4 +43,4 @@ MonoBehaviour:
     Sentences:
     - "(G\xFCl\xFCmseyerek) Beraber her \u015Feyin \xFCstesinden geldik, Riley. \u015Eimdi
       eve d\xF6nmenin vakti geldi."
-  DialogueSpeed: 0.05
+  DialogueSpeed: 0.03
