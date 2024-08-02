@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventListener<InformationEvent>, IEventListener<DialogueEvent>
+public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventListener<InformationEvent>, IEventListener<DialogueEvent>, IEventListener<SectionEvent>
 {
     private GameObject _currentWindow;
 
@@ -16,7 +18,7 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
             CloseWindow("SettingsPanel");
             CloseWindow("GameplayPanel");
             ToggleWindow("PausePanel");
-        }    
+        }
     }
 
     #region Window Operation
@@ -193,11 +195,28 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
         }
     }
 
+    public void OnEvent(SectionEvent eventType)
+    {
+        switch (eventType.SectionEventType)
+        {
+            case SectionEventType.GameCompleted:
+                var gameEndPanel = GetWindow("GameEndPanel");
+                OpenWindow("GameEndPanel");
+                var gameName = gameEndPanel.transform.GetChild(0).GetComponent<Image>();
+                var mainMenuButton = gameEndPanel.transform.GetChild(1).GetComponent<Image>();
+                gameEndPanel.GetComponent<Image>().DOFade(1, 3f);
+                gameName.DOFade(1, 3f);
+                mainMenuButton.DOFade(1, 3f).onComplete += () => mainMenuButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>().enabled = true;
+                break;
+        }
+    }
+
     protected virtual void OnEnable()
     {
         this.StartListeningEvent<InteractEvent>();
         this.StartListeningEvent<InformationEvent>();
         this.StartListeningEvent<DialogueEvent>();
+        this.StartListeningEvent<SectionEvent>();
     }
 
     protected virtual void OnDisable()
@@ -205,6 +224,7 @@ public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventLis
         this.StopListeningEvent<InteractEvent>();
         this.StopListeningEvent<InformationEvent>();
         this.StopListeningEvent<DialogueEvent>();
+        this.StopListeningEvent<SectionEvent>();
     }
 
     #endregion

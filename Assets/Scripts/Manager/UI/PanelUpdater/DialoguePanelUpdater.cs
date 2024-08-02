@@ -66,7 +66,7 @@ public class DialoguePanelUpdater : BasePanelUpdater<DialogueEvent>
 
         if(_nextDialogue.DialogueSO == null)
             DialogueEvent.Trigger(DialogueEventType.EndDialogue, eventType.DialogueSO);
-        
+
         _isCompleted = true;
 
         if (_nextDialogue.DialogueSO != null)
@@ -75,6 +75,9 @@ public class DialoguePanelUpdater : BasePanelUpdater<DialogueEvent>
             
             _nextDialogue.DialogueSO = null;
         }
+
+        if(eventType.DialogueSO.name == "Dialogue_final")
+            SectionEvent.Trigger(SectionEventType.GameCompleted);
     }
 
     private void Update()

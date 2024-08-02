@@ -8,7 +8,7 @@ using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEventListener<MultiplayerEvent>
+public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEventListener<MultiplayerEvent>, IEventListener<SectionEvent>
 {
     [Header("Camera")]
     public CinemachineVirtualCamera Camera;
@@ -48,6 +48,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     private SoundManager _soundManager;
     public static event Action BookChanged = delegate { };
     public Transform CurrentRespawnPoint;
+    private bool _isGameEnded = false;
 
     private void Start()
     {
@@ -182,6 +183,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     private void TopDownMovement()
     {
         if (_isClimbWall) return;
+
+        if(_isGameEnded) return;
         
         if(_currentInteractable != null)
         {
@@ -551,16 +554,31 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         }
     }
 
+    public void OnEvent(SectionEvent eventType)
+    {
+        switch (eventType.SectionEventType)
+        {
+            case SectionEventType.GameCompleted:
+                if (photonView.IsMine)
+                {
+                    _isGameEnded = true;
+                }
+                break;
+        }
+    }
+
     public override void OnEnable()
     {
         base.OnEnable();
         this.StartListeningEvent<MultiplayerEvent>();
+        this.StartListeningEvent<SectionEvent>();
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
         this.StopListeningEvent<MultiplayerEvent>();
+        this.StopListeningEvent<SectionEvent>();
     }
 
     #endregion

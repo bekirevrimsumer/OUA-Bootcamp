@@ -1,6 +1,7 @@
 public enum SectionEventType 
 { 
     SectionCompleted,
+    GameCompleted
 }
 
 public struct SectionEvent : IEventType

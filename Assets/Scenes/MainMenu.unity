@@ -12323,7 +12323,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Gizemli \u0130kizler: Zindan\u0131n Yank\u0131lar\u0131"
+  m_text: Cryptic Twins:Echoes of the Dungeon
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a40165d12e6bfbd478674032687b668a, type: 2}
   m_sharedMaterial: {fileID: -4787804621586711436, guid: a40165d12e6bfbd478674032687b668a, type: 2}
@@ -12350,8 +12350,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 26
+  m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -14285,7 +14285,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 345.25, y: 50}
+  m_SizeDelta: {x: 294.27, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8167631083130651998
 GameObject:

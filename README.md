@@ -17,11 +17,11 @@ Unity Group 9 - Gizemli İkizler: Zindanın Yankıları
 
 # Game Description
 ### Story
-Once upon a time, there were twin brothers named Alex and Riley. They were well-behaved and responsible children; they did their homework and asked their mother for permission to play video games. Their favorite game was "Gizemli İkizler: Zindanın Yankıları". This game, a classic dungeon exploration game, had become their favorite.
+Once upon a time, there were twin brothers named Alex and Riley. They were well-behaved and responsible children; they did their homework and asked their mother for permission to play video games. Their favorite game was Smash Dungeon. This game, a classic dungeon exploration game, had become their favorite.
 
 But our story doesn't start here. No, the real story starts right here! Come, come a little closer. But not too much... Because the twin brothers fell into this trap.
 
-One day, while playing "Gizemli İkizler: Zindanın Yankıları" again, a fight broke out between the brothers. The brothers, as the name suggests, were constantly bickering. This time the fight was quite intense and Alex, angry, threw the gamepad at Riley's head. Riley was about to go to his mother to complain when unexpected letters and symbols appeared on the TV.
+One day, while playing Smash Dungeon again, a fight broke out between the brothers. The brothers, as the name suggests, were constantly bickering. This time the fight was quite intense and Alex, angry, threw the gamepad at Riley's head. Riley was about to go to his mother to complain when unexpected letters and symbols appeared on the TV.
 
 The twin brothers curiously entered the bottom of the television and tried to decipher the meanings of these letters and symbols. However, they got too close. SUDDENLY, TWO SATANIC ARMS PULLED THEM INTO THEIR FAVORITE GAME.
 
