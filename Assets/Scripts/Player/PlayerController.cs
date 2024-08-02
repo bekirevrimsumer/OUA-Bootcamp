@@ -6,6 +6,7 @@ using Cinemachine;
 using DG.Tweening;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Video;
 
 [RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEventListener<MultiplayerEvent>, IEventListener<SectionEvent>
@@ -50,6 +51,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
     public Transform CurrentRespawnPoint;
     private bool _isGameEnded = false;
 
+    public VideoPlayer videoPlayer;
+    public bool isVideoEnded = false;
+
     private void Start()
     {
         Init();
@@ -57,6 +61,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
     private void Init()
     {
+        videoPlayer = FindObjectOfType<VideoPlayer>(true);
+		videoPlayer.loopPointReached += StartingVideoPlayer_loopPointReached;
         Animator = GetComponent<Animator>();
         Rb = GetComponent<Rigidbody>();
         _framingTransposer = Camera.GetCinemachineComponent<CinemachineFramingTransposer>();
@@ -64,8 +70,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         _soundManager.footstepSource = GetComponent<AudioSource>();
     }
 
-    private void Update()
+	private void StartingVideoPlayer_loopPointReached(VideoPlayer source)
+	{
+        isVideoEnded = true;
+	}
+
+	private void Update()
     {
+        if (!isVideoEnded)
+            return;
+
         if (photonView.IsMine)
         {
             TopDownMovement();
