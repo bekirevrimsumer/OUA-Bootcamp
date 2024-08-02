@@ -77,8 +77,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
 	private void Update()
     {
-        if (!isVideoEnded)
+        if(photonView.IsMine)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SkipToEnd();
+            }
+            if (!isVideoEnded)
             return;
+        }
 
         if (photonView.IsMine)
         {
@@ -112,6 +119,17 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
                 _book.isPickedUp = false;
                 _book.outline.enabled = false;
             }
+        }
+    }
+
+    void SkipToEnd()
+    {
+        if (videoPlayer != null && videoPlayer.isPlaying)
+        {
+            videoPlayer.frame = (long)videoPlayer.frameCount - 1;
+            videoPlayer.transform.parent.parent.gameObject.SetActive(false);
+            isVideoEnded = true;
+            SoundEvent.Trigger(SoundType.Background, "BGMusic1", 0);
         }
     }
 

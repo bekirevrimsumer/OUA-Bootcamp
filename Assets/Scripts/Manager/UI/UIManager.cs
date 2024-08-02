@@ -4,9 +4,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class UIManager : MonoBehaviour, IEventListener<InteractEvent>, IEventListener<InformationEvent>, IEventListener<DialogueEvent>, IEventListener<SectionEvent>
 {
+    public VideoPlayer videoPlayer;
     private GameObject _currentWindow;
 
     public List<KeyValuePair> windowList = new List<KeyValuePair>();

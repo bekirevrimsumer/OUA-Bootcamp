@@ -704,6 +704,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   CurrentRespawnPoint: {fileID: 0}
+  videoPlayer: {fileID: 0}
+  isVideoEnded: 0
 --- !u!65 &5447014508508690054
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -1289,7 +1289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e4fd9979a4e3774b977f8cb5159f651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 3049444155921550374, guid: d7b430ea06f6fc544b74cfdc8b9a6beb, type: 3}
+  player: {fileID: 4338356117385746565, guid: af6c2958f0cef2c48b15515bb5b7d845, type: 3}
   maxPlayer: {fileID: 2017599252902376250}
   roomNameText: {fileID: 6386341747300836094}
   roomNameToJoin: test
@@ -1961,6 +1961,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b3099b512adf34882f0a0301197fbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  videoPlayer: {fileID: 0}
   windowList:
   - key: GamePanel
     value: {fileID: 4526649533325399661}
@@ -4269,6 +4270,7 @@ MonoBehaviour:
   footstepSource: {fileID: 0}
   bgMusicSlider: {fileID: 3917971708431622933}
   sfxSlider: {fileID: 6662301581927775720}
+  videoPlayer: {fileID: 0}
 --- !u!82 &2069533809
 AudioSource:
   m_ObjectHideFlags: 0
@@ -8279,13 +8281,13 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7128555262251082330}
-  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7138161622225186448}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -60, y: 0}
@@ -9964,7 +9966,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bdfcd00e719df654886a535178587f29, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 936345f7fc3934efa8119a8700d904c7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10612,7 +10614,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Oyuncu Say\u0131s\u0131"
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a40165d12e6bfbd478674032687b668a, type: 2}
   m_sharedMaterial: {fileID: -4787804621586711436, guid: a40165d12e6bfbd478674032687b668a, type: 2}
