@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        SceneManager.GetSceneByBuildIndex(0);
+        SceneManager.LoadScene(0);
     }
 
     public void ApplySettings()

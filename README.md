@@ -5,6 +5,7 @@ Unity Group 9 - Gizemli İkizler: Zindanın Yankıları
 
 <img src="Screenshots/Images/Game_Image_2.jpeg" alt="Game Image 1">
 <img src="Screenshots/Images/Game_Image_1.jpg" alt="Game Image 1">
+<a href="https://www.youtube.com/watch?v=_5SQf2X3qio"><img src="https://img.shields.io/badge/Watch%20Game%20Trailer-Click%20Here-red" alt="Game Trailer"></a>
 
 # Team Members
 | Name | Role | Social Media |
@@ -53,6 +54,7 @@ The twin brothers, trapped inside Dungeon, will try to complete the dungeon by s
 
 - Task Board: [Trello Board](https://trello.com/b/bGnhI7gn/agile-board-template-trello)
 - Miro Board: [Miro Board](https://miro.com/app/board/uXjVKyj05nw=/?share_link_id=266004089956)
+- Itch.io Page: [Itch.io](https://evrimsumerr.itch.io/cryptic-twins-echoes-of-the-dungeon)
 
 # Sprints
 Sprints will be 2 weeks long. At the end of each sprint, a sprint review will be held to evaluate the work done during the sprint and a refirement meeting will be held for the next sprint. Task scoring in sprints will be done with Fibonacci numbers (from 1 to 8).

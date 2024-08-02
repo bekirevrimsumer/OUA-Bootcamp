@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
             videoPlayer.frame = (long)videoPlayer.frameCount - 1;
             videoPlayer.transform.parent.parent.gameObject.SetActive(false);
             isVideoEnded = true;
-            SoundEvent.Trigger(SoundType.Background, "BGMusic1", 0);
+            SoundEvent.Trigger(SoundType.Background, "BGMusic1", 0, true);
         }
     }
 
@@ -239,8 +239,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
         Vector3 newPosition = transform.position + movement * Time.deltaTime * _speed;
         transform.position = newPosition;
         Rotate(movement);
-
-        photonView.RPC("UpdatePositionAndRotation", RpcTarget.Others, transform.position, transform.rotation);
     }
 
     private void Rotate(Vector3 movement)
@@ -530,7 +528,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable, IEven
 
         if (interactable is MirrorInteractable mirrorInteractable)
         {
-            if (!mirrorInteractable.Mirror.IsCarry && mirrorInteractable.Mirror.IsInteractable)
+            if (!mirrorInteractable.Mirror.IsCarry)
             {
                 _currentInteractable = null;
                 _canInteract = false;
