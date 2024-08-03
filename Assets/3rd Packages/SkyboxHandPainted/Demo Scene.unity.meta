@@ -1,11 +1,7 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Resources/Sounds/4Wind.m4a.meta
-guid: a805d54f96c682b4ba60cf934ed6d195
-========
 guid: b623146edfb0e92499bd18e1d1ad2737
->>>>>>>> e5769bccc9ee0c2c009358b515e24ee15cef1a56:Assets/3rd Packages/SkyboxHandPainted/Demo Scene.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
   assetBundleName: 
-  assetBundleVariant: 
+  assetBundleVariant:
